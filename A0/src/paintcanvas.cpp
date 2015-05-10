@@ -16,7 +16,7 @@ void PaintRect::draw(QPainter& painter) {
     float y = (m_from[1] < m_to[1]) ? m_from[1] : m_to[1];
     float width = abs(m_from[0] - m_to[0]);
     float height = abs(m_from[1] - m_to[1]);
-    painter.drawRect(QRect(x, y, width, height));
+    painter.drawRect(QRect(x,y,width,height));
 }
 
 void PaintOval::draw(QPainter& painter) {
@@ -24,12 +24,12 @@ void PaintOval::draw(QPainter& painter) {
     float y = (m_from[1] < m_to[1]) ? m_from[1] : m_to[1];
     float width = abs(m_from[0] - m_to[0]);
     float height = abs(m_from[1] - m_to[1]);
-    painter.drawEllipse(QRect(x, y, width, height));
+    painter.drawEllipse(QRect(x,y,width,height));
 }
 
 PaintCanvas::PaintCanvas(QWidget *parent) 
     : QWidget(parent)
-    , m_mode(DRAW_LINE) {
+    , m_mode(DRAW_LINE), m_fill(QColor(0,0,0)) {
 
 }
 
@@ -47,6 +47,12 @@ QSize PaintCanvas::sizeHint() const {
     return QSize(300, 300);
 }
 
+void PaintCanvas::clear(){
+    m_shapes.clear();
+    update();
+}
+    
+
 void PaintCanvas::paintEvent(QPaintEvent * event) {
     (void) event; // suppress warnings (uncomment if event is used)
 
@@ -58,10 +64,13 @@ void PaintCanvas::paintEvent(QPaintEvent * event) {
     for( list<PaintShape*>::iterator i = m_shapes.begin(); 
             i != m_shapes.end(); ++i ) {
         PaintShape *shape = (*i);
+        
+        painter.setBrush(QBrush(shape->m_fill));   
         shape->draw( painter );
     }
 
     painter.setRenderHint(QPainter::Antialiasing, false);
+    painter.setBrush(QBrush(Qt::NoBrush));
     painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 }
 
@@ -80,13 +89,13 @@ void PaintCanvas::mouseReleaseEvent ( QMouseEvent * event ) {
 
         switch (m_mode) {
         case DRAW_LINE:
-            shape = new PaintLine( m_start_pos, to );
+            shape = new PaintLine( m_start_pos, to , m_fill);
             break;
         case DRAW_OVAL:
-            shape = new PaintOval( m_start_pos, to );
+            shape = new PaintOval( m_start_pos, to , m_fill);
             break;
         case DRAW_RECTANGLE:
-            shape = new PaintRect( m_start_pos, to );
+            shape = new PaintRect( m_start_pos, to , m_fill);
             break;
         default:
             break;

@@ -18,22 +18,26 @@ public:
     virtual void draw( QPainter& painter ) = 0;
 
 protected:
-    PaintShape( const Point2D& from, const Point2D& to )
+    PaintShape( const Point2D& from, const Point2D& to , const QColor& fill)
         : m_from( from )
         , m_to( to )
+        , m_fill(fill)
     {}
 
 protected:
     Point2D     m_from;
     Point2D     m_to;
+
+public:
+    QColor      m_fill;
 };
 
 class PaintLine
     : public PaintShape
 {
 public:
-    PaintLine( const Point2D& from, const Point2D& to )
-        : PaintShape( from, to )
+    PaintLine( const Point2D& from, const Point2D& to, const QColor& fill )
+        : PaintShape( from, to, fill )
     {}
 
     virtual void draw( QPainter& painter );
@@ -43,8 +47,8 @@ class PaintRect
     : public PaintShape
 {
 public:
-    PaintRect( const Point2D& from, const Point2D& to )
-        : PaintShape( from, to )
+    PaintRect( const Point2D& from, const Point2D& to, const QColor& fill )
+        : PaintShape( from, to, fill )
     {}
 
     virtual void draw( QPainter& painter );
@@ -54,8 +58,8 @@ class PaintOval
     : public PaintShape
 {
 public:
-    PaintOval( const Point2D& from, const Point2D& to )
-        : PaintShape( from, to )
+    PaintOval( const Point2D& from, const Point2D& to, const QColor& fill )
+        : PaintShape( from, to, fill )
     {}
 
     virtual void draw( QPainter& painter );
@@ -79,6 +83,8 @@ public:
     QSize sizeHint() const;
 
     void set_mode(Mode mode) { m_mode = mode; }
+    void set_fill(QColor fill) { m_fill = fill; }
+    virtual void clear();
 
 protected:
 
@@ -94,6 +100,7 @@ protected:
 
 private:
     Mode m_mode; // what to do when a user clicks
+    QColor m_fill;
 
     Point2D m_start_pos; // position where the user last clicked
 
