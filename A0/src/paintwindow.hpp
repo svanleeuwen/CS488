@@ -1,3 +1,6 @@
+// Spencer Van Leeuwen
+// 20412199
+
 #ifndef PAINTWINDOW_HPP
 #define PAINTWINDOW_HPP
 

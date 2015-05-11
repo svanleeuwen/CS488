@@ -1,3 +1,6 @@
+// Spencer Van Leeuwen
+// 20412199
+
 #include <QtGui>
 // #include <QRect>
 #include <cmath>
