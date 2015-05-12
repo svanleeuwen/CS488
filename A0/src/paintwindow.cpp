@@ -43,7 +43,7 @@ void PaintWindow::createMenu() {
     m_menu_app->addAction(quitAct);
 
     QAction* clearAct = new QAction(tr("&Clear"), this);
-    clearAct->setShortcuts(QList<QKeySequence>({QKeySequence(Qt::Key_C)}));
+    clearAct->setShortcut(Qt::Key_C);
     addAction(clearAct);
     clearAct->setStatusTip(tr("Clears the canvas"));
     connect(clearAct, SIGNAL(triggered()), this, SLOT(clear()));
@@ -66,21 +66,21 @@ void PaintWindow::createMenu() {
     connect(fillBlueAct, SIGNAL(triggered()), this, SLOT(set_blue()));
 
     QAction* drawLineAct = new QAction(tr("&Line"), m_group_tools);
-    drawLineAct->setShortcuts(QList<QKeySequence>({QKeySequence(Qt::Key_L)}));
+    drawLineAct->setShortcut(Qt::Key_L);
     addAction(drawLineAct);
     drawLineAct->setStatusTip(tr("Draws a line"));
     drawLineAct->setCheckable(true);
     connect(drawLineAct, SIGNAL(triggered()), this, SLOT(set_line()));
 
     QAction* drawOvalAct = new QAction(tr("&Oval"), m_group_tools);
-    drawOvalAct->setShortcuts(QList<QKeySequence>({QKeySequence(Qt::Key_O)}));
+    drawOvalAct->setShortcut(Qt::Key_O);
     addAction(drawOvalAct);
     drawOvalAct->setStatusTip(tr("Draws an Oval"));
     drawOvalAct->setCheckable(true);
     connect(drawOvalAct, SIGNAL(triggered()), this, SLOT(set_oval()));
 
     QAction* drawRectangleAct = new QAction(tr("&Rectangle"), m_group_tools);
-    drawRectangleAct->setShortcuts(QList<QKeySequence>({QKeySequence(Qt::Key_R)}));
+    drawRectangleAct->setShortcut(Qt::Key_R);
     addAction(drawRectangleAct);
     drawRectangleAct->setStatusTip(tr("Draws a rectangle"));
     drawRectangleAct->setCheckable(true);

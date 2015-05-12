@@ -24,8 +24,15 @@ private:
 
     // Each menu itself
     QMenu* m_menu_app;
+    QMenu* m_menu_draw;
+    QMenu* m_menu_speed;
 
-    std::vector<QAction*> m_menu_actions;
+    QActionGroup* m_group_draw;
+    QActionGroup* m_group_speed;
+
+    std::vector<QAction*> m_app_actions;
+    std::vector<QAction*> m_draw_actions;
+    std::vector<QAction*> m_speed_actions;
     Viewer* m_viewer;
 };
 
