@@ -1,0 +1,67 @@
+sum is: /usr/bin/sum
+
+
+2015-05-12 21:58       Checksum for A0 for srvanlee on gl04       Page 1
+
+
+A0:
+total 1732
+92453133 drwxrwxr-x 9 srvanlee cs488           4096 May 12 21:58 ../
+92453134 drwxrwxr-x 4 srvanlee cs488           4096 May 12 21:56 ./
+79860421 -rw-r--r-- 1 srvanlee srvanleeuwen     385 May 12 21:56 README
+92453136 drwxrwxr-x 2 srvanlee cs488           4096 May 12 21:51 src/
+89254587 -rwxr-xr-x 1 srvanlee srvanleeuwen 1718123 May 12 21:48 paint488*
+79860419 -rw-r--r-- 1 srvanlee srvanleeuwen   13942 May 12 21:43 screenshot01.png
+79860422 -rw-r--r-- 1 srvanlee srvanleeuwen     458 May 12 21:37 README~
+79860418 -rw-r--r-- 1 srvanlee srvanleeuwen     934 May 12 20:32 Manual
+92453135 drwxrwxr-x 2 srvanlee cs488           4096 May  9 00:01 data/
+
+A0/src:
+total 152
+92453134 drwxrwxr-x 4 srvanlee cs488         4096 May 12 21:56 ../
+92453136 drwxrwxr-x 2 srvanlee cs488         4096 May 12 21:51 ./
+89254586 -rw-r--r-- 1 srvanlee srvanleeuwen  6137 May 12 21:48 paintwindow.cpp
+97419509 -rw-r--r-- 1 srvanlee srvanleeuwen  4576 May 12 21:47 moc_paintwindow.cpp
+97419516 -rw-r--r-- 1 srvanlee srvanleeuwen  1126 May 12 21:45 paintwindow.hpp
+97419507 -rw-r--r-- 1 srvanlee srvanleeuwen 84061 May 12 21:38 Makefile
+97419508 -rw-r--r-- 1 srvanlee srvanleeuwen  2583 May 12 20:32 moc_paintcanvas.cpp
+97419512 -rw-r--r-- 1 srvanlee srvanleeuwen  2322 May 12 20:32 paintcanvas.hpp
+97419511 -rw-r--r-- 1 srvanlee srvanleeuwen  2969 May 12 20:32 paintcanvas.cpp
+92453144 -rw-rwxr-- 1 srvanlee cs488          453 May  9 00:01 paint488.pro*
+92453143 -rw-rwxr-- 1 srvanlee cs488         9474 May  9 00:01 algebra.hpp*
+92453141 -rw-rwxr-- 1 srvanlee cs488          543 May  9 00:01 main.cpp*
+92453137 -rw-rwxr-- 1 srvanlee cs488         3308 May  9 00:01 algebra.cpp*
+
+A0/data:
+total 8
+92453134 drwxrwxr-x 4 srvanlee cs488 4096 May 12 21:56 ../
+92453135 drwxrwxr-x 2 srvanlee cs488 4096 May  9 00:01 ./
+
+A0                                      
+A0/Manual                               32850     1
+A0/README                               24161     1
+A0/README~                              53876     1
+A0/data                                 
+A0/paint488                             62520  1678
+A0/screenshot01.png                     07583    14
+A0/src                                  
+A0/src/Makefile                         01187    83
+A0/src/algebra.cpp                      00294     4
+A0/src/algebra.hpp                      65153    10
+A0/src/main.cpp                         25266     1
+A0/src/moc_paintcanvas.cpp              56692     3
+A0/src/moc_paintwindow.cpp              27797     5
+A0/src/paint488.pro                     25205     1
+A0/src/paintcanvas.cpp                  23200     3
+A0/src/paintcanvas.hpp                  01064     3
+A0/src/paintwindow.cpp                  41172     6
+A0/src/paintwindow.hpp                  40626     2
+
+
+
+
+
+
+
+
+

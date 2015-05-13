@@ -53,6 +53,7 @@ private:
     QMenu* m_menu_help;
 
     QActionGroup* m_group_tools;
+    QActionGroup* m_group_colour;
     
     // The canvas onto which the user draws.
     PaintCanvas* m_canvas;

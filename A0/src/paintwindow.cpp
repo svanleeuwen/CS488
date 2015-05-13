@@ -33,6 +33,7 @@ void PaintWindow::createMenu() {
 
     // Adding tools group
     m_group_tools = new QActionGroup(this);
+    m_group_colour = new QActionGroup(this);
 
     // Adding the menu items for each drop down menu
     QAction* quitAct = new QAction(tr("&Quit"), this);
@@ -49,21 +50,26 @@ void PaintWindow::createMenu() {
     connect(clearAct, SIGNAL(triggered()), this, SLOT(clear()));
     m_menu_app->addAction(clearAct);
 
-    QAction* fillBlackAct = new QAction(tr("Bl&ack"), this);
+    QAction* fillBlackAct = new QAction(tr("Bl&ack"), m_group_colour);
     fillBlackAct->setStatusTip(tr("Sets fill colour to black"));
     connect(fillBlackAct, SIGNAL(triggered()), this, SLOT(set_black()));
+    fillBlackAct->setCheckable(true);
+    fillBlackAct->setChecked(true);
 
-    QAction* fillRedAct = new QAction(tr("&Red"), this);
+    QAction* fillRedAct = new QAction(tr("&Red"), m_group_colour);
     fillRedAct->setStatusTip(tr("Sets fill colour to red"));
     connect(fillRedAct, SIGNAL(triggered()), this, SLOT(set_red()));
+    fillRedAct->setCheckable(true);
 
-    QAction* fillGreenAct = new QAction(tr("&Green"), this);
+    QAction* fillGreenAct = new QAction(tr("&Green"), m_group_colour);
     fillGreenAct->setStatusTip(tr("Sets fill colour to green"));
     connect(fillGreenAct, SIGNAL(triggered()), this, SLOT(set_green()));
+    fillGreenAct->setCheckable(true);
 
-    QAction* fillBlueAct = new QAction(tr("Bl&ue"), this);
+    QAction* fillBlueAct = new QAction(tr("Bl&ue"), m_group_colour);
     fillBlueAct->setStatusTip(tr("Sets fill colour to blue"));
     connect(fillBlueAct, SIGNAL(triggered()), this, SLOT(set_blue()));
+    fillBlueAct->setCheckable(true);
 
     QAction* drawLineAct = new QAction(tr("&Line"), m_group_tools);
     drawLineAct->setShortcut(Qt::Key_L);
