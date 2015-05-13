@@ -55,13 +55,3 @@ A0/src/paintcanvas.hpp                  01064     3
 A0/src/paintwindow.cpp                  41172     6
 A0/src/paintwindow.hpp                  40626     2
 
-
-
-
-
-
-
-
-
-
-

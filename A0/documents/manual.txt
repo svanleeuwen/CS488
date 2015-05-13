@@ -1,0 +1,22 @@
+Spencer Van Leeuwen
+Assignment 0 Manual
+----------------------------------
+    This program is a simple paint program. To draw a shape on the canvas, click the left 
+mouse button where you want the shape to begin, drag the mouse to where you want the 
+shape to end, and release the left mouse button. To quit, hit the quit button.
+
+There are 4 menus for the program:
+
+- The "Application" menu allows you to clear the canvas or quit the program.
+- The "Tools" menu allows you to choose the shape you want to draw.
+- The "Colour" menu allows you to choose the fill colour of the shape you are drawing.
+    NOTE: This does not apply to the "line" shape, as it is a fill colour.
+- The "Help" menu gives instructions on how to draw each shape.
+
+The program has the following shortcuts:
+
+- CTRL+Q: Quit the program
+- C:      Clear the canvas
+- L:      Choose the line tool
+- O:      Choose the oval tool
+- R:      Choose the rectangle tool
