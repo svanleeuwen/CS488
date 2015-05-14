@@ -12,12 +12,13 @@
 
 Viewer::Viewer(const QGLFormat& format, QWidget *parent)
     : QGLWidget(format, parent)
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
+//#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
     , mVertexBufferObject(QOpenGLBuffer::VertexBuffer)
+    , mElementBufferObject(QOpenGLBuffer::IndexBuffer)
     , mVertexArrayObject(this)
-#else
+/*#else
     , mVertexBufferObject(QGLBuffer::VertexBuffer)
-#endif
+#endif */
 {
     mTimer = new QTimer(this);
     connect(mTimer, SIGNAL(timeout()), this, SLOT(update()));
@@ -67,28 +68,52 @@ void Viewer::initializeGL() {
         std::cerr << "Cannot link shaders." << std::endl;
         return;
     }
-
+/*
     float triangleData[] = {
         //  X     Y     Z
          0.0f, 0.0f, 0.0f,
          1.0f, 0.0f, 0.0f,
          0.0f, 1.0f, 0.0f,
     };
+*/
+    GLfloat cubeData[] = {
+        // X     Y     Z
+        0.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+    };
 
+    GLushort indices[] = { 
+      0, 1, 2, 3, 2, 3, 4, 5, 4, 5, 6, 7,
+      4, 6, 2, 0, 6, 7, 0, 1, 1, 7, 3, 5
+    };
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
+//#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
+    mElementBufferObject.create();
+    mVertexBufferObject.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    if (!mElementBufferObject.bind()) {
+        std::cerr << "could not bind Element buffer to the context." << std::endl;
+        return;
+    }
+    mElementBufferObject.allocate(indices, sizeof(GLushort) * 4 * 6);
+
     mVertexArrayObject.create();
     mVertexArrayObject.bind();
 
     mVertexBufferObject.create();
     mVertexBufferObject.setUsagePattern(QOpenGLBuffer::StaticDraw);
-#else
+/*#else
 
-    /*
+     *
      * if qt version is less than 5.1, use the following commented code
      * instead of QOpenGLVertexVufferObject. Also use QGLBuffer instead of
      * QOpenGLBuffer.
-     */
+     *
     uint vao;
 
     typedef void (APIENTRY *_glGenVertexArrays) (GLsizei, GLuint*);
@@ -106,13 +131,13 @@ void Viewer::initializeGL() {
     mVertexBufferObject.create();
     mVertexBufferObject.setUsagePattern(QGLBuffer::StaticDraw);
 #endif
-
+*/
     if (!mVertexBufferObject.bind()) {
         std::cerr << "could not bind vertex buffer to the context." << std::endl;
         return;
     }
 
-    mVertexBufferObject.allocate(triangleData, 3 * 3 * sizeof(float));
+    mVertexBufferObject.allocate(cubeData, 4 * 6 * 3 * sizeof(GLfloat));
 
     mProgram.bind();
 
@@ -128,16 +153,23 @@ void Viewer::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
+//#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
+    mElementBufferObject.bind();
     mVertexArrayObject.bind();
-#endif
+//#endif
 
-
+/*
     for (int i = 0; i < 4; i++) {
 
         mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix() * mModelMatrices[i]);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+    }
+*/
+    for(int i = 0; i < 6; i++) {
+        mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix());
+        glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 
+            (const GLvoid*)(i*4*sizeof(GLushort)));
     }
 }
 

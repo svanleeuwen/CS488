@@ -53,12 +53,13 @@ private:
     void scaleWorld(float x, float y, float z);
 
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
+//#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
     QOpenGLBuffer mVertexBufferObject;
+    QOpenGLBuffer mElementBufferObject;
     QOpenGLVertexArrayObject mVertexArrayObject;
-#else 
+/*#else 
     QGLBuffer mVertexBufferObject;
-#endif
+#endif */
 
     int mVertexLocation;
     int mMvpMatrixLocation;
