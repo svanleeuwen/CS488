@@ -5,6 +5,7 @@
 #include <QGLShaderProgram>
 #include <QMatrix4x4>
 #include <QtGlobal>
+#include "game.hpp"
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
 #include <QOpenGLBuffer>
@@ -23,6 +24,8 @@ public:
     
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
+
+    Game* getGame();
 
     // If you want to render a new frame, call do not call paintGL(),
     // instead, call update() to ensure that the view gets a paint 
@@ -47,6 +50,8 @@ protected:
 
 private:
 
+    virtual void drawWell();
+    
     QMatrix4x4 getCameraMatrix();
     void translateWorld(float x, float y, float z);
     void rotateWorld(float angle, float x, float y, float z);
@@ -65,10 +70,26 @@ private:
     int mMvpMatrixLocation;
 
     QMatrix4x4 mPerspMatrix;
-    QMatrix4x4 mModelMatrices[4];
+    QMatrix4x4 mModelMatrices[3];
     QMatrix4x4 mTransformMatrix;
-    
-    QTimer* mTimer;
+
+    Game* mGame;    
+    QTimer* mGameTimer;
+
+    QTimer* mRotateTimer;
+    QTimer* mPersistenceTimer;
+
+    int mButtonPressed;
+    bool mShiftPressed;
+
+    int mPreviousX;
+    bool mMovingRight;
+
+    float mTotalScaling = 1.0f;
+
+    static constexpr float scaleMax = 1.0f;
+    static constexpr float scaleMin = 0.25f;
+
     QGLShaderProgram mProgram;
 };
 

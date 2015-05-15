@@ -20,17 +20,20 @@ Viewer::Viewer(const QGLFormat& format, QWidget *parent)
     , mVertexBufferObject(QGLBuffer::VertexBuffer)
 #endif */
 {
-    mTimer = new QTimer(this);
-    connect(mTimer, SIGNAL(timeout()), this, SLOT(update()));
-    mTimer->start(1000/30);
+    mGame = new Game();
+    mGameTimer = new QTimer(this);
+    connect(mGameTimer, SIGNAL(timeout()), this, SLOT(update()));
+    mGameTimer->start(1000/30);
 
-    mModelMatrices[0].translate(-5,-10,0);
-    mModelMatrices[1].translate(5,-10,0);
-    mModelMatrices[1].rotate(90, QVector3D(0,0,1));
-    mModelMatrices[2].translate(-5,10,0);
-    mModelMatrices[2].rotate(270, QVector3D(0,0,1));
-    mModelMatrices[3].translate(5,10,0);
-    mModelMatrices[3].rotate(180, QVector3D(0,0,1));
+    mRotateTimer = new QTimer(this);
+    mPersistenceTimer = new QTimer(this);
+
+    mModelMatrices[0].translate(-6,-11);
+    mModelMatrices[0].scale(1, 21);
+    mModelMatrices[1].translate(5, -11);
+    mModelMatrices[1].scale(1, 21);
+    mModelMatrices[2].translate(-5, -11);
+    mModelMatrices[2].scale(10, 1);
 }
 
 Viewer::~Viewer() {
@@ -43,6 +46,10 @@ QSize Viewer::minimumSizeHint() const {
 
 QSize Viewer::sizeHint() const {
     return QSize(300, 600);
+}
+
+Game* Viewer::getGame() {
+    return mGame;
 }
 
 void Viewer::initializeGL() {
@@ -68,14 +75,7 @@ void Viewer::initializeGL() {
         std::cerr << "Cannot link shaders." << std::endl;
         return;
     }
-/*
-    float triangleData[] = {
-        //  X     Y     Z
-         0.0f, 0.0f, 0.0f,
-         1.0f, 0.0f, 0.0f,
-         0.0f, 1.0f, 0.0f,
-    };
-*/
+
     GLfloat cubeData[] = {
         // X     Y     Z
         0.0f, 0.0f, 0.0f,
@@ -158,21 +158,25 @@ void Viewer::paintGL() {
     mVertexArrayObject.bind();
 //#endif
 
-/*
-    for (int i = 0; i < 4; i++) {
-
-        mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix() * mModelMatrices[i]);
-
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
-    }
-*/
-    for(int i = 0; i < 6; i++) {
-        mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix());
-        glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 
-            (const GLvoid*)(i*4*sizeof(GLushort)));
-    }
+    drawWell();
 }
 
+void Viewer::drawWell()
+{
+    for(int j = 0; j < 3; j++) {
+        for(int i = 0; i < 6; i++) {
+            mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix() * mModelMatrices[j]);
+            glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 
+                (const GLvoid*)(i*4*sizeof(GLushort)));
+        }
+    }
+}
+/*
+void Viewer::drawPieces()
+{
+    for(int i = 0; i < 
+}
+*/
 void Viewer::resizeGL(int width, int height) {
     if (height == 0) {
         height = 1;
@@ -185,15 +189,73 @@ void Viewer::resizeGL(int width, int height) {
 }
 
 void Viewer::mousePressEvent ( QMouseEvent * event ) {
-    std::cerr << "Stub: button " << event->button() << " pressed\n";
+    mButtonPressed = event->button();
+    mShiftPressed = event->modifiers() == Qt::ShiftModifier;
+    mPreviousX = event->x();
+
+    if(!mShiftPressed);
+        // Start timer
 }
 
 void Viewer::mouseReleaseEvent ( QMouseEvent * event ) {
-    std::cerr << "Stub: button " << event->button() << " released\n";
+    mButtonPressed = Qt::NoButton;
+
+    if(!mShiftPressed);
+        // Stop timer
+
+    // Start persistence
+
+    // Call parent
 }
 
-void Viewer::mouseMoveEvent ( QMouseEvent * event ) {
-    std::cerr << "Stub: Motion at " << event->x() << ", " << event->y() << std::endl;
+void Viewer::mouseMoveEvent ( QMouseEvent * event ) { 
+    if(mButtonPressed != Qt::LeftButton &&
+            mButtonPressed != Qt::RightButton &&
+            mButtonPressed != Qt::MiddleButton) {
+        QGLWidget::mouseMoveEvent(event);
+        return;
+    }
+
+    int deltaX = event->x() - mPreviousX;
+    mPreviousX = event->x();
+    // Update rotate speed variable
+    
+    if(deltaX != 0) {
+        if(mMovingRight != (deltaX > 0)) {
+            mMovingRight = deltaX > 0;
+            
+            if(!mShiftPressed);
+                // Reset timer
+        }
+        
+        if(!mShiftPressed) {
+            float rotateFactor = deltaX / 2.5;
+
+            switch(mButtonPressed) {
+                case Qt::LeftButton:
+                    rotateWorld(rotateFactor, 1, 0, 0);
+                    break;
+
+                case Qt::RightButton:
+                    rotateWorld(rotateFactor, 0, 1, 0); 
+                    break;
+
+                case Qt::MiddleButton:
+                    rotateWorld(rotateFactor, 0, 0, 1);
+            }
+        } else {
+            float scaleFactor = 1 + deltaX/100.0f;
+
+            if(mTotalScaling * scaleFactor > scaleMax) {
+                scaleFactor = scaleMax/mTotalScaling;
+            } else if(mTotalScaling * scaleFactor < scaleMin) {
+                scaleFactor = scaleMin/mTotalScaling;
+            }
+
+            scaleWorld(scaleFactor, scaleFactor, scaleFactor);
+            mTotalScaling = mTotalScaling * scaleFactor;
+        }
+    }
 }
 
 QMatrix4x4 Viewer::getCameraMatrix() {

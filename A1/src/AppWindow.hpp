@@ -20,6 +20,9 @@ protected:
 
 private:
     void createActions();
+    void createAppActions();
+    void createDrawActions();
+    void createSpeedActions();
     void createMenu();
 
     // Each menu itself
@@ -33,7 +36,9 @@ private:
     std::vector<QAction*> m_app_actions;
     std::vector<QAction*> m_draw_actions;
     std::vector<QAction*> m_speed_actions;
+    
     Viewer* m_viewer;
+    Game* m_game;
 };
 
 #endif

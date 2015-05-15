@@ -47,11 +47,13 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp \
 		AppWindow.cpp \
-		Viewer.cpp moc_AppWindow.cpp \
+		Viewer.cpp \
+		game.cpp moc_AppWindow.cpp \
 		moc_Viewer.cpp
 OBJECTS       = main.o \
 		AppWindow.o \
 		Viewer.o \
+		game.o \
 		moc_AppWindow.o \
 		moc_Viewer.o
 DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -274,7 +276,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/game4881.0.0 || mkdir -p .tmp/game4881.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/game4881.0.0/ && $(COPY_FILE) --parents AppWindow.hpp Viewer.hpp .tmp/game4881.0.0/ && $(COPY_FILE) --parents main.cpp AppWindow.cpp Viewer.cpp .tmp/game4881.0.0/ && (cd `dirname .tmp/game4881.0.0` && $(TAR) game4881.0.0.tar game4881.0.0 && $(COMPRESS) game4881.0.0.tar) && $(MOVE) `dirname .tmp/game4881.0.0`/game4881.0.0.tar.gz . && $(DEL_FILE) -r .tmp/game4881.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/game4881.0.0/ && $(COPY_FILE) --parents AppWindow.hpp Viewer.hpp game.hpp .tmp/game4881.0.0/ && $(COPY_FILE) --parents main.cpp AppWindow.cpp Viewer.cpp game.cpp .tmp/game4881.0.0/ && (cd `dirname .tmp/game4881.0.0` && $(TAR) game4881.0.0.tar game4881.0.0 && $(COMPRESS) game4881.0.0.tar) && $(MOVE) `dirname .tmp/game4881.0.0`/game4881.0.0.tar.gz . && $(DEL_FILE) -r .tmp/game4881.0.0
 
 
 clean:compiler_clean 
@@ -442,6 +444,7 @@ moc_AppWindow.cpp: /usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtGui/qgenericmatrix.h \
 		/usr/include/qt5/QtGui/QMatrix4x4 \
 		/usr/include/qt5/QtCore/QtGlobal \
+		game.hpp \
 		/usr/include/qt5/QtGui/QOpenGLBuffer \
 		/usr/include/qt5/QtGui/qopenglbuffer.h \
 		/usr/include/qt5/QtGui/QOpenGLVertexArrayObject \
@@ -582,6 +585,7 @@ moc_Viewer.cpp: /usr/include/qt5/QtOpenGL/QGLWidget \
 		/usr/include/qt5/QtGui/qgenericmatrix.h \
 		/usr/include/qt5/QtGui/QMatrix4x4 \
 		/usr/include/qt5/QtCore/QtGlobal \
+		game.hpp \
 		/usr/include/qt5/QtGui/QOpenGLBuffer \
 		/usr/include/qt5/QtGui/qopenglbuffer.h \
 		/usr/include/qt5/QtGui/QOpenGLVertexArrayObject \
@@ -757,6 +761,7 @@ main.o: main.cpp /usr/include/qt5/QtWidgets/QApplication \
 		/usr/include/qt5/QtGui/qgenericmatrix.h \
 		/usr/include/qt5/QtGui/QMatrix4x4 \
 		/usr/include/qt5/QtCore/QtGlobal \
+		game.hpp \
 		/usr/include/qt5/QtGui/QOpenGLBuffer \
 		/usr/include/qt5/QtGui/qopenglbuffer.h \
 		/usr/include/qt5/QtGui/QOpenGLVertexArrayObject \
@@ -1216,6 +1221,7 @@ AppWindow.o: AppWindow.cpp /usr/include/qt5/QtWidgets/QtWidgets \
 		/usr/include/qt5/QtOpenGL/QGLShaderProgram \
 		/usr/include/qt5/QtOpenGL/qglshaderprogram.h \
 		/usr/include/qt5/QtCore/QtGlobal \
+		game.hpp \
 		/usr/include/qt5/QtGui/QOpenGLBuffer \
 		/usr/include/qt5/QtGui/QOpenGLVertexArrayObject \
 		/usr/include/qt5/QtOpenGL/QGLBuffer \
@@ -1673,10 +1679,14 @@ Viewer.o: Viewer.cpp /usr/include/qt5/QtWidgets/QtWidgets \
 		/usr/include/qt5/QtOpenGL/QGLWidget \
 		/usr/include/qt5/QtOpenGL/QGLShaderProgram \
 		/usr/include/qt5/QtCore/QtGlobal \
+		game.hpp \
 		/usr/include/qt5/QtGui/QOpenGLBuffer \
 		/usr/include/qt5/QtGui/QOpenGLVertexArrayObject \
 		/usr/include/qt5/QtOpenGL/QGLBuffer
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Viewer.o Viewer.cpp
+
+game.o: game.cpp game.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o game.cpp
 
 moc_AppWindow.o: moc_AppWindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_AppWindow.o moc_AppWindow.cpp
