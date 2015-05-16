@@ -48,10 +48,16 @@ protected:
     // Called when the mouse moves
     virtual void mouseMoveEvent ( QMouseEvent * event );
 
-private:
+private slots:
+    virtual void persistenceRotate(); 
+    virtual void tick();
 
+private:
+    virtual void drawCube(int colourIndex);
     virtual void drawWell();
-    
+    virtual void drawPieces();
+  
+
     QMatrix4x4 getCameraMatrix();
     void translateWorld(float x, float y, float z);
     void rotateWorld(float angle, float x, float y, float z);
@@ -66,8 +72,9 @@ private:
     QGLBuffer mVertexBufferObject;
 #endif */
 
-    int mVertexLocation;
-    int mMvpMatrixLocation;
+    GLint mVertexLocation;
+    GLint mMvpMatrixLocation;
+    GLint mColourLocation;
 
     QMatrix4x4 mPerspMatrix;
     QMatrix4x4 mModelMatrices[3];
@@ -84,11 +91,14 @@ private:
 
     int mPreviousX;
     bool mMovingRight;
-
+    float mPersistenceSpeed;
+    QVector3D mPersistenceAxis;
+    
+    int mTotalX = 0;
     float mTotalScaling = 1.0f;
 
-    static constexpr float scaleMax = 1.0f;
-    static constexpr float scaleMin = 0.25f;
+    const float mScaleMax = 1.5f;
+    const float mScaleMin = 0.25f;
 
     QGLShaderProgram mProgram;
 };

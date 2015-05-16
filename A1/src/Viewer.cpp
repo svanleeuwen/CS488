@@ -10,6 +10,12 @@
 #define GL_MULTISAMPLE 0x809D
 #endif
 
+static const QColor COLOURS[] = {
+    QColor(255, 0, 0), QColor(0, 255, 0), QColor(0, 0, 255),
+    QColor(255, 255, 0), QColor(0, 255, 255), QColor(255, 0, 255),
+    QColor(255, 165, 0), QColor(255, 255, 255)
+};
+
 Viewer::Viewer(const QGLFormat& format, QWidget *parent)
     : QGLWidget(format, parent)
 //#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
@@ -22,11 +28,16 @@ Viewer::Viewer(const QGLFormat& format, QWidget *parent)
 {
     mGame = new Game();
     mGameTimer = new QTimer(this);
-    connect(mGameTimer, SIGNAL(timeout()), this, SLOT(update()));
+    connect(mGameTimer, SIGNAL(timeout()), this, SLOT(tick()));
     mGameTimer->start(1000/30);
 
     mRotateTimer = new QTimer(this);
+    mRotateTimer->setSingleShot(true);
+    mRotateTimer->setInterval(75);
+
     mPersistenceTimer = new QTimer(this);
+    mPersistenceTimer->setInterval(25);
+    connect(mPersistenceTimer, SIGNAL(timeout()), this, SLOT(persistenceRotate()));
 
     mModelMatrices[0].translate(-6,-11);
     mModelMatrices[0].scale(1, 21);
@@ -85,7 +96,7 @@ void Viewer::initializeGL() {
         0.0f, 1.0f, 1.0f,
         1.0f, 1.0f, 1.0f,
         0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f
     };
 
     GLushort indices[] = { 
@@ -95,7 +106,7 @@ void Viewer::initializeGL() {
 
 //#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
     mElementBufferObject.create();
-    mVertexBufferObject.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    mVertexBufferObject.setUsagePattern(QOpenGLBuffer::DynamicDraw);
     if (!mElementBufferObject.bind()) {
         std::cerr << "could not bind Element buffer to the context." << std::endl;
         return;
@@ -106,7 +117,7 @@ void Viewer::initializeGL() {
     mVertexArrayObject.bind();
 
     mVertexBufferObject.create();
-    mVertexBufferObject.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    mVertexBufferObject.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 /*#else
 
      *
@@ -146,6 +157,12 @@ void Viewer::initializeGL() {
 
     // mPerspMatrixLocation = mProgram.uniformLocation("cameraMatrix");
     mMvpMatrixLocation = mProgram.uniformLocation("mvpMatrix");
+    mColourLocation = mProgram.uniformLocation("colour");
+
+    glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void Viewer::paintGL() {
@@ -159,24 +176,52 @@ void Viewer::paintGL() {
 //#endif
 
     drawWell();
+    drawPieces();
+}
+
+void Viewer::drawCube(int colourIndex)
+{
+    QColor colour = COLOURS[colourIndex];
+            
+    for(int i = 0; i < 6; i++) {
+        //if(multi)
+        //{
+            colour = COLOURS[colourIndex];
+            colour.setRed(colour.red()*(i+1)/7.0);
+            colour.setGreen(colour.green()*(i+1)/7.0);
+            colour.setBlue(colour.blue()*(i+1)/7.0);
+
+        mProgram.setUniformValue(mColourLocation, colour);
+        glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 
+            (const GLvoid*)(i*4*sizeof(GLushort)));
+    }
 }
 
 void Viewer::drawWell()
 {
     for(int j = 0; j < 3; j++) {
-        for(int i = 0; i < 6; i++) {
-            mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix() * mModelMatrices[j]);
-            glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 
-                (const GLvoid*)(i*4*sizeof(GLushort)));
+        mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix() * mModelMatrices[j]); 
+        drawCube(8);
+    }
+}
+
+void Viewer::drawPieces()
+{
+    for(int i = 0; i < mGame->getHeight() - 4; i++)
+    {
+        for(int j = 0; j < mGame->getWidth(); j++)
+        {
+            QMatrix4x4 modelMatrix;
+            modelMatrix.translate(-5 + j, -10 + i);
+            mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix() * modelMatrix);
+           
+            int colour = mGame->get(i, j); 
+            if(colour > -1)
+                drawCube(colour); 
         }
     }
 }
-/*
-void Viewer::drawPieces()
-{
-    for(int i = 0; i < 
-}
-*/
+
 void Viewer::resizeGL(int width, int height) {
     if (height == 0) {
         height = 1;
@@ -193,20 +238,38 @@ void Viewer::mousePressEvent ( QMouseEvent * event ) {
     mShiftPressed = event->modifiers() == Qt::ShiftModifier;
     mPreviousX = event->x();
 
-    if(!mShiftPressed);
-        // Start timer
+    if(mPersistenceTimer->isActive())
+        mPersistenceTimer->stop();
 }
+
 
 void Viewer::mouseReleaseEvent ( QMouseEvent * event ) {
     mButtonPressed = Qt::NoButton;
 
-    if(!mShiftPressed);
-        // Stop timer
-
-    // Start persistence
-
-    // Call parent
+    if(!mShiftPressed) {
+        int remainingTime = mRotateTimer->remainingTime();
+        
+        if(remainingTime > 0) {
+            switch(event->button()) {
+                case Qt::LeftButton:
+                    mPersistenceAxis = {1, 0, 0};
+                    break;
+                case Qt::RightButton:
+                    mPersistenceAxis = {0, 1, 0};
+                    break;
+                case Qt::MiddleButton:
+                    mPersistenceAxis = {0, 0, 1};
+                default:
+                    {}
+            }
+            mPersistenceSpeed = mPersistenceTimer->interval()*mTotalX/remainingTime;
+            mPersistenceTimer->start();
+        }
+    }
 }
+
+const float SCALE_DIVISOR = 100.0f;
+const float ROTATE_DIVISOR = 2.5f;
 
 void Viewer::mouseMoveEvent ( QMouseEvent * event ) { 
     if(mButtonPressed != Qt::LeftButton &&
@@ -218,18 +281,28 @@ void Viewer::mouseMoveEvent ( QMouseEvent * event ) {
 
     int deltaX = event->x() - mPreviousX;
     mPreviousX = event->x();
-    // Update rotate speed variable
     
     if(deltaX != 0) {
         if(mMovingRight != (deltaX > 0)) {
             mMovingRight = deltaX > 0;
             
-            if(!mShiftPressed);
-                // Reset timer
+            if(!mShiftPressed)
+            {
+                mTotalX = deltaX;
+                mRotateTimer->start();
+            }    
         }
         
         if(!mShiftPressed) {
-            float rotateFactor = deltaX / 2.5;
+            if(mRotateTimer->isActive())
+            {
+                mTotalX += deltaX;
+            } else {
+                mRotateTimer->start();
+                mTotalX = deltaX;
+            }
+
+            float rotateFactor = deltaX / ROTATE_DIVISOR;
 
             switch(mButtonPressed) {
                 case Qt::LeftButton:
@@ -244,18 +317,29 @@ void Viewer::mouseMoveEvent ( QMouseEvent * event ) {
                     rotateWorld(rotateFactor, 0, 0, 1);
             }
         } else {
-            float scaleFactor = 1 + deltaX/100.0f;
+            float scaleFactor = 1 + deltaX/SCALE_DIVISOR;
 
-            if(mTotalScaling * scaleFactor > scaleMax) {
-                scaleFactor = scaleMax/mTotalScaling;
-            } else if(mTotalScaling * scaleFactor < scaleMin) {
-                scaleFactor = scaleMin/mTotalScaling;
+            if(mTotalScaling * scaleFactor > mScaleMax) {
+                scaleFactor = mScaleMax/mTotalScaling;
+            } else if(mTotalScaling * scaleFactor < mScaleMin) {
+                scaleFactor = mScaleMin/mTotalScaling;
             }
 
             scaleWorld(scaleFactor, scaleFactor, scaleFactor);
             mTotalScaling = mTotalScaling * scaleFactor;
         }
     }
+}
+
+void Viewer::persistenceRotate()
+{
+    mTransformMatrix.rotate(mPersistenceSpeed/ROTATE_DIVISOR, mPersistenceAxis);
+}
+
+void Viewer::tick()
+{
+    mGame->tick();
+    update();
 }
 
 QMatrix4x4 Viewer::getCameraMatrix() {

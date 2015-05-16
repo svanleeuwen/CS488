@@ -49,7 +49,7 @@ public:
   // Create a new game instance with a well of the given dimensions.
   // Note that internally, the board has four extra rows, to hold a 
   // piece that has just begun to fall.
-  Game(int width = 10, int height = 14);
+  Game(int width = 10, int height = 24);
 
   ~Game();
 
