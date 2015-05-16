@@ -13,23 +13,23 @@
 static const QColor COLOURS[] = {
     QColor(255, 0, 0), QColor(0, 255, 0), QColor(0, 0, 255),
     QColor(255, 255, 0), QColor(0, 255, 255), QColor(255, 0, 255),
-    QColor(255, 165, 0), QColor(255, 255, 255)
+    QColor(255, 165, 0), QColor(255, 255, 255), QColor(255, 255, 255)
 };
 
-Viewer::Viewer(const QGLFormat& format, QWidget *parent)
+Viewer::Viewer(const QGLFormat& format, Game* game, QWidget *parent)
     : QGLWidget(format, parent)
 //#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
     , mVertexBufferObject(QOpenGLBuffer::VertexBuffer)
     , mElementBufferObject(QOpenGLBuffer::IndexBuffer)
     , mVertexArrayObject(this)
+    , mGame(game)
 /*#else
     , mVertexBufferObject(QGLBuffer::VertexBuffer)
 #endif */
 {
-    mGame = new Game();
-    mGameTimer = new QTimer(this);
-    connect(mGameTimer, SIGNAL(timeout()), this, SLOT(tick()));
-    mGameTimer->start(1000/30);
+    mUpdateTimer = new QTimer(this);
+    connect(mUpdateTimer, SIGNAL(timeout()), this, SLOT(update()));
+    mUpdateTimer->start(1000/30);
 
     mRotateTimer = new QTimer(this);
     mRotateTimer->setSingleShot(true);
@@ -57,10 +57,6 @@ QSize Viewer::minimumSizeHint() const {
 
 QSize Viewer::sizeHint() const {
     return QSize(300, 600);
-}
-
-Game* Viewer::getGame() {
-    return mGame;
 }
 
 void Viewer::initializeGL() {
@@ -160,7 +156,6 @@ void Viewer::initializeGL() {
     mColourLocation = mProgram.uniformLocation("colour");
 
     glFrontFace(GL_CW);
-    glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 }
@@ -187,9 +182,9 @@ void Viewer::drawCube(int colourIndex)
         //if(multi)
         //{
             colour = COLOURS[colourIndex];
-            colour.setRed(colour.red()*(i+1)/7.0);
-            colour.setGreen(colour.green()*(i+1)/7.0);
-            colour.setBlue(colour.blue()*(i+1)/7.0);
+            colour.setRedF(colour.redF()*(i+1)/7.0);
+            colour.setGreenF(colour.greenF()*(i+1)/7.0);
+            colour.setBlueF(colour.blueF()*(i+1)/7.0);
 
         mProgram.setUniformValue(mColourLocation, colour);
         glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 
@@ -331,17 +326,6 @@ void Viewer::mouseMoveEvent ( QMouseEvent * event ) {
     }
 }
 
-void Viewer::persistenceRotate()
-{
-    mTransformMatrix.rotate(mPersistenceSpeed/ROTATE_DIVISOR, mPersistenceAxis);
-}
-
-void Viewer::tick()
-{
-    mGame->tick();
-    update();
-}
-
 QMatrix4x4 Viewer::getCameraMatrix() {
     QMatrix4x4 vMatrix;
 
@@ -366,3 +350,6 @@ void Viewer::scaleWorld(float x, float y, float z) {
     mTransformMatrix.scale(x, y, z);
 }
 
+void Viewer::persistenceRotate() {
+    mTransformMatrix.rotate(mPersistenceSpeed/ROTATE_DIVISOR, mPersistenceAxis);
+}

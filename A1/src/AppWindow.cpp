@@ -11,28 +11,50 @@ AppWindow::AppWindow() {
     glFormat.setProfile(QGLFormat::CoreProfile);
     glFormat.setSampleBuffers(true);
 
+    m_game = new Game();
+
     QVBoxLayout *layout = new QVBoxLayout;
     // m_menubar = new QMenuBar;
-    m_viewer = new Viewer(glFormat, this);
+    m_viewer = new Viewer(glFormat, m_game, this);
     layout->addWidget(m_viewer);
     setCentralWidget(new QWidget);
     centralWidget()->setLayout(layout);
     m_viewer->show();
 
-    m_game = m_viewer->getGame();
+    m_game_timer = new QTimer(this);
+    connect(m_game_timer, SIGNAL(timeout()), this, SLOT(tick()));
+    setTickSpeed(Speed::slow);
 
     createActions();
     createMenu();
 }
 
 void AppWindow::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_Escape) {
-        QCoreApplication::instance()->quit();
-    } else if (event->key() == Qt::Key_T) {
-        std::cerr << "Hello!" << std::endl;
-    } else {
-        QWidget::keyPressEvent(event);
+    switch(event->key()) {
+        case Qt::Key_Escape: 
+            QCoreApplication::instance()->quit();
+            return;
+        case Qt::Key_Left:
+            m_game->moveLeft();
+            break;
+        case Qt::Key_Right:
+            m_game->moveRight();
+            break;
+        case Qt::Key_Up:
+            m_game->rotateCCW();
+            break;
+        case Qt::Key_Down:
+            m_game->rotateCW();
+            break;
+        case Qt::Key_Space:
+            m_game->drop();
+            break;
+        default: 
+            QWidget::keyPressEvent(event);
+            return;
     }
+
+    m_viewer->update();
 }
 
 void AppWindow::createActions() {
@@ -62,6 +84,10 @@ void AppWindow::createAppActions()
     connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
     connect(newGameAct, SIGNAL(triggered()), this, SLOT(close()));
     connect(resetAct, SIGNAL(triggered()), this, SLOT(close())); 
+
+    for (auto& action : m_app_actions) {
+        addAction(action);
+    }
 }
 
 void AppWindow::createDrawActions()
@@ -87,6 +113,13 @@ void AppWindow::createDrawActions()
     connect(wireFrameAct, SIGNAL(triggered()), this, SLOT(close()));
     connect(faceAct, SIGNAL(triggered()), this, SLOT(close()));
     connect(multiAct, SIGNAL(triggered()), this, SLOT(close()));
+
+    for (auto& action : m_draw_actions) {
+        addAction(action);
+        action->setCheckable(true);
+    }
+
+    faceAct->setChecked(true);
 }
 
 void AppWindow::createSpeedActions()
@@ -109,9 +142,16 @@ void AppWindow::createSpeedActions()
     mediumAct->setStatusTip(tr("Sets fall rate to medium"));
     fastAct->setStatusTip(tr("Sets fall rate to fast"));
 
-    connect(slowAct, SIGNAL(triggered()), this, SLOT(close()));
-    connect(mediumAct, SIGNAL(triggered()), this, SLOT(close()));
-    connect(fastAct, SIGNAL(triggered()), this, SLOT(close()));
+    connect(slowAct, SIGNAL(triggered()), this, SLOT(setSlowSpeed()));
+    connect(mediumAct, SIGNAL(triggered()), this, SLOT(setMediumSpeed()));
+    connect(fastAct, SIGNAL(triggered()), this, SLOT(setFastSpeed()));
+    
+    for (auto& action : m_speed_actions) {
+        addAction(action);
+        action->setCheckable(true);
+    }
+
+    slowAct->setChecked(true);
 }
 
 void AppWindow::createMenu() {
@@ -120,20 +160,47 @@ void AppWindow::createMenu() {
     m_menu_speed = menuBar()->addMenu(tr("&Speed"));
 
     for (auto& action : m_app_actions) {
-        addAction(action);
         m_menu_app->addAction(action);
     }
 
     for (auto& action : m_draw_actions) {
-        addAction(action);
-        action->setCheckable(true);
         m_menu_draw->addAction(action);
     }
 
     for (auto& action : m_speed_actions) {
-        addAction(action);
-        action->setCheckable(true);
         m_menu_speed->addAction(action);
     }
 }
 
+void AppWindow::setTickSpeed(Speed speed)
+{
+    switch(speed)
+    {
+        case Speed::slow:
+            m_game_timer->setInterval(500);
+            break;
+        case Speed::medium:
+            m_game_timer->setInterval(300);
+            break;
+        case Speed::fast:
+            m_game_timer->setInterval(100);
+    }
+
+    m_game_timer->start();
+}
+
+void AppWindow::setSlowSpeed() {
+    setTickSpeed(Speed::slow);
+}
+
+void AppWindow::setMediumSpeed() {
+    setTickSpeed(Speed::medium);
+}
+
+void AppWindow::setFastSpeed() {
+    setTickSpeed(Speed::fast);
+}
+
+void AppWindow::tick() {
+    m_game->tick();
+}

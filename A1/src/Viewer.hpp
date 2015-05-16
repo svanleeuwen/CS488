@@ -19,13 +19,11 @@ class Viewer : public QGLWidget {
     Q_OBJECT
 
 public:
-    Viewer(const QGLFormat& format, QWidget *parent = 0);
+    Viewer(const QGLFormat& format, Game* game, QWidget *parent = 0);
     virtual ~Viewer();
     
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
-
-    Game* getGame();
 
     // If you want to render a new frame, call do not call paintGL(),
     // instead, call update() to ensure that the view gets a paint 
@@ -48,14 +46,10 @@ protected:
     // Called when the mouse moves
     virtual void mouseMoveEvent ( QMouseEvent * event );
 
-private slots:
-    virtual void persistenceRotate(); 
-    virtual void tick();
-
 private:
-    virtual void drawCube(int colourIndex);
-    virtual void drawWell();
-    virtual void drawPieces();
+    void drawCube(int colourIndex);
+    void drawWell();
+    void drawPieces();
   
 
     QMatrix4x4 getCameraMatrix();
@@ -80,8 +74,7 @@ private:
     QMatrix4x4 mModelMatrices[3];
     QMatrix4x4 mTransformMatrix;
 
-    Game* mGame;    
-    QTimer* mGameTimer;
+    QTimer* mUpdateTimer;
 
     QTimer* mRotateTimer;
     QTimer* mPersistenceTimer;
@@ -101,6 +94,11 @@ private:
     const float mScaleMin = 0.25f;
 
     QGLShaderProgram mProgram;
+
+    Game* mGame;
+
+private slots:
+    void persistenceRotate(); 
 };
 
 #endif

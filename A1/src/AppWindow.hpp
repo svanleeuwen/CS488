@@ -39,6 +39,17 @@ private:
     
     Viewer* m_viewer;
     Game* m_game;
+    QTimer* m_game_timer;
+
+    enum Speed { slow, medium, fast };
+
+    void setTickSpeed(Speed speed);
+
+private slots:
+    void setSlowSpeed();
+    void setMediumSpeed();
+    void setFastSpeed();
+    void tick();
 };
 
 #endif
