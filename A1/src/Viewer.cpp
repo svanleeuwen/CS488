@@ -114,8 +114,8 @@ void Viewer::initializeGL() {
     };
 
     GLushort indices[] = { 
-      0, 1, 2, 3, 2, 3, 4, 5, 4, 5, 6, 7,
-      4, 6, 2, 0, 6, 7, 0, 1, 1, 7, 3, 5
+      0, 2, 1, 3, 2, 4, 3, 5, 4, 6, 5, 7,
+      4, 2, 6, 0, 6, 0, 7, 1, 1, 3, 7, 5
     };
 
 //#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
@@ -173,7 +173,6 @@ void Viewer::initializeGL() {
     mMvpMatrixLocation = mProgram.uniformLocation("mvpMatrix");
     mColourLocation = mProgram.uniformLocation("colour");
 
-    glFrontFace(GL_CW);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 }
@@ -228,7 +227,7 @@ void Viewer::drawWell()
 
 void Viewer::drawPieces()
 {
-    for(int i = 0; i < mGame->getHeight() - 4; i++)
+    for(int i = 0; i < mGame->getHeight(); i++)
     {
         for(int j = 0; j < mGame->getWidth(); j++)
         {
@@ -255,10 +254,7 @@ void Viewer::resizeGL(int width, int height) {
 }
 
 void Viewer::mousePressEvent ( QMouseEvent * event ) {
-    if(mButtonsPressed == Qt::NoButton) {
-        mShiftPressed = event->modifiers() == Qt::ShiftModifier;
-    }
-
+    mShiftPressed = event->modifiers() == Qt::ShiftModifier;
     mButtonsPressed += event->button();
     mPreviousX = event->x();
 
@@ -312,7 +308,9 @@ const float ROTATE_DIVISOR = 2.5f;
 void Viewer::mouseMoveEvent ( QMouseEvent * event ) { 
     int deltaX = event->x() - mPreviousX;
     mPreviousX = event->x();
-    
+
+    mShiftPressed = (event->modifiers() & Qt::ShiftModifier) > 0;
+
     if(deltaX != 0) {
         if(mMovingRight != (deltaX > 0)) {
             mMovingRight = deltaX > 0;
