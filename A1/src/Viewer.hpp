@@ -25,10 +25,15 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
+    enum DrawMode { wireframe, face, multicolour };
+    
+    void setDrawMode(DrawMode mode);
+    void resetView();
+
     // If you want to render a new frame, call do not call paintGL(),
     // instead, call update() to ensure that the view gets a paint 
     // event.
-  
+
 protected:
 
     // Events we implement
@@ -77,9 +82,10 @@ private:
     QTimer* mUpdateTimer;
 
     QTimer* mRotateTimer;
+    QTimer* mReleaseTimer;
     QTimer* mPersistenceTimer;
 
-    int mButtonPressed;
+    int mButtonsPressed;
     bool mShiftPressed;
 
     int mPreviousX;
@@ -96,6 +102,8 @@ private:
     QGLShaderProgram mProgram;
 
     Game* mGame;
+    
+    DrawMode mMode;
 
 private slots:
     void persistenceRotate(); 

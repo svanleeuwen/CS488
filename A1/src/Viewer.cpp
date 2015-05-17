@@ -13,7 +13,7 @@
 static const QColor COLOURS[] = {
     QColor(255, 0, 0), QColor(0, 255, 0), QColor(0, 0, 255),
     QColor(255, 255, 0), QColor(0, 255, 255), QColor(255, 0, 255),
-    QColor(255, 165, 0), QColor(255, 255, 255), QColor(255, 255, 255)
+    QColor(255, 165, 0), QColor(150, 125, 255), QColor(200, 200, 200)
 };
 
 Viewer::Viewer(const QGLFormat& format, Game* game, QWidget *parent)
@@ -35,8 +35,12 @@ Viewer::Viewer(const QGLFormat& format, Game* game, QWidget *parent)
     mRotateTimer->setSingleShot(true);
     mRotateTimer->setInterval(75);
 
+    mReleaseTimer = new QTimer(this);
+    mReleaseTimer->setSingleShot(true);
+    mReleaseTimer->setInterval(25);
+
     mPersistenceTimer = new QTimer(this);
-    mPersistenceTimer->setInterval(25);
+    mPersistenceTimer->setInterval(50);
     connect(mPersistenceTimer, SIGNAL(timeout()), this, SLOT(persistenceRotate()));
 
     mModelMatrices[0].translate(-6,-11);
@@ -45,6 +49,8 @@ Viewer::Viewer(const QGLFormat& format, Game* game, QWidget *parent)
     mModelMatrices[1].scale(1, 21);
     mModelMatrices[2].translate(-5, -11);
     mModelMatrices[2].scale(10, 1);
+    
+    mButtonsPressed = Qt::NoButton;
 }
 
 Viewer::~Viewer() {
@@ -57,6 +63,18 @@ QSize Viewer::minimumSizeHint() const {
 
 QSize Viewer::sizeHint() const {
     return QSize(300, 600);
+}
+
+void Viewer::setDrawMode(DrawMode mode) {
+    mMode = mode;
+    if(mMode == DrawMode::wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void Viewer::resetView() {
+    mTransformMatrix.setToIdentity();
 }
 
 void Viewer::initializeGL() {
@@ -176,17 +194,25 @@ void Viewer::paintGL() {
 
 void Viewer::drawCube(int colourIndex)
 {
-    QColor colour = COLOURS[colourIndex];
+    QColor colour;
+    
+    if(mMode != DrawMode::multicolour)
+    {
+        colour = COLOURS[colourIndex];
+        mProgram.setUniformValue(mColourLocation, colour);
+    }
             
     for(int i = 0; i < 6; i++) {
-        //if(multi)
-        //{
+        if(mMode == DrawMode::multicolour)
+        {
             colour = COLOURS[colourIndex];
-            colour.setRedF(colour.redF()*(i+1)/7.0);
-            colour.setGreenF(colour.greenF()*(i+1)/7.0);
-            colour.setBlueF(colour.blueF()*(i+1)/7.0);
+            colour.setRedF(colour.redF()*(i+1)/7);
+            colour.setGreenF(colour.greenF()*(i+1)/7);
+            colour.setBlueF(colour.blueF()*(i+1)/7);
 
-        mProgram.setUniformValue(mColourLocation, colour);
+            mProgram.setUniformValue(mColourLocation, colour);
+        }
+
         glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 
             (const GLvoid*)(i*4*sizeof(GLushort)));
     }
@@ -229,37 +255,54 @@ void Viewer::resizeGL(int width, int height) {
 }
 
 void Viewer::mousePressEvent ( QMouseEvent * event ) {
-    mButtonPressed = event->button();
-    mShiftPressed = event->modifiers() == Qt::ShiftModifier;
+    if(mButtonsPressed == Qt::NoButton) {
+        mShiftPressed = event->modifiers() == Qt::ShiftModifier;
+    }
+
+    mButtonsPressed += event->button();
     mPreviousX = event->x();
 
-    if(mPersistenceTimer->isActive())
+    if(mPersistenceTimer->isActive()) {
         mPersistenceTimer->stop();
+    }
 }
 
 
 void Viewer::mouseReleaseEvent ( QMouseEvent * event ) {
-    mButtonPressed = Qt::NoButton;
+    static int buttonsReleased = Qt::NoButton;
 
-    if(!mShiftPressed) {
+    int remainingReleaseTime = mReleaseTimer->remainingTime();
+    if(remainingReleaseTime <= 0) {
+        buttonsReleased = Qt::NoButton;
+    }
+
+    buttonsReleased += event->button();
+    mButtonsPressed -= event->button();
+
+    if(!mShiftPressed && (mButtonsPressed == Qt::NoButton)) {
         int remainingTime = mRotateTimer->remainingTime();
         
         if(remainingTime > 0) {
-            switch(event->button()) {
-                case Qt::LeftButton:
-                    mPersistenceAxis = {1, 0, 0};
-                    break;
-                case Qt::RightButton:
-                    mPersistenceAxis = {0, 1, 0};
-                    break;
-                case Qt::MiddleButton:
-                    mPersistenceAxis = {0, 0, 1};
-                default:
-                    {}
+            mPersistenceAxis = {0, 0, 0};
+
+            if((buttonsReleased & Qt::LeftButton) > 0) {
+                mPersistenceAxis += {1, 0, 0};
             }
+
+            if((buttonsReleased & Qt::RightButton) > 0) {
+                mPersistenceAxis += {0, 1, 0};
+            }
+
+            if((buttonsReleased & Qt::MiddleButton) > 0) {
+                mPersistenceAxis += {0, 0, 1};
+            }
+
             mPersistenceSpeed = mPersistenceTimer->interval()*mTotalX/remainingTime;
             mPersistenceTimer->start();
         }
+        
+    } else if(!mShiftPressed) {
+        mReleaseTimer->start();
     }
 }
 
@@ -267,13 +310,6 @@ const float SCALE_DIVISOR = 100.0f;
 const float ROTATE_DIVISOR = 2.5f;
 
 void Viewer::mouseMoveEvent ( QMouseEvent * event ) { 
-    if(mButtonPressed != Qt::LeftButton &&
-            mButtonPressed != Qt::RightButton &&
-            mButtonPressed != Qt::MiddleButton) {
-        QGLWidget::mouseMoveEvent(event);
-        return;
-    }
-
     int deltaX = event->x() - mPreviousX;
     mPreviousX = event->x();
     
@@ -281,16 +317,14 @@ void Viewer::mouseMoveEvent ( QMouseEvent * event ) {
         if(mMovingRight != (deltaX > 0)) {
             mMovingRight = deltaX > 0;
             
-            if(!mShiftPressed)
-            {
+            if(!mShiftPressed) {
                 mTotalX = deltaX;
                 mRotateTimer->start();
             }    
         }
         
         if(!mShiftPressed) {
-            if(mRotateTimer->isActive())
-            {
+            if(mRotateTimer->isActive()) {
                 mTotalX += deltaX;
             } else {
                 mRotateTimer->start();
@@ -299,23 +333,24 @@ void Viewer::mouseMoveEvent ( QMouseEvent * event ) {
 
             float rotateFactor = deltaX / ROTATE_DIVISOR;
 
-            switch(mButtonPressed) {
-                case Qt::LeftButton:
-                    rotateWorld(rotateFactor, 1, 0, 0);
-                    break;
-
-                case Qt::RightButton:
-                    rotateWorld(rotateFactor, 0, 1, 0); 
-                    break;
-
-                case Qt::MiddleButton:
-                    rotateWorld(rotateFactor, 0, 0, 1);
+            if((mButtonsPressed & Qt::LeftButton) > 0) {
+                rotateWorld(rotateFactor, 1, 0, 0);
             }
+
+            if((mButtonsPressed & Qt::RightButton) > 0) {
+                rotateWorld(rotateFactor, 0, 1, 0);
+            }
+
+            if((mButtonsPressed & Qt::MiddleButton) > 0) {
+                rotateWorld(rotateFactor, 0, 0, 1);
+            }
+        
         } else {
             float scaleFactor = 1 + deltaX/SCALE_DIVISOR;
 
             if(mTotalScaling * scaleFactor > mScaleMax) {
                 scaleFactor = mScaleMax/mTotalScaling;
+
             } else if(mTotalScaling * scaleFactor < mScaleMin) {
                 scaleFactor = mScaleMin/mTotalScaling;
             }

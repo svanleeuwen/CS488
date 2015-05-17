@@ -49,6 +49,14 @@ private slots:
     void setSlowSpeed();
     void setMediumSpeed();
     void setFastSpeed();
+
+    void setWireframeMode();
+    void setFaceMode();
+    void setMulticolourMode();
+
+    void newGame();
+    void resetView();
+
     void tick();
 };
 

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_AppWindow_t {
-    QByteArrayData data[6];
-    char stringdata[58];
+    QByteArrayData data[11];
+    char stringdata[124];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,10 +34,17 @@ QT_MOC_LITERAL(1, 10, 12),
 QT_MOC_LITERAL(2, 23, 0),
 QT_MOC_LITERAL(3, 24, 14),
 QT_MOC_LITERAL(4, 39, 12),
-QT_MOC_LITERAL(5, 52, 4)
+QT_MOC_LITERAL(5, 52, 16),
+QT_MOC_LITERAL(6, 69, 11),
+QT_MOC_LITERAL(7, 81, 18),
+QT_MOC_LITERAL(8, 100, 7),
+QT_MOC_LITERAL(9, 108, 9),
+QT_MOC_LITERAL(10, 118, 4)
     },
     "AppWindow\0setSlowSpeed\0\0setMediumSpeed\0"
-    "setFastSpeed\0tick\0"
+    "setFastSpeed\0setWireframeMode\0setFaceMode\0"
+    "setMulticolourMode\0newGame\0resetView\0"
+    "tick\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -47,7 +54,7 @@ static const uint qt_meta_data_AppWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -55,12 +62,22 @@ static const uint qt_meta_data_AppWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   34,    2, 0x08,
-       3,    0,   35,    2, 0x08,
-       4,    0,   36,    2, 0x08,
-       5,    0,   37,    2, 0x08,
+       1,    0,   59,    2, 0x08,
+       3,    0,   60,    2, 0x08,
+       4,    0,   61,    2, 0x08,
+       5,    0,   62,    2, 0x08,
+       6,    0,   63,    2, 0x08,
+       7,    0,   64,    2, 0x08,
+       8,    0,   65,    2, 0x08,
+       9,    0,   66,    2, 0x08,
+      10,    0,   67,    2, 0x08,
 
  // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -77,7 +94,12 @@ void AppWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 0: _t->setSlowSpeed(); break;
         case 1: _t->setMediumSpeed(); break;
         case 2: _t->setFastSpeed(); break;
-        case 3: _t->tick(); break;
+        case 3: _t->setWireframeMode(); break;
+        case 4: _t->setFaceMode(); break;
+        case 5: _t->setMulticolourMode(); break;
+        case 6: _t->newGame(); break;
+        case 7: _t->resetView(); break;
+        case 8: _t->tick(); break;
         default: ;
         }
     }
@@ -109,13 +131,13 @@ int AppWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 4;
+        _id -= 9;
     }
     return _id;
 }

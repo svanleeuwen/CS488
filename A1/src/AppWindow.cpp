@@ -25,6 +25,8 @@ AppWindow::AppWindow() {
     connect(m_game_timer, SIGNAL(timeout()), this, SLOT(tick()));
     setTickSpeed(Speed::slow);
 
+    setFaceMode();
+
     createActions();
     createMenu();
 }
@@ -82,8 +84,8 @@ void AppWindow::createAppActions()
     resetAct->setStatusTip(tr("Resets the view of the game"));
 
     connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
-    connect(newGameAct, SIGNAL(triggered()), this, SLOT(close()));
-    connect(resetAct, SIGNAL(triggered()), this, SLOT(close())); 
+    connect(newGameAct, SIGNAL(triggered()), this, SLOT(newGame()));
+    connect(resetAct, SIGNAL(triggered()), this, SLOT(resetView())); 
 
     for (auto& action : m_app_actions) {
         addAction(action);
@@ -110,9 +112,9 @@ void AppWindow::createDrawActions()
     faceAct->setStatusTip(tr("Draws game with the faces of shapes coloured"));
     multiAct->setStatusTip(tr("Draws the game with each cube face a different colour"));
 
-    connect(wireFrameAct, SIGNAL(triggered()), this, SLOT(close()));
-    connect(faceAct, SIGNAL(triggered()), this, SLOT(close()));
-    connect(multiAct, SIGNAL(triggered()), this, SLOT(close()));
+    connect(wireFrameAct, SIGNAL(triggered()), this, SLOT(setWireframeMode()));
+    connect(faceAct, SIGNAL(triggered()), this, SLOT(setFaceMode()));
+    connect(multiAct, SIGNAL(triggered()), this, SLOT(setMulticolourMode()));
 
     for (auto& action : m_draw_actions) {
         addAction(action);
@@ -199,6 +201,26 @@ void AppWindow::setMediumSpeed() {
 
 void AppWindow::setFastSpeed() {
     setTickSpeed(Speed::fast);
+}
+
+void AppWindow::setWireframeMode() {
+    m_viewer->setDrawMode(Viewer::DrawMode::wireframe);
+}
+
+void AppWindow::setFaceMode() {
+    m_viewer->setDrawMode(Viewer::DrawMode::face);
+}
+
+void AppWindow::setMulticolourMode() {
+    m_viewer->setDrawMode(Viewer::DrawMode::multicolour);
+}
+
+void AppWindow::newGame() {
+    m_game->reset();
+}
+
+void AppWindow::resetView() {
+    m_viewer->resetView();
 }
 
 void AppWindow::tick() {
