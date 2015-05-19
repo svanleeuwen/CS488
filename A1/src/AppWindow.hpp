@@ -1,3 +1,8 @@
+/*
+ * Name: Spencer Van Leeuwen
+ * Student Number: 20412199
+ * User-id: srvanlee
+ */
 #ifndef APPWINDOW_HPP
 #define APPWINDOW_HPP
 

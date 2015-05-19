@@ -1,3 +1,9 @@
+/*
+ * Name: Spencer Van Leeuwen
+ * Student Number: 20412199
+ * User-id: srvanlee
+ */
+
 // #include <GL/glew.h>
 #include <QtWidgets>
 #include <QtOpenGL>

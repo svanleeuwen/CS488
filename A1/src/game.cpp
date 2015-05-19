@@ -1,3 +1,8 @@
+/*
+ * Name: Spencer Van Leeuwen
+ * Student Number: 20412199
+ * User-id: srvanlee
+ */
 //---------------------------------------------------------------------------
 //
 // CS488 -- Introduction to Computer Graphics

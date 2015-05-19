@@ -1,3 +1,8 @@
+/*
+ * Name: Spencer Van Leeuwen
+ * Student Number: 20412199
+ * User-id: srvanlee
+ */
 #include <QtWidgets>
 #include <QGLFormat>
 #include <iostream>

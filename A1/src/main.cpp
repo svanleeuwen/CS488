@@ -1,3 +1,8 @@
+/*
+ * Name: Spencer Van Leeuwen
+ * Student Number: 20412199
+ * User-id: srvanlee
+ */
 #include <QApplication>
 #include <QDesktopWidget>
 #include "AppWindow.hpp"

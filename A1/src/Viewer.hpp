@@ -1,3 +1,8 @@
+/*
+ * Name: Spencer Van Leeuwen
+ * Student Number: 20412199
+ * User-id: srvanlee
+ */
 #ifndef CS488_VIEWER_HPP
 #define CS488_VIEWER_HPP
 
