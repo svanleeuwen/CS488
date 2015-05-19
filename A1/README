@@ -16,5 +16,4 @@ I have created the following data files, which are in the data directory:
 - None
 
 My program assumes the following: 
-- Nothing
-
+- Using Qt version >= 5.1 and Ubuntu 14.04
