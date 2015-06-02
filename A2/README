@@ -1,0 +1,19 @@
+Name: Spencer Van Leeuwen
+Student Number: 20412199
+User-id: srvanlee
+Assignment: A2
+
+The final executable was compiled on this machine: 
+
+How to invoke my program: 
+- Enter the command "./a2"
+
+How to use my extra features: 
+- No extra features
+
+I have created the following data files, which are in the data directory:
+- None
+
+My program assumes the following: 
+- I used Qt version >= 5.1 and Ubuntu 14.04, but I don't think it matters in 
+this assignment.
