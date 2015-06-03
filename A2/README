@@ -4,6 +4,7 @@ User-id: srvanlee
 Assignment: A2
 
 The final executable was compiled on this machine: 
+- gl08
 
 How to invoke my program: 
 - Enter the command "./a2"
@@ -15,5 +16,4 @@ I have created the following data files, which are in the data directory:
 - None
 
 My program assumes the following: 
-- I used Qt version >= 5.1 and Ubuntu 14.04, but I don't think it matters in 
-this assignment.
+- Qt version >= 5.1 and Ubuntu 14.04

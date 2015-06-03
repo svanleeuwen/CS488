@@ -29,6 +29,7 @@ private:
     QMenu* m_menu_mode;
 
     QActionGroup* m_group_mode;
+    QAction* m_default_action;
 
     std::vector<QAction*> m_app_actions;
     std::vector<QAction*> m_view_actions;

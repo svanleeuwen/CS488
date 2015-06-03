@@ -124,7 +124,8 @@ void AppWindow::createModelActions() {
         action->setCheckable(true);
     }
 
-    mRotateAct->setChecked(true);
+    m_default_action = mRotateAct;
+    m_default_action->setChecked(true);
 }
 
 void AppWindow::createMenu() {
@@ -188,5 +189,5 @@ void AppWindow::setViewport() {
 void AppWindow::reset() {
     m_viewer->reset_view();
     m_mode_text->setText(QString("Mode: Rotate Model"));
-
+    m_default_action->setChecked(true);    
 }

@@ -389,7 +389,7 @@ void Viewer::mouseReleaseEvent ( QMouseEvent * event ) {
 const float F_TRANSLATE = 5.0f;
 const float F_SCALE = 1.5f;
 const float F_FOV = 1.5f;
-const float F_NEAR = 1.0f;
+const float F_NEAR = 5.0f;
 const float F_FAR = 10.0f;
 
 void Viewer::mouseMoveEvent ( QMouseEvent * event ) {

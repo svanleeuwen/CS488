@@ -1,0 +1,67 @@
+sum is: /usr/bin/sum
+
+
+2015-06-02 21:12       Checksum for A2 for srvanlee on gl08       Page 1
+
+
+A2:
+total 1908
+ 27091652 drwxrwx---  2 srvanlee cs488           4096 Jun  2 21:11 src/
+113371508 drwxrwx---  4 srvanlee cs488           4096 Jun  2 21:10 ./
+133983201 -rw-r--r--  1 srvanlee srvanleeuwen   16337 Jun  2 21:09 screenshot01.png
+ 79011462 -rw-r--r--  1 srvanlee srvanleeuwen     406 Jun  2 21:08 README
+ 79011445 -rw-r-x---  1 srvanlee srvanleeuwen      84 Jun  2 21:06 shader.vert*
+ 73217202 -rw-r-x---  1 srvanlee srvanleeuwen     118 Jun  2 21:06 shader.frag*
+ 73217194 -rwxr-xr-x  1 srvanlee srvanleeuwen 1893350 Jun  2 21:06 a2*
+  3970475 -rw-r--r--  1 srvanlee srvanleeuwen    1072 Jun  2 20:41 Manual
+ 28489997 drwxrwx--- 10 srvanlee cs488           4096 May 19 16:02 ../
+ 27091651 drwxrwx---  2 srvanlee cs488           4096 May  9 00:01 data/
+
+A2/src:
+total 2012
+ 27091652 drwxrwx--- 2 srvanlee cs488           4096 Jun  2 21:11 ./
+113371508 drwxrwx--- 4 srvanlee cs488           4096 Jun  2 21:10 ../
+ 22494987 -rwxr-xr-x 1 srvanlee srvanleeuwen 1893350 Jun  2 20:55 a2*
+ 22494982 -rw-r--r-- 1 srvanlee srvanleeuwen    5956 Jun  2 20:55 AppWindow.cpp
+ 22494983 -rw-r--r-- 1 srvanlee srvanleeuwen     978 Jun  2 20:53 AppWindow.hpp
+ 27091664 -rw-r--r-- 1 srvanlee srvanleeuwen   74796 Jun  2 20:51 Makefile
+ 92046695 -rw-r--r-- 1 srvanlee srvanleeuwen   15923 Jun  2 20:35 Viewer.cpp
+ 27091660 -rw-r--r-- 1 srvanlee srvanleeuwen    4090 Jun  2 20:24 Viewer.hpp
+ 27091662 -rw-r-x--- 1 srvanlee cs488           9474 May  9 00:01 algebra.hpp*
+ 27091658 -rw-r-x--- 1 srvanlee cs488            539 May  9 00:01 main.cpp*
+ 27091657 -rw-r-x--- 1 srvanlee cs488            426 May  9 00:01 a2.pro*
+ 27091656 -rw-r-x--- 1 srvanlee cs488            118 May  9 00:01 shader.frag*
+ 27091654 -rw-r-x--- 1 srvanlee cs488             84 May  9 00:01 shader.vert*
+ 27091653 -rw-r-x--- 1 srvanlee cs488           3308 May  9 00:01 algebra.cpp*
+
+A2/data:
+total 8
+113371508 drwxrwx--- 4 srvanlee cs488 4096 Jun  2 21:10 ../
+ 27091651 drwxrwx--- 2 srvanlee cs488 4096 May  9 00:01 ./
+
+A2                                      
+A2/a2                                   53239  1849
+A2/data                                 
+A2/Manual                               05502     2
+A2/README                               20592     1
+A2/screenshot01.png                     63555    16
+A2/shader.frag                          23161     1
+A2/shader.vert                          10278     1
+A2/src                                  
+A2/src/a2                               53239  1849
+A2/src/a2.pro                           32966     1
+A2/src/algebra.cpp                      00294     4
+A2/src/algebra.hpp                      65153    10
+A2/src/AppWindow.cpp                    04161     6
+A2/src/AppWindow.hpp                    24097     1
+A2/src/main.cpp                         49175     1
+A2/src/Makefile                         60701    74
+A2/src/shader.frag                      23161     1
+A2/src/shader.vert                      10278     1
+A2/src/Viewer.cpp                       51939    16
+A2/src/Viewer.hpp                       00219     4
+
+
+
+
+
