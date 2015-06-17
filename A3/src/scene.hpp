@@ -5,27 +5,33 @@
 #include "algebra.hpp"
 #include "primitive.hpp"
 #include "material.hpp"
+#include <QMatrix4x4>
+#include <QVector3D>
+#include <QVector2D>
+
+class Viewer;
 
 class SceneNode {
 public:
   SceneNode(const std::string& name);
   virtual ~SceneNode();
 
-  virtual void walk_gl(bool picking = false) const;
+  virtual void walk_gl(Viewer* view, bool picking = false) const;
 
-  const Matrix4x4& get_transform() const { return m_trans; }
-  const Matrix4x4& get_inverse() const { return m_invtrans; }
+  virtual bool rotate_picked_nodes(double x, double y);
+  virtual void toggle_picking(int id);
+
+  virtual void reset_joints();
+
+  virtual void push_rotation();
+  virtual bool undo();
+  virtual bool redo();
+
+  const QMatrix4x4& get_transform() const { return m_trans; }
   
-  void set_transform(const Matrix4x4& m)
+  void set_transform(const QMatrix4x4& m)
   {
     m_trans = m;
-    m_invtrans = m.invert();
-  }
-
-  void set_transform(const Matrix4x4& m, const Matrix4x4& i)
-  {
-    m_trans = m;
-    m_invtrans = i;
   }
 
   void add_child(SceneNode* child)
@@ -41,8 +47,8 @@ public:
   // Callbacks to be implemented.
   // These will be called from Lua.
   void rotate(char axis, double angle);
-  void scale(const Vector3D& amount);
-  void translate(const Vector3D& amount);
+  void scale(const QVector3D& amount);
+  void translate(const QVector3D& amount);
 
   // Returns true if and only if this node is a JointNode
   virtual bool is_joint() const;
@@ -54,8 +60,8 @@ protected:
   std::string m_name;
 
   // Transformations
-  Matrix4x4 m_trans;
-  Matrix4x4 m_invtrans;
+  QMatrix4x4 m_trans;
+  QMatrix4x4 m_rot;
 
   // Hierarchy
   typedef std::list<SceneNode*> ChildList;
@@ -67,7 +73,16 @@ public:
   JointNode(const std::string& name);
   virtual ~JointNode();
 
-  virtual void walk_gl(bool bicking = false) const;
+  virtual void walk_gl(Viewer* view, bool picking = false) const;
+
+  virtual bool rotate_picked_nodes(double x, double y);
+  virtual void toggle_picking(int id);
+
+  virtual void reset_joints();
+
+  virtual void push_rotation();
+  virtual bool undo();
+  virtual bool redo();
 
   virtual bool is_joint() const;
 
@@ -78,10 +93,22 @@ public:
     double min, init, max;
   };
 
-  
+   
 protected:
 
   JointRange m_joint_x, m_joint_y;
+
+  double m_angle_x;
+  double m_angle_y;
+
+private:
+  void rotate_joint_x(double angle);
+  void rotate_joint_y(double angle);
+
+  QMatrix4x4 m_rot_mat;
+
+  std::vector<QVector2D> mRotStack;
+  std::vector<QVector2D> mUndoStack;
 };
 
 class GeometryNode : public SceneNode {
@@ -90,7 +117,12 @@ public:
                Primitive* primitive);
   virtual ~GeometryNode();
 
-  virtual void walk_gl(bool picking = false) const;
+  virtual void walk_gl(Viewer* view, bool picking = false) const;
+
+  virtual void reset_joints();
+
+  virtual bool rotate_picked_nodes(double x, double y);
+  virtual void toggle_picking(int id);
 
   const Material* get_material() const;
   Material* get_material();
@@ -103,6 +135,9 @@ public:
 protected:
   Material* m_material;
   Primitive* m_primitive;
+
+private:
+  bool m_picked;
 };
 
 #endif

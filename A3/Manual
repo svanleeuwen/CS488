@@ -1,0 +1,21 @@
+Spencer Van Leeuwen
+Assignment 2 Manual
+---------------------------------------------
+
+I added the files sphere.cpp and sphere.hpp to build my sphere. I was being a little ambitious, and I implemented a sqrt(3)-subdivision algorithm described in Real-Time Rendering by Akenine-Moller, Haines, and Hoffman. (I would give a more precise reference, but I don't have it with me right now). I used the subdivision algorithm to turn a tetrahedron into a sphere.
+
+---------------------------------------------
+
+When there are no actions left to undo/redo, a message is outputted to stdout.
+
+---------------------------------------------
+
+I debated about whether or not Reset Joints or Reset All should reset which body parts are picked. The assignment didn't specify either way, and it made testing much easier, so I decided to reset the picked parts.
+
+---------------------------------------------
+
+I used Gouroud shading with the light placed at the eye.
+
+---------------------------------------------
+
+trackball.{cpp,hpp} are modifications to trackball.{c,h} to use Qt classes.

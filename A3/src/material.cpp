@@ -1,4 +1,5 @@
 #include "material.hpp"
+#include "Viewer.hpp"
 
 Material::~Material()
 {
@@ -13,7 +14,7 @@ PhongMaterial::~PhongMaterial()
 {
 }
 
-void PhongMaterial::apply_gl() const
+void PhongMaterial::apply_gl(Viewer* view) const
 {
-  // Perform OpenGL calls necessary to set up this material.
+    view->set_colour(QColor(m_kd.R()*255, m_kd.G()*255, m_kd.B()*255));
 }

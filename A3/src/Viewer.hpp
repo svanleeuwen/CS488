@@ -13,6 +13,14 @@
 #include <QGLBuffer>
 #endif
 
+#include "scene.hpp"
+#include <stack>
+#include <QMatrix4x4>
+
+#define  SENS_PANX     30.0
+#define  SENS_PANY     23.0
+#define  SENS_ZOOM     35.0
+
 class Viewer : public QGLWidget {
     
     Q_OBJECT
@@ -27,7 +35,26 @@ public:
     // If you want to render a new frame, call do not call paintGL(),
     // instead, call update() to ensure that the view gets a paint 
     // event.
-  
+    
+    bool mPosOriMode;
+
+    void resetPos();
+    void resetOri();
+    void resetJoints();
+
+    void undo();
+    void redo();
+
+    void toggleTrackingCircle();
+    void toggleZBuffer();
+    void toggleBackface();
+    void toggleFrontface();
+
+    void drawSphere(bool picking = false);
+    void set_colour(const QColor& col);
+
+    std::stack<QMatrix4x4>* mMatStack;
+
 protected:
 
     // Events we implement
@@ -52,24 +79,49 @@ protected:
 private:
 
     QMatrix4x4 getCameraMatrix();
-    void translateWorld(float x, float y, float z);
-    void rotateWorld(float x, float y, float z);
-    void scaleWorld(float x, float y, float z);
-    void set_colour(const QColor& col);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
-    QOpenGLBuffer mCircleBufferObject;
+    void recursiveDraw(SceneNode* node);
+    void drawScene();
+
+    void initializeScene();
+
+    float* getSphereData();
+    void addShaders();
+    void initializeVertexBuffer();
+    void initializeProgram();
+
+    void updateCulling();
+
+//#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
+    QOpenGLBuffer mVertexBufferObject;
     QOpenGLVertexArrayObject mVertexArrayObject;
-#else 
+/*#else 
     QGLBuffer mCircleBufferObject;
-#endif
+#endif*/
     
     int mMvpMatrixLocation;
+    int mCenterLocation;
     int mColorLocation;
+    int mPickingLocation;
+    int mLightLocation;
 
+    int mSphereVertexCount;
+    
     QMatrix4x4 mPerspMatrix;
-    QMatrix4x4 mTransformMatrix;
+    QMatrix4x4 mTranslateMatrix;
+    QMatrix4x4 mRotateMatrix;
     QGLShaderProgram mProgram;
+
+    SceneNode* mScene;
+    
+    int mButtonsPressed;
+    int mPreviousX;
+    int mPreviousY;
+
+    bool mTrackingCircle;
+    bool mZBuffer;
+    bool mBackfaceCulling;
+    bool mFrontfaceCulling;
 };
 
 #endif

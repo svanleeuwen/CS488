@@ -18,7 +18,9 @@ HEADERS += algebra.hpp \
            scene.hpp \
            scene_lua.hpp \
            AppWindow.hpp \
-           Viewer.hpp
+           Viewer.hpp \
+           sphere.hpp \
+           trackball.hpp
 SOURCES += algebra.cpp \
            main.cpp \
            material.cpp \
@@ -26,4 +28,6 @@ SOURCES += algebra.cpp \
            scene.cpp \
            scene_lua.cpp \
            AppWindow.cpp \ 
-           Viewer.cpp
+           Viewer.cpp \
+           sphere.cpp \
+           trackball.cpp

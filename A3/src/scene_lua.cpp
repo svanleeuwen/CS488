@@ -41,6 +41,7 @@
 #include <cstring>
 #include <cstdio>
 #include "lua488.hpp"
+#include <QVector3D>
 
 // Uncomment the following line to enable debugging messages
 // #define GRLUA_ENABLE_DEBUG
@@ -247,7 +248,7 @@ int gr_node_scale_cmd(lua_State* L)
     values[i] = luaL_checknumber(L, i + 2);
   }
 
-  self->scale(Vector3D(values[0], values[1], values[2]));
+  self->scale(QVector3D(values[0], values[1], values[2]));
 
   return 0;
 }
@@ -269,7 +270,7 @@ int gr_node_translate_cmd(lua_State* L)
     values[i] = luaL_checknumber(L, i + 2);
   }
 
-  self->translate(Vector3D(values[0], values[1], values[2]));
+  self->translate(QVector3D(values[0], values[1], values[2]));
 
   return 0;
 }

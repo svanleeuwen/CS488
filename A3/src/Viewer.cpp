@@ -4,21 +4,37 @@
 #include <iostream>
 #include <math.h>
 
+#include "scene_lua.hpp"
+#include "sphere.hpp"
+#include <vector>
+#include <QVector3D>
+#include "trackball.hpp"
 
 #ifndef GL_MULTISAMPLE
 #define GL_MULTISAMPLE 0x809D
 #endif
 
+using namespace std;
+
 Viewer::Viewer(const QGLFormat& format, QWidget *parent) 
     : QGLWidget(format, parent) 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
-    , mCircleBufferObject(QOpenGLBuffer::VertexBuffer)
+    , mVertexBufferObject(QOpenGLBuffer::VertexBuffer)
     , mVertexArrayObject(this)
-#else 
-    , mCircleBufferObject(QGLBuffer::VertexBuffer)
-#endif
 {
+    mPosOriMode = true;
+    mTrackingCircle = false;
 
+    mZBuffer = false;
+    mBackfaceCulling = false;
+    mFrontfaceCulling = false;
+
+    mButtonsPressed = 0;
+
+    initializeScene();
+
+    mMatStack = new std::stack<QMatrix4x4>();
+    QMatrix4x4 eye;
+    mMatStack->push(eye);
 }
 
 Viewer::~Viewer() {
@@ -33,17 +49,32 @@ QSize Viewer::sizeHint() const {
     return QSize(300, 300);
 }
 
-void Viewer::initializeGL() {
-    QGLFormat glFormat = QGLWidget::format();
-    if (!glFormat.sampleBuffers()) {
-        std::cerr << "Could not enable sample buffers." << std::endl;
-        return;
+float* Viewer::getSphereData() {
+    SphereMesh sphere(4);
+    vector<Triangle*>* faces = sphere.getFaces();
+
+    int n = faces->size();
+    mSphereVertexCount = n*3;
+    
+    float* sphereData = new float[mSphereVertexCount*3*3];
+
+    for(uint i = 0; i < faces->size(); i++) {
+        vector<Point*>& verts = faces->at(i)->getVertices();
+       
+        for(int j = 0; j < 3; j++) { 
+            QVector3D point = (QVector3D)(*verts.at(j));
+            point.normalize();
+
+            sphereData[(i*3 + j)*3 + 0] = point.x();
+            sphereData[(i*3 + j)*3 + 1] = point.y();
+            sphereData[(i*3 + j)*3 + 2] = point.z();
+        }
     }
 
-    glShadeModel(GL_SMOOTH);
-    glClearColor( 0.4, 0.4, 0.4, 0.0 );
-    glEnable(GL_DEPTH_TEST);
-    
+    return sphereData;
+}
+
+void Viewer::addShaders() {
     if (!mProgram.addShaderFromSourceFile(QGLShader::Vertex, "shader.vert")) {
         std::cerr << "Cannot load vertex shader." << std::endl;
         return;
@@ -58,75 +89,91 @@ void Viewer::initializeGL() {
         std::cerr << "Cannot link shaders." << std::endl;
         return;
     }
+}
+
+void Viewer::initializeVertexBuffer() {
+    float* sphereData = getSphereData();
 
     float circleData[120];
 
-    double radius = width() < height() ? 
-        (float)width() * 0.25 : (float)height() * 0.25;
-        
+    double radius = 1.0;
+
     for(size_t i=0; i<40; ++i) {
         circleData[i*3] = radius * cos(i*2*M_PI/40);
         circleData[i*3 + 1] = radius * sin(i*2*M_PI/40);
         circleData[i*3 + 2] = 0.0;
     }
 
+    mVertexBufferObject.create();
+    mVertexBufferObject.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 1, 0))
-    mVertexArrayObject.create();
-    mVertexArrayObject.bind();
-
-    mCircleBufferObject.create();
-    mCircleBufferObject.setUsagePattern(QOpenGLBuffer::StaticDraw);
-#else 
-    /*
-     * if qt version is less than 5.1, use the following commented code
-     * instead of QOpenGLVertexVufferObject. Also use QGLBuffer instead of 
-     * QOpenGLBuffer.
-     */
-    uint vao;
-     
-    typedef void (APIENTRY *_glGenVertexArrays) (GLsizei, GLuint*);
-    typedef void (APIENTRY *_glBindVertexArray) (GLuint);
-     
-    _glGenVertexArrays glGenVertexArrays;
-    _glBindVertexArray glBindVertexArray;
-     
-    glGenVertexArrays = (_glGenVertexArrays) QGLWidget::context()->getProcAddress("glGenVertexArrays");
-    glBindVertexArray = (_glBindVertexArray) QGLWidget::context()->getProcAddress("glBindVertexArray");
-     
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);    
-
-    mCircleBufferObject.create();
-    mCircleBufferObject.setUsagePattern(QGLBuffer::StaticDraw);
-#endif
-
-    if (!mCircleBufferObject.bind()) {
+    if (!mVertexBufferObject.bind()) {
         std::cerr << "could not bind vertex buffer to the context." << std::endl;
         return;
     }
 
-    mCircleBufferObject.allocate(circleData, 40 * 3 * sizeof(float));
+    mVertexBufferObject.allocate((mSphereVertexCount + 40) * 3 * sizeof(float));
+    
+    mVertexBufferObject.write(0, sphereData, mSphereVertexCount * 3 * sizeof(float));
+    mVertexBufferObject.write(mSphereVertexCount * 3 * sizeof(float), circleData, 40 * 3 * sizeof(float));
+    
+    delete sphereData;
+}
 
+void Viewer::initializeProgram() {
     mProgram.bind();
 
     mProgram.enableAttributeArray("vert");
     mProgram.setAttributeBuffer("vert", GL_FLOAT, 0, 3);
 
     mMvpMatrixLocation = mProgram.uniformLocation("mvpMatrix");
-    mColorLocation = mProgram.uniformLocation("frag_color");
+    mColorLocation = mProgram.uniformLocation("diffuse_color");
+    mCenterLocation = mProgram.uniformLocation("sphere_center");
+    mPickingLocation = mProgram.uniformLocation("picking");
+    mLightLocation = mProgram.uniformLocation("light_location");
+}
+
+void Viewer::initializeGL() {
+    QGLFormat glFormat = QGLWidget::format();
+    if (!glFormat.sampleBuffers()) {
+        std::cerr << "Could not enable sample buffers." << std::endl;
+        return;
+    }
+
+    glShadeModel(GL_SMOOTH);
+    glClearColor( 0.4, 0.4, 0.4, 0.0 );
+
+    addShaders();    
+
+    mVertexArrayObject.create();
+    mVertexArrayObject.bind();
+
+    initializeVertexBuffer();
+
+    initializeProgram();
+}
+
+void Viewer::drawSphere(bool picking) {
+    // Bind buffer object
+    mVertexBufferObject.bind();
+    mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix() * mMatStack->top());
+
+    QVector4D origin = QVector4D(0, 0, 0, 1);
+    mProgram.setUniformValue(mCenterLocation, getCameraMatrix() * mMatStack->top() * origin); 
+    mProgram.setUniformValue(mLightLocation, QVector3D(getCameraMatrix() * origin));
+
+    mProgram.setUniformValue(mPickingLocation, picking);
+
+    // Draw buffer
+    glDrawArrays(GL_TRIANGLES, 0, mSphereVertexCount);
 }
 
 void Viewer::paintGL() {
     // Clear framebuffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Set up lighting
-
-    // Draw stuff
-
+    
+    mScene->walk_gl(this);
     draw_trackball_circle();
-
 }
 
 void Viewer::resizeGL(int width, int height) {
@@ -141,48 +188,137 @@ void Viewer::resizeGL(int width, int height) {
 }
 
 void Viewer::mousePressEvent ( QMouseEvent * event ) {
-    std::cerr << "Stub: button " << event->button() << " pressed\n";
+    mButtonsPressed += event->button();
+    mPreviousX = event->x();
+    mPreviousY = event->y();
+
+    if(!mPosOriMode && event->button() == Qt::LeftButton) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // picking method taken from provided tutorial
+        mScene->walk_gl(this, true);
+        glFlush();
+        swapBuffers();
+        glFinish();
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        unsigned char data[4];
+        glReadPixels(event->x(), height() - event->y(), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+        int pickedId = data[0] + data[1]*256 + data[2]*256*256;
+        mScene->toggle_picking(pickedId);
+        
+        update();
+    }
 }
 
 void Viewer::mouseReleaseEvent ( QMouseEvent * event ) {
-    std::cerr << "Stub: button " << event->button() << " released\n";
+    mButtonsPressed -= event->button();
+
+    if(!mPosOriMode && 
+            (event->button() == Qt::RightButton || 
+             event->button() == Qt::MiddleButton)) {
+        mScene->push_rotation(); 
+    }
 }
 
 void Viewer::mouseMoveEvent ( QMouseEvent * event ) {
-    std::cerr << "Stub: Motion at " << event->x() << ", " << event->y() << std::endl;
+    int current_width = width();
+    int current_height = height();
+
+    int x = event->x();
+    int y = event->y();
+
+    if(mPosOriMode) {
+        // The following if statements are modifications to the function vPerformTransfo
+        // from events.c
+        if (mButtonsPressed & Qt::LeftButton) {
+            QMatrix4x4 panMat;
+            panMat.translate((x - mPreviousX) / ((float)SENS_PANX),
+                -(y - mPreviousY) / ((float)SENS_PANY), 0.0);
+            
+            mTranslateMatrix = mTranslateMatrix * panMat; 
+        }
+       
+        if (mButtonsPressed & Qt::MiddleButton) {
+            QMatrix4x4 zoomMat;
+            zoomMat.translate(0.0, 0.0, (y - mPreviousY) / ((float)SENS_ZOOM));
+
+            mTranslateMatrix = mTranslateMatrix * zoomMat;
+        }
+
+        if (mButtonsPressed & Qt::RightButton) {
+            float fDiameter;
+            int iCenterX, iCenterY;
+            float fNewModX, fNewModY, fOldModX, fOldModY;
+        
+            /* vCalcRotVec expects new and old positions in relation to the center of the
+             * trackball circle which is centered in the middle of the window and
+             * half the smaller of nWinWidth or nWinHeight.
+             */
+            fDiameter = (current_width < current_height) ? current_width * 0.5 : current_height * 0.5;
+            iCenterX = current_width / 2;
+            iCenterY = current_height / 2;
+            fOldModX = mPreviousX - iCenterX;
+            fOldModY = mPreviousY - iCenterY;
+            fNewModX = x - iCenterX;
+            fNewModY = y - iCenterY;
+
+            QVector3D rotVec = calcRotVec(fNewModX, fNewModY,
+                            fOldModX, fOldModY,
+                            fDiameter);
+            /* Negate Y component since Y axis increases downwards
+             * in screen space and upwards in OpenGL.
+             */
+            QMatrix4x4 rotMat = axisRotMatrix(rotVec);
+
+            // Since all these matrices are meant to be loaded
+            // into the OpenGL matrix stack, we need to transpose the
+            // rotation matrix (since OpenGL wants rows stored
+            // in columns)
+            
+            mRotateMatrix = mRotateMatrix * rotMat.transposed();
+        }
+    } else {
+        int deltaX = x - mPreviousX;
+        int deltaY = y - mPreviousY;
+
+        double xRatio = 0.0;
+        double yRatio = 0.0;
+        
+        if(mButtonsPressed & Qt::MiddleButton) {
+            yRatio = (double)deltaY / height();
+        }
+
+        if(mButtonsPressed & Qt::RightButton) {
+            xRatio = (double)deltaX / width();
+        }
+
+        mScene->rotate_picked_nodes(yRatio * 180.0, xRatio * 180.0);
+    }
+
+    mPreviousX = x;
+    mPreviousY = y;
+    
+    update();
 }
 
 QMatrix4x4 Viewer::getCameraMatrix() {
-    // Todo: Ask if we want to keep this.
     QMatrix4x4 vMatrix;
 
     QMatrix4x4 cameraTransformation;
-    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, 20.0);
+    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, 40.0);
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
 
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
 
-    return mPerspMatrix * vMatrix * mTransformMatrix;
-}
-
-void Viewer::translateWorld(float x, float y, float z) {
-    // Todo: Ask if we want to keep this.
-    mTransformMatrix.translate(x, y, z);
-}
-
-void Viewer::rotateWorld(float x, float y, float z) {
-    // Todo: Ask if we want to keep this.
-    mTransformMatrix.rotate(x, y, z);
-}
-
-void Viewer::scaleWorld(float x, float y, float z) {
-    // Todo: Ask if we want to keep this.
-    mTransformMatrix.scale(x, y, z);
+    return mPerspMatrix * vMatrix * mTranslateMatrix * mRotateMatrix;
 }
 
 void Viewer::set_colour(const QColor& col)
 {
-  mProgram.setUniformValue(mColorLocation, col.red(), col.green(), col.blue());
+    mProgram.setUniformValue(mColorLocation, col.redF(), col.greenF(), col.blueF());
 }
 
 void Viewer::draw_trackball_circle()
@@ -190,25 +326,112 @@ void Viewer::draw_trackball_circle()
     int current_width = width();
     int current_height = height();
 
-    // Set up for orthogonal drawing to draw a circle on screen.
-    // You'll want to make the rest of the function conditional on
-    // whether or not we want to draw the circle this time around.
+    float radius = min(current_width, current_height)/4.0;
 
-    set_colour(QColor(0.0, 0.0, 0.0));
+    if(mTrackingCircle) {
+        set_colour(QColor(0.0, 0.0, 0.0));
 
-    // Set orthographic Matrix
-    QMatrix4x4 orthoMatrix;
-    orthoMatrix.ortho(0.0, (float)current_width, 
-           0.0, (float)current_height, -0.1, 0.1);
+        // Set orthographic Matrix
+        QMatrix4x4 orthoMatrix;
+        orthoMatrix.ortho(0.0, (float)current_width, 
+               0.0, (float)current_height, -0.1, 0.1);
 
-    // Translate the view to the middle
-    QMatrix4x4 transformMatrix;
-    transformMatrix.translate(width()/2.0, height()/2.0, 0.0);
+        // Translate the view to the middle
+        QMatrix4x4 transformMatrix;
+        transformMatrix.translate(current_width/2.0, current_height/2.0, 0.0);
+        transformMatrix.scale(radius, radius, 1.0);
+        
+        // Bind buffer object
+        mVertexBufferObject.bind();
+        mProgram.setUniformValue(mMvpMatrixLocation, orthoMatrix * transformMatrix);
 
-    // Bind buffer object
-    mCircleBufferObject.bind();
-    mProgram.setUniformValue(mMvpMatrixLocation, orthoMatrix * transformMatrix);
+        mProgram.setUniformValue(mPickingLocation, true);
 
-    // Draw buffer
-    glDrawArrays(GL_LINE_LOOP, 0, 40);    
+        // Draw buffer
+        glDrawArrays(GL_LINE_LOOP, mSphereVertexCount, 40);    
+    }
+}
+
+void Viewer::initializeScene() {
+    mScene = import_lua("puppet.lua");
+}
+
+void Viewer::resetPos() {
+    mTranslateMatrix.setToIdentity();
+    update();
+}
+
+void Viewer::resetOri() {
+    mRotateMatrix.setToIdentity();
+    update();
+}
+
+void Viewer::resetJoints() {
+    mScene->reset_joints();
+    update();
+}
+
+void Viewer::undo() {
+    bool undone = mScene->undo();
+    if(!undone) {
+        cout << "No actions left to undo" << endl;
+    }
+
+    update();
+}
+
+void Viewer::redo() {
+    bool redone = mScene->redo();
+    if(!redone) {
+        cout << "No actions left to redo" << endl;
+    }
+
+    update();
+}
+
+void Viewer::toggleTrackingCircle() {
+    mTrackingCircle = !mTrackingCircle;
+    update();
+}
+
+void Viewer::toggleZBuffer() {
+    mZBuffer = !mZBuffer;
+    
+    if(mZBuffer) {
+        glEnable(GL_DEPTH_TEST);
+    } else {
+        glDisable(GL_DEPTH_TEST);
+    }
+
+    update();
+}
+
+void Viewer::updateCulling() {
+    if(mBackfaceCulling && mFrontfaceCulling) {
+        glCullFace(GL_FRONT_AND_BACK);
+        glEnable(GL_CULL_FACE);
+    
+    } else if(mBackfaceCulling) {
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
+
+    } else if(mFrontfaceCulling) {
+        glCullFace(GL_FRONT);
+        glEnable(GL_CULL_FACE);
+
+    } else {
+        glDisable(GL_CULL_FACE);
+    }
+
+    update();
+}
+
+void Viewer::toggleBackface() {
+    mBackfaceCulling = !mBackfaceCulling;
+    updateCulling();    
+}
+
+void Viewer::toggleFrontface() {
+    mFrontfaceCulling = !mFrontfaceCulling;
+    updateCulling();
 }

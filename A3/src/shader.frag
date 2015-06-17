@@ -1,6 +1,6 @@
 #version 330
 
-uniform vec3 frag_color;
+in vec3 frag_color;
 
 out vec4 finalColor;
 

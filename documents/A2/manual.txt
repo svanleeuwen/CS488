@@ -6,6 +6,11 @@ There are no extra features, I have made no assumptions, and the
 assignment is complete.
 
 ---------------------------------------------
+Near and Far Plane:
+- There are textual labels at the bottom of the program window displaying where the 
+near and far planes are located.
+
+---------------------------------------------
 Clipping:
 - I clipped the lines using their 3D homogeneous coordinates before normalizing
 and transforming to the viewport.
