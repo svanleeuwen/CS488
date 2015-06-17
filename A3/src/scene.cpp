@@ -82,6 +82,17 @@ bool SceneNode::redo() {
     return true;
 }
 
+void SceneNode::modelling_rotate(char axis, double angle)
+{
+    if(axis == 'x') {
+        m_trans.rotate(angle, 1.0f, 0.0f, 0.0f);
+    } else if(axis == 'y') {
+        m_trans.rotate(angle, 0.0f, 1.0f, 0.0f);
+    } else {
+        m_trans.rotate(angle, 0.0f, 0.0f, 1.0f);
+    }
+}
+
 void SceneNode::rotate(char axis, double angle)
 {
     if(axis == 'x') {
@@ -111,6 +122,8 @@ bool SceneNode::is_joint() const
 JointNode::JointNode(const std::string& name)
   : SceneNode(name)
 {
+    m_angle_x = 0;
+    m_angle_y = 0;
 }
 
 JointNode::~JointNode()
@@ -204,8 +217,8 @@ bool JointNode::redo() {
     int m = mUndoStack.size();
     if(m > 0) {
         QVector2D currentAngle;
-        
-        if(n > 0) {
+       
+        if(n > 0) { 
             currentAngle = mRotStack.at(n-1);
         } else {
             currentAngle = QVector2D(m_joint_x.init, m_joint_y.init);

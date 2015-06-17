@@ -1,0 +1,133 @@
+sum is: /usr/bin/sum
+
+
+2015-06-17 08:41       Checksum for A3 for srvanlee on gl06       Page 1
+
+
+A3:
+total 2916
+86331066 drwxrwx---  4 srvanlee cs488           4096 Jun 17 08:39 ./
+86331070 drwxrwx---  2 srvanlee cs488           4096 Jun 17 08:38 src/
+27038361 -rw-r--r--  1 srvanlee srvanleeuwen     679 Jun 17 08:37 shader.vert
+27038354 -rwxr-xr-x  1 srvanlee srvanleeuwen 2853107 Jun 17 08:37 puppeteer*
+27038362 -rw-r--r--  1 srvanlee srvanleeuwen    1500 Jun 17 08:37 Manual
+27038359 -rw-r--r--  1 srvanlee srvanleeuwen     370 Jun 17 07:19 README
+27038357 -rw-r--r--  1 srvanlee srvanleeuwen    6056 Jun 17 07:17 puppet.lua
+27038355 -rw-r--r--  1 srvanlee srvanleeuwen     123 Jun 17 07:17 shader.frag
+27038353 -rw-r--r--  1 srvanlee srvanleeuwen   73703 Jun 17 07:13 screenshot01.png
+28489997 drwxrwx--- 10 srvanlee cs488           4096 May 19 16:02 ../
+86331069 drwxrwx---  2 srvanlee cs488           4096 May  9 00:01 data/
+
+A3/src:
+total 3064
+ 86331066 drwxrwx--- 4 srvanlee cs488           4096 Jun 17 08:39 ../
+ 86331070 drwxrwx--- 2 srvanlee cs488           4096 Jun 17 08:38 ./
+ 17764572 -rw-r--r-- 1 srvanlee srvanleeuwen   11804 Jun 17 08:22 Viewer.cpp
+ 17764566 -rwxr-xr-x 1 srvanlee srvanleeuwen 2853107 Jun 17 08:12 puppeteer*
+ 17764573 -rw-r--r-- 1 srvanlee srvanleeuwen    7647 Jun 17 08:12 scene.cpp
+ 17764560 -rw-r--r-- 1 srvanlee srvanleeuwen   11712 Jun 17 08:11 scene_lua.cpp
+105305532 -rw-r--r-- 1 srvanlee srvanleeuwen    2849 Jun 17 08:09 scene.hpp
+ 22242152 -rw-r--r-- 1 srvanlee srvanleeuwen    1032 Jun 17 07:57 a3mark.lua
+ 86331054 -rw-r--r-- 1 srvanlee srvanleeuwen  102925 Jun 17 06:43 Makefile
+ 12964869 -rw-r--r-- 1 srvanlee srvanleeuwen     288 Jun 17 06:43 trackball.hpp
+ 12964868 -rw-r--r-- 1 srvanlee srvanleeuwen    3589 Jun 17 06:43 trackball.cpp
+ 12964867 -rw-r--r-- 1 srvanlee srvanleeuwen    1451 Jun 17 06:43 sphere.hpp
+ 12964866 -rw-r--r-- 1 srvanlee srvanleeuwen    6856 Jun 17 06:43 sphere.cpp
+ 12964865 -rw-r--r-- 1 srvanlee srvanleeuwen     679 Jun 17 06:43 shader.vert
+ 12964864 -rw-r--r-- 1 srvanlee srvanleeuwen     123 Jun 17 06:43 shader.frag
+ 12964860 -rw-r--r-- 1 srvanlee srvanleeuwen     875 Jun 17 06:43 puppeteer.pro
+ 87403916 -rw-r--r-- 1 srvanlee srvanleeuwen    6056 Jun 17 06:43 puppet.lua
+ 87403915 -rw-r--r-- 1 srvanlee srvanleeuwen     344 Jun 17 06:43 primitive.hpp
+ 86331068 -rw-r--r-- 1 srvanlee srvanleeuwen     190 Jun 17 06:43 primitive.cpp
+ 86331067 -rw-r--r-- 1 srvanlee srvanleeuwen     496 Jun 17 06:43 material.hpp
+ 86331065 -rw-r--r-- 1 srvanlee srvanleeuwen     371 Jun 17 06:43 material.cpp
+ 86331063 -rw-r--r-- 1 srvanlee srvanleeuwen    2901 Jun 17 06:43 Viewer.hpp
+ 86331053 -rw-r--r-- 1 srvanlee srvanleeuwen    1080 Jun 17 06:43 AppWindow.hpp
+ 86331052 -rw-r--r-- 1 srvanlee srvanleeuwen    6427 Jun 17 06:43 AppWindow.cpp
+ 29098593 -rw-r-x--- 1 srvanlee cs488           9474 May  9 00:01 algebra.hpp*
+ 29098588 -rw-r-x--- 1 srvanlee cs488            895 May  9 00:01 main.cpp*
+ 29098587 -rw-r-x--- 1 srvanlee cs488            145 May  9 00:01 scene_lua.hpp*
+ 29098585 -rw-r-x--- 1 srvanlee cs488            170 May  9 00:01 lua488.hpp*
+ 29098584 -rw-r-x--- 1 srvanlee cs488           5680 May  9 00:01 a3mark.png*
+ 85727224 -rw-r-x--- 1 srvanlee cs488           3308 May  9 00:01 algebra.cpp*
+
+A3/data:
+total 8
+86331066 drwxrwx--- 4 srvanlee cs488 4096 Jun 17 08:39 ../
+86331069 drwxrwx--- 2 srvanlee cs488 4096 May  9 00:01 ./
+
+A3                                      
+A3/data                                 
+A3/Manual                               27761     2
+A3/puppeteer                            24164  2787
+
+
+
+
+
+
+
+2015-06-17 08:41       Checksum for A3 for srvanlee on gl06       Page 2
+
+
+A3/puppet.lua                           19384     6
+A3/README                               62517     1
+A3/screenshot01.png                     39506    72
+A3/shader.frag                          10938     1
+A3/shader.vert                          04275     1
+A3/src                                  
+A3/src/a3mark.lua                       25163     2
+A3/src/a3mark.png                       02377     6
+A3/src/algebra.cpp                      00294     4
+A3/src/algebra.hpp                      65153    10
+A3/src/AppWindow.cpp                    48075     7
+A3/src/AppWindow.hpp                    48423     2
+A3/src/lua488.hpp                       04702     1
+A3/src/main.cpp                         37135     1
+A3/src/Makefile                         53444   101
+A3/src/material.cpp                     54364     1
+A3/src/material.hpp                     18536     1
+A3/src/primitive.cpp                    00758     1
+A3/src/primitive.hpp                    59785     1
+A3/src/puppeteer                        24164  2787
+A3/src/puppeteer.pro                    00159     1
+A3/src/puppet.lua                       19384     6
+A3/src/scene.cpp                        50977     8
+A3/src/scene.hpp                        07953     3
+A3/src/scene_lua.cpp                    31025    12
+A3/src/scene_lua.hpp                    34090     1
+A3/src/shader.frag                      10938     1
+A3/src/shader.vert                      04275     1
+A3/src/sphere.cpp                       48640     7
+A3/src/sphere.hpp                       31800     2
+A3/src/trackball.cpp                    02942     4
+A3/src/trackball.hpp                    12846     1
+A3/src/Viewer.cpp                       46550    12
+A3/src/Viewer.hpp                       23123     3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

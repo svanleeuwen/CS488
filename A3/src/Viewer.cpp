@@ -154,19 +154,19 @@ void Viewer::initializeGL() {
 }
 
 void Viewer::drawSphere(bool picking) {
-    // Bind buffer object
+    // Bind buffer objectrot
     mVertexBufferObject.bind();
     mProgram.setUniformValue(mMvpMatrixLocation, getCameraMatrix() * mMatStack->top());
 
     QVector4D origin = QVector4D(0, 0, 0, 1);
     mProgram.setUniformValue(mCenterLocation, getCameraMatrix() * mMatStack->top() * origin); 
-    mProgram.setUniformValue(mLightLocation, QVector3D(getCameraMatrix() * origin));
+    mProgram.setUniformValue(mLightLocation, getCameraMatrix() * origin);
 
     mProgram.setUniformValue(mPickingLocation, picking);
 
     // Draw buffer
     glDrawArrays(GL_TRIANGLES, 0, mSphereVertexCount);
-}
+}rot
 
 void Viewer::paintGL() {
     // Clear framebuffer
@@ -353,7 +353,11 @@ void Viewer::draw_trackball_circle()
 }
 
 void Viewer::initializeScene() {
-    mScene = import_lua("puppet.lua");
+    if(QCoreApplication::arguments().size() > 1) {
+        mScene = import_lua(QCoreApplication::arguments().at(1).toUtf8().constData());
+    } else {
+        mScene = import_lua("puppet.lua");
+    }
 }
 
 void Viewer::resetPos() {

@@ -27,7 +27,7 @@ public:
   virtual bool undo();
   virtual bool redo();
 
-  const QMatrix4x4& get_transform() const { return m_trans; }
+  const QMatrix4x4& get_transform() const { return m_trans ; }
   
   void set_transform(const QMatrix4x4& m)
   {
@@ -46,6 +46,7 @@ public:
 
   // Callbacks to be implemented.
   // These will be called from Lua.
+  void modelling_rotate(char axis, double angle);
   void rotate(char axis, double angle);
   void scale(const QVector3D& amount);
   void translate(const QVector3D& amount);
@@ -104,8 +105,6 @@ protected:
 private:
   void rotate_joint_x(double angle);
   void rotate_joint_y(double angle);
-
-  QMatrix4x4 m_rot_mat;
 
   std::vector<QVector2D> mRotStack;
   std::vector<QVector2D> mUndoStack;

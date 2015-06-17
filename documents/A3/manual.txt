@@ -19,3 +19,13 @@ I used Gouroud shading with the light placed at the eye.
 ---------------------------------------------
 
 trackball.{cpp,hpp} are modifications to trackball.{c,h} to use Qt classes.
+
+---------------------------------------------
+
+My implementation depends on the puppet's origin starting at the 
+world coordinates origin.
+
+The getCameraMatrix() function that we were given assumes that the camera
+is looking at the origin, so when running "a3mark.lua", passing through the
+world coordinate origin gives backwards shading. I am not sure how to fix this
+without completely changing the camera's functionality.

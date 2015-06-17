@@ -296,7 +296,7 @@ int gr_node_rotate_cmd(lua_State* L)
   
   double angle = luaL_checknumber(L, 3);
 
-  self->rotate(axis, angle);
+  self->modelling_rotate(axis, angle);
 
   return 0;
 }
