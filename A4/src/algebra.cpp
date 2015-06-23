@@ -141,3 +141,51 @@ Matrix4x4 Matrix4x4::invert() const
 
   return ret;
 }
+
+Matrix4x4 Matrix4x4::getRotMat(char axis, double angle) {
+    Matrix4x4 rotMat;
+    
+    if(axis == 'x') {
+        rotMat[1][1] = cos(angle * M_PI / 180.0);
+        rotMat[1][2] = -sin(angle * M_PI / 180.0);
+        rotMat[2][1] = sin(angle * M_PI / 180.0);
+        rotMat[2][2] = cos(angle * M_PI / 180.0);
+    } else if(axis == 'y') {
+        rotMat[0][0] = cos(angle * M_PI / 180.0);
+        rotMat[0][2] = sin(angle * M_PI / 180.0);
+        rotMat[2][0] = -sin(angle * M_PI / 180.0);
+        rotMat[2][2] = cos(angle * M_PI / 180.0);
+    } else {
+        rotMat[0][0] = cos(angle * M_PI / 180.0);
+        rotMat[0][1] = -sin(angle * M_PI / 180.0);
+        rotMat[1][0] = sin(angle * M_PI / 180.0);
+        rotMat[1][1] = cos(angle * M_PI / 180.0);
+    }
+
+    return rotMat;
+}
+
+Matrix4x4 Matrix4x4::getScaleMat(const Vector3D& amount) {
+    Matrix4x4 scaleMat;
+
+    scaleMat[0][0] = amount[0];
+    scaleMat[1][1] = amount[1];
+    scaleMat[2][2] = amount[2];
+
+    return scaleMat;
+}
+
+Matrix4x4 Matrix4x4::getTransMat(const Vector3D& amount) {
+    Matrix4x4 transMat;
+
+    transMat[0][3] = amount[0];
+    transMat[1][3] = amount[1];
+    transMat[2][3] = amount[2];
+
+    return transMat;
+}
+
+Colour& Colour::operator +=(const Colour& other) {
+    (*this) = (*this) + other;
+    return *this;
+}

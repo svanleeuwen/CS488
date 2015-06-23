@@ -10,6 +10,19 @@ Light::Light()
   falloff[2] = 0.0;
 }
 
+Colour Light::getIntensity(Point3D& point) const {
+    double r = (point - position).length();
+    double ratio;
+    
+    if(falloff[1] > 0 || falloff[2] > 0) {
+        ratio = 1 / (falloff[0] + falloff[1]*r + falloff[2]*r*r); 
+    } else {
+        ratio = 1 / r*r;
+    }
+
+    return ratio * colour; 
+}
+
 std::ostream& operator<<(std::ostream& out, const Light& l)
 {
   out << "L[" << l.colour << ", " << l.position << ", ";

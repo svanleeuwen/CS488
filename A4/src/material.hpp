@@ -2,11 +2,14 @@
 #define CS488_MATERIAL_HPP
 
 #include "algebra.hpp"
+#include "ray.hpp"
+#include "light.hpp"
+#include "intersection.hpp"
 
 class Material {
 public:
   virtual ~Material();
-  virtual void apply_gl() const = 0;
+  virtual Colour getColour(const Vector3D& in, const Vector3D& out, const Intersection& isect, const Light& light) = 0;
 
 protected:
   Material()
@@ -19,7 +22,9 @@ public:
   PhongMaterial(const Colour& kd, const Colour& ks, double shininess);
   virtual ~PhongMaterial();
 
-  virtual void apply_gl() const;
+  virtual Colour getColour(const Vector3D& in, const Vector3D& out, const Intersection& isect, const Light& light);
+
+  Colour getKD() const { return m_kd; }
 
 private:
   Colour m_kd;

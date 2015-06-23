@@ -105,29 +105,3 @@ A3/src/trackball.hpp                    12846     1
 A3/src/Viewer.cpp                       46550    12
 A3/src/Viewer.hpp                       23123     3
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

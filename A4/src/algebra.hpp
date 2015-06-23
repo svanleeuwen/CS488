@@ -105,6 +105,8 @@ private:
   double v_[3];
 };
 
+class Vector4D;
+
 class Vector3D
 {
 public:
@@ -120,6 +122,13 @@ public:
     v_[1] = y;
     v_[2] = z;
   }
+
+  Vector3D(const Point3D& p) {
+    v_[0] = p[0];
+    v_[1] = p[1];
+    v_[2] = p[2];
+  }
+
   Vector3D(const Vector3D& other)
   {
     v_[0] = other.v_[0];
@@ -173,6 +182,11 @@ private:
 };
 
 inline Vector3D operator *(double s, const Vector3D& v)
+{
+  return Vector3D(s*v[0], s*v[1], s*v[2]);
+}
+
+inline Vector3D operator *(const Vector3D& v, double s)
 {
   return Vector3D(s*v[0], s*v[1], s*v[2]);
 }
@@ -246,6 +260,14 @@ public:
     v_[2] = z;
     v_[3] = w;
   }
+
+  Vector4D(const Vector3D& vec, double w) {
+      v_[0] = vec[0];
+      v_[1] = vec[1];
+      v_[2] = vec[2];
+      v_[3] = w;
+  }
+
   Vector4D(const Vector4D& other)
   {
     v_[0] = other.v_[0];
@@ -364,6 +386,10 @@ public:
   {
     return begin() + 16;
   }
+
+  static Matrix4x4 getRotMat(char axis, double angle);
+  static Matrix4x4 getScaleMat(const Vector3D& amount);
+  static Matrix4x4 getTransMat(const Vector3D& amount);
 		
 private:
   double v_[16];
@@ -448,6 +474,8 @@ public:
     return *this;
   }
 
+  Colour& operator +=(const Colour& other); 
+     
   double R() const 
   { 
     return r_;
@@ -481,6 +509,8 @@ inline Colour operator +(const Colour& a, const Colour& b)
 {
   return Colour(a.R()+b.R(), a.G()+b.G(), a.B()+b.B());
 }
+
+
 
 inline std::ostream& operator <<(std::ostream& os, const Colour& c)
 {

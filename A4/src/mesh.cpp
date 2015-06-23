@@ -8,6 +8,13 @@ Mesh::Mesh(const std::vector<Point3D>& verts,
 {
 }
 
+bool Mesh::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object) {
+        (void) ray;
+            (void) isect;
+            (void) object;
+                return false;
+}
+
 std::ostream& operator<<(std::ostream& out, const Mesh& mesh)
 {
   std::cerr << "mesh({";

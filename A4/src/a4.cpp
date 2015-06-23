@@ -1,5 +1,7 @@
 #include "a4.hpp"
 #include "image.hpp"
+#include "camera.hpp"
+#include "tracer.hpp"
 
 void a4_render(// What to render
                SceneNode* root,
@@ -15,34 +17,49 @@ void a4_render(// What to render
                const std::list<Light*>& lights
                )
 {
-  // Fill in raytracing code here.
+    Camera cam(width, height, eye, view, up, fov);
 
-  std::cerr << "Stub: a4_render(" << root << ",\n     "
+    Ray* rays = new Ray[height*width];
+
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            rays[y*height + x] = cam.getRay(x, y);
+        }
+    }
+
+/*    std::cerr << "Stub: a4_render(" << root << ",\n     "
             << filename << ", " << width << ", " << height << ",\n     "
             << eye << ", " << view << ", " << up << ", " << fov << ",\n     "
             << ambient << ",\n     {";
 
-  for (std::list<Light*>::const_iterator I = lights.begin(); I != lights.end(); ++I) {
-    if (I != lights.begin()) std::cerr << ", ";
-    std::cerr << **I;
-  }
-  std::cerr << "});" << std::endl;
-  
-  // For now, just make a sample image.
-
-  Image img(width, height, 3);
-
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < height; x++) {
-      // Red: increasing from top to bottom
-      img(x, y, 0) = (double)y / height;
-      // Green: increasing from left to right
-      img(x, y, 1) = (double)x / width;
-      // Blue: in lower-left and upper-right corners
-      img(x, y, 2) = ((y < height/2 && x < height/2)
-                      || (y >= height/2 && x >= height/2)) ? 1.0 : 0.0;
+    for (std::list<Light*>::const_iterator I = lights.begin(); I != lights.end(); ++I) {
+        if (I != lights.begin()) std::cerr << ", ";
+            std::cerr << **I;
     }
-  }
-  img.savePng(filename);
-  
+    std::cerr << "});" << std::endl; */
+
+    Tracer tracer(root, cam, ambient, lights);
+
+    Image img(width, height, 3);
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            Colour colour = tracer.traceRay(rays[y*height + x]);
+
+            img(x, y, 0) = colour.R();
+            img(x, y, 1) = colour.G();
+            img(x, y, 2) = colour.B();
+
+/*            // Red: increasing from top to bottom
+            img(x, y, 0) = (double)y / height;
+            // Green: increasing from left to right
+            img(x, y, 1) = (double)x / width;
+            // Blue: in lower-left and upper-right corners
+            img(x, y, 2) = ((y < height/2 && x < height/2)
+                      || (y >= height/2 && x >= height/2)) ? 1.0 : 0.0; */
+ 
+        }
+    }
+
+    img.savePng(filename);
 }
