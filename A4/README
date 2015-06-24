@@ -4,6 +4,7 @@ User-id: srvanlee
 Assignment: 4
 
 The final executable was compiled on this machine: 
+gl16
 
 How to invoke my program: 
 ./rt "filename"

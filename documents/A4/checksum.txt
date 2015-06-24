@@ -1,0 +1,199 @@
+sum is: /usr/bin/sum
+
+
+2015-06-24 07:18       Checksum for A4 for srvanlee on gl16       Page 1
+
+
+A4:
+total 844
+ 69217352 drwxrwx---  2 srvanlee cs488          8192 Jun 24 07:17 src/
+110668468 drwxrwx---  4 srvanlee cs488          4096 Jun 24 07:16 ./
+110224172 -rw-r--r--  1 srvanlee srvanleeuwen    394 Jun 24 07:16 README
+105962048 -rwxr-xr-x  1 srvanlee srvanleeuwen 755208 Jun 24 07:15 rt*
+106768045 -rw-r--r--  1 srvanlee srvanleeuwen  14443 Jun 24 07:13 screenshot01.png
+105962050 -rw-r--r--  1 srvanlee srvanleeuwen  50637 Jun 24 07:13 sample.png
+110668469 drwxrwx---  2 srvanlee cs488          4096 Jun 24 07:13 data/
+ 96668887 -rw-r--r--  1 srvanlee srvanleeuwen    254 Jun 24 07:13 Manual
+ 28489997 drwxrwx--- 10 srvanlee cs488          4096 May 19 16:02 ../
+
+A4/src:
+total 232
+ 69217352 drwxrwx--- 2 srvanlee cs488         8192 Jun 24 07:17 ./
+110668468 drwxrwx--- 4 srvanlee cs488         4096 Jun 24 07:16 ../
+ 25430723 -rw-r--r-- 1 srvanlee srvanleeuwen   606 Jun 24 07:13 tracer.hpp
+122874138 -rw-r--r-- 1 srvanlee srvanleeuwen   993 Jun 24 07:13 tracer.cpp
+111773827 -rw-r--r-- 1 srvanlee srvanleeuwen  2636 Jun 24 07:13 scene.hpp
+111773825 -rw-r--r-- 1 srvanlee srvanleeuwen  6626 Jun 24 07:13 scene.cpp
+111773822 -rw-r--r-- 1 srvanlee srvanleeuwen   988 Jun 24 07:13 ray.hpp
+ 21211137 -rw-r--r-- 1 srvanlee srvanleeuwen  1672 Jun 24 07:13 ray.cpp
+ 21211135 -rw-r--r-- 1 srvanlee srvanleeuwen  1250 Jun 24 07:13 primitive.hpp
+ 21211133 -rw-r--r-- 1 srvanlee srvanleeuwen  5880 Jun 24 07:13 primitive.cpp
+ 21211130 -rw-r--r-- 1 srvanlee srvanleeuwen  7120 Jun 24 07:13 output
+ 21211128 -rw-r--r-- 1 srvanlee srvanleeuwen   995 Jun 24 07:13 mesh.hpp
+ 21211126 -rw-r--r-- 1 srvanlee srvanleeuwen  5203 Jun 24 07:13 mesh.cpp
+ 21211124 -rw-r--r-- 1 srvanlee srvanleeuwen   827 Jun 24 07:13 material.hpp
+ 21211122 -rw-r--r-- 1 srvanlee srvanleeuwen  1426 Jun 24 07:13 material.cpp
+ 21211118 -rw-r--r-- 1 srvanlee srvanleeuwen   331 Jun 24 07:13 light.hpp
+ 74787513 -rw-r--r-- 1 srvanlee srvanleeuwen   719 Jun 24 07:13 light.cpp
+ 95438482 -rw-r--r-- 1 srvanlee srvanleeuwen   754 Jun 24 07:13 intersection.hpp
+ 95438480 -rw-r--r-- 1 srvanlee srvanleeuwen   954 Jun 24 07:13 intersection.cpp
+ 95438473 -rw-r--r-- 1 srvanlee srvanleeuwen   500 Jun 24 07:13 camera.hpp
+ 95438470 -rw-r--r-- 1 srvanlee srvanleeuwen  1237 Jun 24 07:13 camera.cpp
+ 95438468 -rw-r--r-- 1 srvanlee srvanleeuwen 10259 Jun 24 07:13 algebra.hpp
+118080856 -rw-r--r-- 1 srvanlee srvanleeuwen  4602 Jun 24 07:13 algebra.cpp
+ 69217366 -rw-r--r-- 1 srvanlee srvanleeuwen  1809 Jun 24 07:13 a4.cpp
+ 69217367 -rw-r--r-- 1 srvanlee srvanleeuwen   664 Jun 24 07:13 Makefile
+ 23671655 -rw-r-x--- 1 srvanlee cs488          966 May  9 00:01 polyroots.hpp*
+ 76233875 -rw-r-x--- 1 srvanlee cs488        47780 May  9 00:01 polyroots.cpp*
+ 76233874 -rw-r-x--- 1 srvanlee cs488        15791 May  9 00:01 scene_lua.cpp*
+ 69217372 -rw-r-x--- 1 srvanlee cs488          276 May  9 00:01 main.cpp*
+ 69217371 -rw-r-x--- 1 srvanlee cs488          136 May  9 00:01 scene_lua.hpp*
+ 69217369 -rw-r-x--- 1 srvanlee cs488         1787 May  9 00:01 image.hpp*
+ 69217368 -rw-r-x--- 1 srvanlee cs488          170 May  9 00:01 lua488.hpp*
+ 69217363 -rw-r-x--- 1 srvanlee cs488          637 May  9 00:01 a4.hpp*
+ 69217353 -rw-r-x--- 1 srvanlee cs488         6107 May  9 00:01 image.cpp*
+
+A4/data:
+total 1136
+110668468 drwxrwx--- 4 srvanlee cs488          4096 Jun 24 07:16 ../
+121208678 -rw-r--r-- 1 srvanlee srvanleeuwen  20945 Jun 24 07:15 nonhier.png
+121208680 -rwxr-xr-x 1 srvanlee srvanleeuwen 755208 Jun 24 07:15 rt*
+121208684 -rw-r--r-- 1 srvanlee srvanleeuwen  14430 Jun 24 07:13 simple_cows.png
+110668469 drwxrwx--- 2 srvanlee cs488          4096 Jun 24 07:13 ./
+
+
+
+
+
+
+
+2015-06-24 07:18       Checksum for A4 for srvanlee on gl16       Page 2
+
+
+121208683 -rw-r--r-- 1 srvanlee srvanleeuwen   2782 Jun 24 07:13 scene.lua
+121208682 -rw-r--r-- 1 srvanlee srvanleeuwen  16412 Jun 24 07:13 sample.png
+121208681 -rw-r--r-- 1 srvanlee srvanleeuwen   2782 Jun 24 07:13 sample.lua
+121208679 -rw-r--r-- 1 srvanlee srvanleeuwen   6038 Jun 24 07:13 puppet.lua
+121208677 -rw-r--r-- 1 srvanlee srvanleeuwen  14443 Jun 24 07:13 macho_cows.png
+108918111 -rw-r-x--- 1 srvanlee cs488          2845 May  9 00:01 macho-cows.lua*
+108918110 -rw-r-x--- 1 srvanlee cs488           755 May  9 00:01 icosa.lua*
+108918109 -rw-r-x--- 1 srvanlee cs488          1011 May  9 00:01 cylinder.lua*
+110668481 -rw-r-x--- 1 srvanlee cs488           997 May  9 00:01 simple.lua*
+110668480 -rw-r-x--- 1 srvanlee cs488          2857 May  9 00:01 hier.lua*
+110668479 -rw-r-x--- 1 srvanlee cs488          1268 May  9 00:01 readobj.lua*
+110668478 -rw-r-x--- 1 srvanlee cs488          4322 May  9 00:01 buckyball.lua*
+110668477 -rw-r-x--- 1 srvanlee cs488          1566 May  9 00:01 instance.lua*
+110668476 -rw-r-x--- 1 srvanlee cs488          1470 May  9 00:01 nonhier2.lua*
+110668475 -rw-r-x--- 1 srvanlee cs488          8859 May  9 00:01 smstdodeca.lua*
+110668474 -rw-r-x--- 1 srvanlee cs488          1281 May  9 00:01 nonhier.lua*
+110668473 -rw-r-x--- 1 srvanlee cs488        180010 May  9 00:01 cow.obj*
+110668472 -rw-r-x--- 1 srvanlee cs488         38328 May  9 00:01 mickey.lua*
+110668471 -rw-r-x--- 1 srvanlee cs488          1673 May  9 00:01 dodeca.lua*
+110668470 -rw-r-x--- 1 srvanlee cs488          2907 May  9 00:01 simple-cows.lua*
+
+A4                                      
+A4/data                                 
+A4/data/buckyball.lua                   10689     5
+A4/data/cow.obj                         57991   176
+A4/data/cylinder.lua                    01173     1
+A4/data/dodeca.lua                      50755     2
+A4/data/hier.lua                        09954     3
+A4/data/icosa.lua                       58132     1
+A4/data/instance.lua                    25944     2
+A4/data/macho-cows.lua                  09303     3
+A4/data/macho_cows.png                  42914    15
+A4/data/mickey.lua                      01039    38
+A4/data/nonhier2.lua                    25636     2
+A4/data/nonhier.lua                     03278     2
+A4/data/nonhier.png                     48962    21
+A4/data/puppet.lua                      11757     6
+A4/data/readobj.lua                     57040     2
+A4/data/rt                              19331   738
+A4/data/sample.lua                      04721     3
+A4/data/sample.png                      57721    17
+A4/data/scene.lua                       04721     3
+A4/data/simple-cows.lua                 10797     3
+A4/data/simple_cows.png                 20447    15
+A4/data/simple.lua                      02633     1
+A4/data/smstdodeca.lua                  02544     9
+A4/Manual                               36630     1
+A4/README                               35159     1
+A4/rt                                   19331   738
+A4/sample.png                           39475    50
+A4/screenshot01.png                     42914    15
+A4/src                                  
+A4/src/a4.cpp                           36133     2
+A4/src/a4.hpp                           30758     1
+A4/src/algebra.cpp                      64490     5
+A4/src/algebra.hpp                      36196    11
+
+
+
+
+
+
+
+2015-06-24 07:18       Checksum for A4 for srvanlee on gl16       Page 3
+
+
+A4/src/camera.cpp                       21524     2
+A4/src/camera.hpp                       08326     1
+A4/src/image.cpp                        42618     6
+A4/src/image.hpp                        52703     2
+A4/src/intersection.cpp                 32307     1
+A4/src/intersection.hpp                 20463     1
+A4/src/light.cpp                        01652     1
+A4/src/light.hpp                        61469     1
+A4/src/lua488.hpp                       04702     1
+A4/src/main.cpp                         38275     1
+A4/src/Makefile                         48623     1
+A4/src/material.cpp                     64060     2
+A4/src/material.hpp                     13027     1
+A4/src/mesh.cpp                         24121     6
+A4/src/mesh.hpp                         10898     1
+A4/src/output                           00019     7
+A4/src/polyroots.cpp                    59889    47
+A4/src/polyroots.hpp                    52382     1
+A4/src/primitive.cpp                    29057     6
+A4/src/primitive.hpp                    60450     2
+A4/src/ray.cpp                          58122     2
+A4/src/ray.hpp                          55694     1
+A4/src/scene.cpp                        14962     7
+A4/src/scene.hpp                        05367     3
+A4/src/scene_lua.cpp                    62316    16
+A4/src/scene_lua.hpp                    33354     1
+A4/src/tracer.cpp                       18890     1
+A4/src/tracer.hpp                       31584     1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
