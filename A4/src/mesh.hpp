@@ -19,6 +19,8 @@ public:
     typedef std::vector<int> Face;
   
 private:
+    bool intersectsBoundingBox(const Ray& ray);
+
     bool getPolyIntersection(const Face& poly, Intersection* isect);
     bool getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* isect, GeometryNode* object);
     
@@ -27,6 +29,9 @@ private:
 
     std::vector<Point3D> m_verts;
     std::vector<Face> m_faces;
+
+    Point3D a_min;
+    Point3D a_max;
 
     friend std::ostream& operator<<(std::ostream& out, const Mesh& mesh);
 };

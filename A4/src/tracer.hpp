@@ -13,7 +13,7 @@ public:
     Tracer(SceneNode* scene, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights) :
         m_scene(scene), m_cam(&cam), m_ambient(ambient), m_lights(&lights) {}
 
-    Colour traceRay(Ray& ray);
+    bool traceRay(Ray& ray, Colour& colour);
 
 private:
 

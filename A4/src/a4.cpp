@@ -2,6 +2,12 @@
 #include "image.hpp"
 #include "camera.hpp"
 #include "tracer.hpp"
+#include <math.h>
+
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 void a4_render(// What to render
                SceneNode* root,
@@ -27,39 +33,34 @@ void a4_render(// What to render
         }
     }
 
-/*    std::cerr << "Stub: a4_render(" << root << ",\n     "
-            << filename << ", " << width << ", " << height << ",\n     "
-            << eye << ", " << view << ", " << up << ", " << fov << ",\n     "
-            << ambient << ",\n     {";
-
-    for (std::list<Light*>::const_iterator I = lights.begin(); I != lights.end(); ++I) {
-        if (I != lights.begin()) std::cerr << ", ";
-            std::cerr << **I;
-    }
-    std::cerr << "});" << std::endl; */
-
     Tracer tracer(root, cam, ambient, lights);
 
     Image img(width, height, 3);
+    int i = 1;
 
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            Colour colour = tracer.traceRay(rays[y*height + x]);
+            if(y*height + x == (int) ((i/10.0) * (width*height))) {
+                cout << i*10 << "\% complete" << endl;
+                i++;
+            }
 
-            img(x, y, 0) = colour.R();
-            img(x, y, 1) = colour.G();
-            img(x, y, 2) = colour.B();
+            Colour colour = Colour(0.0, 0.0, 0.0);
+            bool hit = tracer.traceRay(rays[y*height + x], colour);
 
-/*            // Red: increasing from top to bottom
-            img(x, y, 0) = (double)y / height;
-            // Green: increasing from left to right
-            img(x, y, 1) = (double)x / width;
-            // Blue: in lower-left and upper-right corners
-            img(x, y, 2) = ((y < height/2 && x < height/2)
-                      || (y >= height/2 && x >= height/2)) ? 1.0 : 0.0; */
- 
+            if(hit) {
+                img(x, y, 0) = colour.R();
+                img(x, y, 1) = colour.G();
+                img(x, y, 2) = colour.B();
+            } else {
+                img(x, y, 0) = ((double)x)/(double)width;
+                img(x, y, 1) = ((double)y)/(double)height;
+                img(x, y, 2) = 1.0 - ((double)x)/(double)width;
+            }
         }
     }
+
+    cout << "100\% complete" << endl;
 
     img.savePng(filename);
 }

@@ -11,6 +11,8 @@ public:
 
     Ray getRay(int xPos, int yPos);
 
+    Point3D getEye() const { return m_eye; }
+
 private:
     Matrix4x4 getViewToWorld();
 

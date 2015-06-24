@@ -1,0 +1,22 @@
+Name: Spencer Van Leeuwen
+Student Number: 20412199
+User-id: srvanlee
+Assignment: 4
+
+The final executable was compiled on this machine: 
+
+How to invoke my program: 
+./rt "filename"
+
+How to use my extra features: 
+-none
+
+I have created the following data files, which are in the data directory:
+sample.png
+macho-cows.png
+nonhier.png
+simple-cows.png
+
+My program assumes the following: 
+none
+

@@ -1,0 +1,6 @@
+Spencer Van Leeuwen
+Assignment 4 Manual
+---------------------------------------------
+
+The assignment works as specified in the requirements. I didn't get to implement an extra feature.
+The 3 standard images and my extra scene are in the data directory.

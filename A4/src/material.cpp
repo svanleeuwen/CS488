@@ -17,14 +17,15 @@ PhongMaterial::PhongMaterial(const Colour& kd, const Colour& ks, double shinines
 PhongMaterial::~PhongMaterial()
 {
 }
-
-double clamp(double val, double min, double max) {
-    if(val > max) {
-        return max;
-    }else if(val < min) {
-        return min;
-    } else {
-        return val;
+namespace {
+    double clamp(double val, double min, double max) {
+        if(val > max) {
+            return max;
+        }else if(val < min) {
+            return min;
+        } else {
+            return val;
+        }
     }
 }
 

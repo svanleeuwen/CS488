@@ -25,6 +25,9 @@ public:
   virtual Colour getColour(const Vector3D& in, const Vector3D& out, const Intersection& isect, const Light& light);
 
   Colour getKD() const { return m_kd; }
+  Colour getKS() const { return m_ks; }
+
+  double getShininess() const { return m_shininess; }
 
 private:
   Colour m_kd;
