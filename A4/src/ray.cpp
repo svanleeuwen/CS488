@@ -1,9 +1,16 @@
 #include "ray.hpp"
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 Ray::Ray(Point3D origin, Vector3D direction, double epsilon) {
     m_origin = origin;
     m_direction = direction;
+
     m_hasEndpoint = false;
+    m_endpoint = m_origin + 100*m_direction;
+
     m_epsilon = epsilon;
 }
 
@@ -51,4 +58,20 @@ bool Ray::checkParam(double t) const {
     }
 
     return false;
+}
+
+Ray Ray::getTransform(Matrix4x4& trans) const {
+    Ray r;
+
+    r.m_origin = trans * m_origin;
+    r.m_hasEndpoint = m_hasEndpoint;
+
+    r.m_endpoint = trans * m_endpoint;
+    r.m_direction = r.m_endpoint - r.m_origin;
+
+    r.m_epsilon = m_epsilon;
+
+//    cout << r.m_origin << ", " << r.m_hasEndpoint << ", " << r.m_endpoint << ", " << r.m_direction << ", "  << endl;
+
+    return r;
 }

@@ -8,8 +8,8 @@ class Ray {
 public:
     Ray() {}
 
-    Ray(Point3D origin, Vector3D direction, double epsilon = 0.000001); 
-    Ray(Point3D origin, Point3D endpoint, double epsilon = 0.000001); 
+    Ray(Point3D origin, Vector3D direction, double epsilon = 1.0e-10); 
+    Ray(Point3D origin, Point3D endpoint, double epsilon = 1.0e-10); 
     
     ~Ray() {}
     Ray(const Ray& other); 
@@ -22,8 +22,10 @@ public:
     const Vector3D& getDirection() const { return m_direction; }
 
     bool hasEndpoint() const { return m_hasEndpoint; }
+    double getEpsilon() const { return m_epsilon; }
 
     bool checkParam(double t) const;
+    Ray getTransform(Matrix4x4& trans) const;
 
 private:
     Point3D m_origin;

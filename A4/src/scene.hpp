@@ -6,6 +6,7 @@
 #include "primitive.hpp"
 #include "material.hpp"
 #include "intersection.hpp"
+#include <stack>
 
 class SceneNode {
 public:
@@ -26,7 +27,10 @@ public:
     }
 
     virtual bool exists_intersection(const Ray& ray);
+    virtual bool exists_intersection(const Ray& ray, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
+   
     virtual bool get_intersection(const Ray& ray, Intersection* isect);
+    virtual bool get_intersection(const Ray& ray, Intersection* isect, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
 
     // Callbacks to be implemented.
     // These will be called from Lua.
@@ -45,6 +49,8 @@ protected:
     // Transformations
     Matrix4x4 m_trans;
     Matrix4x4 m_inv;
+
+    bool m_transformed;
 
     // Hierarchy
     typedef std::list<SceneNode*> ChildList;
@@ -76,9 +82,9 @@ public:
                Primitive* primitive);
     virtual ~GeometryNode();
 
-    virtual bool exists_intersection(const Ray& ray);
-    virtual bool get_intersection(const Ray& ray, Intersection* isect);
-
+    virtual bool exists_intersection(const Ray& ray, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
+    virtual bool get_intersection(const Ray& ray, Intersection* isect, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
+    
     const Material* get_material() const;
     Material* get_material();
 
