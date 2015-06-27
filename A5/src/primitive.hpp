@@ -4,6 +4,7 @@
 #include "algebra.hpp"
 #include "ray.hpp"
 #include "intersection.hpp"
+#include "bbox.hpp"
 
 class Primitive {
 public:
@@ -14,10 +15,13 @@ public:
 
 class Sphere : public Primitive {
 public:
-
+    Sphere();
     virtual ~Sphere();
 
     virtual bool getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object);
+
+private:
+    AABB m_bbox;
 };
 
 class Cube : public Primitive {
@@ -29,10 +33,7 @@ public:
 
 class NonhierSphere : public Primitive {
 public:
-    NonhierSphere(const Point3D& pos, double radius)
-    : m_pos(pos), m_radius(radius)
-    {
-    }
+    NonhierSphere(const Point3D& pos, double radius);
     virtual ~NonhierSphere();
 
     virtual bool getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object);
@@ -40,6 +41,8 @@ public:
 private:
     Point3D m_pos;
     double m_radius;
+
+    AABB m_bbox;
 };
 
 class NonhierBox : public Primitive {

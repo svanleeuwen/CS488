@@ -12,11 +12,22 @@ Primitive::~Primitive()
 {
 }
 
+Sphere::Sphere() {
+    Point3D min(-1, -1, -1);
+    Point3D max(1, 1, 1);
+
+    m_bbox = AABB(min, max);
+}
+
 Sphere::~Sphere()
 {
 }
 
 bool Sphere::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object) {
+    if(!m_bbox.intersect(ray)) {
+        return false;
+    } 
+
     Vector3D o = Vector3D(ray.getOrigin());
     Vector3D d = ray.getDirection();
 
@@ -125,11 +136,24 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* ob
     return true;
 }
 
+NonhierSphere::NonhierSphere(const Point3D& pos, double radius) :
+    m_pos(pos), m_radius(radius) 
+{
+    Point3D min(m_pos[0] - m_radius, m_pos[1] - m_radius, m_pos[2] - m_radius);
+    Point3D max(m_pos[0] + m_radius, m_pos[1] + m_radius, m_pos[2] + m_radius);
+
+    m_bbox = AABB(min, max);   
+}
+
 NonhierSphere::~NonhierSphere()
 {
 }
 
 bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object) {
+    if(!m_bbox.intersect(ray)) {
+        return false;
+    }
+
     Point3D o = ray.getOrigin();
     Vector3D d = ray.getDirection();
 
@@ -175,6 +199,7 @@ NonhierBox::~NonhierBox()
 {
 }
 
+// Slabs method from Real-time Rendering
 bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object) {
     double t_min = -std::numeric_limits<double>::infinity();
     double t_max = std::numeric_limits<double>::infinity();

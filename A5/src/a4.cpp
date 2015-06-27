@@ -72,9 +72,9 @@ void* computeImage(void* arg) {
             (*img)(x, y, 1) = colour.G();
             (*img)(x, y, 2) = colour.B();
         } else {
-            (*img)(x, y, 0) = ((double)i)/(double)width;
-            (*img)(x, y, 1) = ((double)j)/(double)height;
-            (*img)(x, y, 2) = 1.0 - ((double)i)/(double)width;
+            (*img)(x, y, 0) = ((double)x)/(double)width;
+            (*img)(x, y, 1) = ((double)y)/(double)height;
+            (*img)(x, y, 2) = 1.0 - ((double)x)/(double)width;
         }
     }
 }
