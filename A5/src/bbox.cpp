@@ -21,6 +21,21 @@ AABB& AABB::operator=(const AABB& other) {
     return *this;
 }
 
+// Note: tracing may speed up if recompute AABB using primitive
+// I don't think I can recompute without transforming primitives instead of rays
+void AABB::transform(const Matrix4x4& trans) {
+    Point3D min = trans * m_min;
+    Point3D max = trans * m_max;
+
+    m_min[0] = fmin(min[0], max[0]);
+    m_min[1] = fmin(min[1], max[1]);
+    m_min[2] = fmin(min[2], max[2]);
+
+    m_max[0] = fmax(min[0], max[0]);
+    m_max[1] = fmax(min[1], max[1]);
+    m_max[2] = fmax(min[2], max[2]);
+}
+
 bool AABB::intersect(const Ray& ray) {
     double t_min = -std::numeric_limits<double>::infinity();
     double t_max = std::numeric_limits<double>::infinity();

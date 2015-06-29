@@ -405,6 +405,7 @@ int gr_node_add_child_cmd(lua_State* L)
   luaL_argcheck(L, childdata != 0, 2, "Node expected");
 
   SceneNode* child = childdata->node;
+  child->m_num_parents += 1;
 
   self->add_child(child);
 

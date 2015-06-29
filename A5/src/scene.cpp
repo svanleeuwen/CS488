@@ -12,6 +12,22 @@ SceneNode::SceneNode(const std::string& name)
 
 SceneNode::~SceneNode()
 {
+    for(auto it = m_children.begin(); it != m_children.end(); it++) {
+        (*it)->m_num_parents -= 1;
+
+        if((*it)->m_num_parents == 0) {
+            delete (*it);
+        }
+    }
+}
+
+void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {
+    Matrix4x4 t_trans = trans * m_trans;
+    Matrix4x4 t_inv = m_inv * inv;
+    
+    for(auto it = m_children.begin(); it != m_children.end(); it++) {
+        (*it)->getPrimitives(primitives, t_trans, t_inv);
+    }
 }
 
 bool SceneNode::exists_intersection(const Ray& ray) {
@@ -161,6 +177,7 @@ JointNode::JointNode(const std::string& name)
 
 JointNode::~JointNode()
 {
+    ~SceneNode();
 }
 
 bool JointNode::is_joint() const
@@ -194,7 +211,28 @@ GeometryNode::GeometryNode(const std::string& name, Primitive* primitive)
 
 GeometryNode::~GeometryNode()
 {
+    ~SceneNode();
 }
+
+void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {
+    Matrix4x4 t_trans = trans * m_trans;
+    Matrix4x4 t_inv = m_inv * inv;
+
+    if(!m_primitive_pushed) {
+        m_primitive->setTransform(t_trans, t_inv);
+        primitives->push_back(*m_primitive);
+
+        m_primitive_pushed = true;
+
+    } else {
+        primitives->push_back(m_primitive->clone());
+    }
+
+    for(auto it = m_children.begin(); it != m_children.end(); it++) {
+        (*it)->getPrimitives(primitives, t_trans, t_inv);
+    }
+}
+
 
 bool GeometryNode::exists_intersection(const Ray& ray, stack<Matrix4x4>* transStack, stack<Matrix4x4>* invStack) {
     bool hit = SceneNode::exists_intersection(ray, transStack, invStack);   

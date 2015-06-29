@@ -8,6 +8,7 @@ class BBox {
 public:
     virtual ~BBox();
 
+    virtual void transform(const Matrix& trans) = 0;
     virtual bool intersect(const Ray& ray) = 0;
 };
 
@@ -20,6 +21,7 @@ public:
     
     AABB& operator=(const AABB& other);
 
+    virtual void transform(const Matrix& trans);
     virtual bool intersect(const Ray& ray);
 
 private:

@@ -7,6 +7,7 @@
 #include "material.hpp"
 #include "intersection.hpp"
 #include <stack>
+#include <vector>
 
 class SceneNode {
 public:
@@ -26,6 +27,9 @@ public:
         m_children.remove(child);
     }
 
+    void getPrimitives(std::vector<Primitive>* primitives);
+    void getPrimitives(std:vector<Primitive>* primitives, const Matrix4x4& trans, const Matrix4x4& inv);
+
     virtual bool exists_intersection(const Ray& ray);
     virtual bool exists_intersection(const Ray& ray, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
    
@@ -40,7 +44,9 @@ public:
 
     // Returns true if and only if this node is a JointNode
     virtual bool is_joint() const;
-  
+ 
+    int m_num_parents;
+
 protected:
     // Useful for picking
     int m_id;
@@ -99,6 +105,8 @@ public:
 protected:
     Material* m_material;
     Primitive* m_primitive;
+
+    bool m_primitive_pushed;
 };
 
 #endif

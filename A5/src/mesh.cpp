@@ -6,8 +6,8 @@ Mesh::Mesh(const std::vector<Point3D>& verts,
   : m_verts(verts),
     m_faces(faces)
 {
-    a_min = verts.at(0);
-    a_max = verts.at(0);
+    Point3D a_min = verts.at(0);
+    Point3D a_max = verts.at(0);
 
     for(auto it = verts.begin(); it != verts.end(); it++) {
         for(int i = 0; i < 3; i++) {
@@ -19,53 +19,23 @@ Mesh::Mesh(const std::vector<Point3D>& verts,
             }
         }   
     }
+
+    m_bbox = AABB(a_min, a_max);
 }
 
-bool Mesh::intersectsBoundingBox(const Ray& ray) {
-    double t_min = -std::numeric_limits<double>::infinity();
-    double t_max = std::numeric_limits<double>::infinity();
+Mesh(const Mesh& other) {
+    m_verts = other.m_verts;
+    m_faces = other.m_faces;
 
-    Vector3D p_min = a_min - ray.getOrigin();
-    Vector3D p_max = a_max - ray.getOrigin();
+    Primitive(other);
+}
 
-    Vector3D d = ray.getDirection();
-    bool finite_ray = ray.hasEndpoint();
+Mesh& operator=(const Mesh& other) {
+    m_verts = other.m_verts;
+    m_faces = other.m_faces;
 
-    for(int i = 0; i < 3; i++) {
-        if(fabs(d[i]) > 1.0e-15) {
-        double t1 = p_max[i] / d[i];
-        double t2 = p_min[i] / d[i];
-
-        if(t1 < t2) {
-            if(t1 > t_min) {
-                t_min = t1;
-            }
-            if(t2 < t_max) {
-                t_max = t2;
-            }
-        } else {
-            if(t2 > t_min) {
-                t_min = t2;
-            }
-            if(t1 < t_max) {
-                t_max = t1;
-            }
-        }
-
-        if(t_min > t_max || t_max < ray.getEpsilon()) {
-            return false;
-        }
-
-        } else if(-p_max[i] > 0 || -p_min[i] < 0) {
-            return false;
-        }
-
-        if(finite_ray && t_min > 1) {
-            return false;
-        }
-    }
-
-    return true;
+    Primitive(other);
+    return *this;
 }
 
 int getMaxIndex(Vector3D& vec) {
@@ -84,7 +54,7 @@ int getMaxIndex(Vector3D& vec) {
 }
 
 bool Mesh::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object) {
-    if(!intersectsBoundingBox(ray)) {
+    if(!m_bbox.intersect(ray)) {
         return false;
     }
     
