@@ -37,7 +37,7 @@ namespace {
  *      isect: the point where the light intersects the surface
  *      light: the light source 
  */
-Colour PhongMaterial::getColour(const Vector3D& l, const Vector3D& v, const Intersection& isect, const Light& light) {
+Colour PhongMaterial::getColour(const Vector3D& l, const Vector3D& v, const Intersection* isect, const Light& light) {
     Colour colour(0.0, 0.0, 0.0);
 
     Vector3D l_norm = l;
@@ -46,10 +46,10 @@ Colour PhongMaterial::getColour(const Vector3D& l, const Vector3D& v, const Inte
     Vector3D v_norm = v;
     v_norm.normalize();
 
-    Vector3D normal = isect.getNormal();
+    Vector3D normal = isect->getNormal();
     normal.normalize();
 
-    Point3D point = isect.getPoint();
+    Point3D point = isect->getPoint();
     Colour intensity = light.getIntensity(point);
 
     colour += m_kd * intensity * clamp(l_norm.dot(normal), 0.0, 1.0);

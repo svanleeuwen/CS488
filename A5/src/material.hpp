@@ -9,7 +9,7 @@
 class Material {
 public:
   virtual ~Material();
-  virtual Colour getColour(const Vector3D& in, const Vector3D& out, const Intersection& isect, const Light& light) = 0;
+  virtual Colour getColour(const Vector3D& in, const Vector3D& out, const Intersection* isect, const Light& light) = 0;
 
 protected:
   Material()
@@ -22,7 +22,7 @@ public:
   PhongMaterial(const Colour& kd, const Colour& ks, double shininess);
   virtual ~PhongMaterial();
 
-  virtual Colour getColour(const Vector3D& in, const Vector3D& out, const Intersection& isect, const Light& light);
+  virtual Colour getColour(const Vector3D& in, const Vector3D& out, const Intersection* isect, const Light& light);
 
   Colour getKD() const { return m_kd; }
   Colour getKS() const { return m_ks; }

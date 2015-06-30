@@ -3,29 +3,34 @@
 #include <math.h>
 #include <iostream>
 #include <limits>
-#include "scene.hpp"
 
 using std::cout;
 using std::endl;
-
-Primitive::Primitive(const Point3D& min, const Point3D& max) :
-    m_bbox(min, max);
-{}
 
 Primitive::~Primitive()
 {
 }
 
-Primitive(const Primitive& other) {
+Primitive::Primitive(const Primitive& other) {
     m_trans = other.m_trans;
     m_inv = other.m_inv;
-    m_bbox = other.m_bbox;
+
+    m_modelBBox = other.m_modelBBox;
+    m_worldBBox = other.m_worldBBox;
+
+    m_material = other.m_material;
 }
 
-Primitive& operator=(const Primitive& other) {
-    m_trans = other.m_trans;
-    m_inv = other.m_inv;
-    m_bbox = other.m_bbox;   
+Primitive& Primitive::operator=(const Primitive& other) {
+    if(&other != this) {
+        m_trans = other.m_trans;
+        m_inv = other.m_inv;
+
+        m_modelBBox = other.m_modelBBox;   
+        m_worldBBox = other.m_worldBBox;
+
+        m_material = other.m_material;
+    }
     
     return *this;
 }
@@ -34,36 +39,41 @@ void Primitive::setTransform(const Matrix4x4& trans, const Matrix4x4& inv) {
     m_trans = trans;
     m_inv = inv;
 
-    m_bbox.transform(trans);
+    m_worldBBox = AABB::getTransform(m_modelBBox, trans);
+}
+
+void Primitive::setBBox(const Point3D& min, const Point3D& max) {
+    m_modelBBox = AABB(min, max);
+    m_worldBBox = AABB(min, max);
 }
 
 Sphere::Sphere() {
     Point3D min(-1, -1, -1);
     Point3D max(1, 1, 1);
 
-    Primitive(min, max);
+    setBBox(min, max);
 }
 
 Sphere::~Sphere()
 {
 }
 
-Sphere(const Sphere& other) {
-    Primitive(other);
-}
+Sphere::Sphere(const Sphere& other) : Primitive(other) {}
 
-Sphere& operator=(const Sphere& other) {
-    Primive(other);
+Sphere& Sphere::operator=(const Sphere& other) {
+    Primitive::operator=(other);
     return *this;
 }
 
-bool Sphere::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect) {
-    if(!m_bbox.intersect(ray)) {
+bool Sphere::getIntersection(const Ray& ray, Intersection* isect) {
+    Ray modelRay = ray.getTransform(m_inv);
+
+    if(!m_modelBBox.intersect(modelRay)) {
         return false;
     } 
 
-    Vector3D o = Vector3D(ray.getOrigin());
-    Vector3D d = ray.getDirection();
+    Vector3D o = Vector3D(modelRay.getOrigin());
+    Vector3D d = modelRay.getDirection();
 
     double A = d.length2();
     double B = 2*d.dot(o);
@@ -75,29 +85,31 @@ bool Sphere::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* 
     bool hit = false;
     double t;
 
-    if(numRoots == 1 && ray.checkParam(roots[0])) {
+    if(numRoots == 1 && modelRay.checkParam(roots[0])) {
         t = roots[0];
         hit = true;
 
     } else if(numRoots == 2) {
-        if(ray.checkParam(roots[0]) && ray.checkParam(roots[1])) {
+        if(modelRay.checkParam(roots[0]) && modelRay.checkParam(roots[1])) {
             t = fmin(roots[0], roots[1]);
             hit = true;
 
-        } else if(ray.checkParam(roots[0])) {
+        } else if(modelRay.checkParam(roots[0])) {
             t = roots[0];
             hit = true;
 
-        } else if(ray.checkParam(roots[1])) {
+        } else if(modelRay.checkParam(roots[1])) {
             t = roots[1];
             hit = true;
         }
     }
 
-    if(hit) {
-        Point3D point = ray(t);
-        Vector3D normal = point;
-        *isect = Intersection(point, t, object, normal);
+    if(hit && isect != NULL) {
+        Point3D point = modelRay(t);
+        Vector3D normal = m_inv.transpose() * Vector3D(point);
+
+        point = m_trans * point;
+        *isect = Intersection(point, t, m_material, normal);
     }
 
     return hit;
@@ -107,34 +119,34 @@ Cube::Cube() {
     Point3D min(0, 0, 0);
     Point3D max(1, 1, 1);
 
-    Primitive(min, max);
+    setBBox(min, max);
 }
 
 Cube::~Cube()
 {
 }
 
-Cube(const Cube& other) {
-    Primitive(other);
-}
+Cube::Cube(const Cube& other) : Primitive(other) {}
 
-Cube& operator=(const Cube& other) {
-    Primitive(other);
+Cube& Cube::operator=(const Cube& other) {
+    Primitive::operator=(other);
     return *this;
 }
 
-bool Cube::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect) {
+bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
+    Ray modelRay = ray.getTransform(m_inv);
+
     double t_min = -std::numeric_limits<double>::infinity();
     double t_max = std::numeric_limits<double>::infinity();
 
-    Vector3D p_min = - Vector3D(ray.getOrigin());
-    Vector3D p_max = Point3D(1.0, 1.0, 1.0) - ray.getOrigin();
+    Vector3D p_min = - Vector3D(modelRay.getOrigin());
+    Vector3D p_max = Point3D(1.0, 1.0, 1.0) - modelRay.getOrigin();
 
     Vector3D normal_min;
     Vector3D normal_max;
 
-    Vector3D d = ray.getDirection();
-    bool finite_ray = ray.hasEndpoint();
+    Vector3D d = modelRay.getDirection();
+    bool finite_ray = modelRay.hasEndpoint();
     
     for(int i = 0; i < 3; i++) {
         if(fabs(d[i]) > 1.0e-15) {
@@ -164,7 +176,7 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* ob
                 }
             }
 
-            if(t_min > t_max || t_max < ray.getEpsilon()) {
+            if(t_min > t_max || t_max < modelRay.getEpsilon()) {
                 return false;
             }
 
@@ -177,10 +189,19 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* ob
         }
     } 
 
-    if(t_min > ray.getEpsilon()) {
-        *isect = Intersection(ray(t_min), t_min, object, normal_min);
-    } else {
-        *isect = Intersection(ray(t_max), t_max, object, normal_max);
+    if(isect != NULL) {
+        if(t_min > modelRay.getEpsilon()) {
+            Point3D point = m_trans * modelRay(t_min);
+            Vector3D normal = m_inv.transpose() * normal_min;
+
+            *isect = Intersection(point, t_min, m_material, normal);
+
+        } else {
+            Point3D point = m_trans * modelRay(t_max);
+            Vector3D normal = m_inv.transpose() * normal_max;
+
+            *isect = Intersection(point, t_max, m_material, normal);
+        }
     }
 
     return true;
@@ -192,7 +213,7 @@ NonhierSphere::NonhierSphere(const Point3D& pos, double radius) :
     Point3D min(m_pos[0] - m_radius, m_pos[1] - m_radius, m_pos[2] - m_radius);
     Point3D max(m_pos[0] + m_radius, m_pos[1] + m_radius, m_pos[2] + m_radius);
 
-    Primitive(min, max);   
+    setBBox(min, max);   
 }
 
 NonhierSphere::~NonhierSphere()
@@ -200,28 +221,31 @@ NonhierSphere::~NonhierSphere()
 }
 
 
-NonhierSphere(const NonhierSphere& other) {
+NonhierSphere::NonhierSphere(const NonhierSphere& other) : Primitive(other)
+{
     m_pos = other.m_pos;
     m_radius = other.m_radius;
-    
-    Primitive(other);
 }
 
-NonhierSphere& operator=(const NonhierSphere& other) {
-    m_pos = other.m_pos;
-    m_radius = other.m_radius;
-    
-    Primitive(other);
+NonhierSphere& NonhierSphere::operator=(const NonhierSphere& other) {
+    if(&other != this) {
+        Primitive::operator=(other);
+
+        m_pos = other.m_pos;
+        m_radius = other.m_radius;
+    }
     return *this;
 }
 
-bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect) {
-    if(!m_bbox.intersect(ray)) {
+bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect) {
+    Ray modelRay = ray.getTransform(m_inv);
+
+    if(!m_modelBBox.intersect(modelRay)) {
         return false;
     }
 
-    Point3D o = ray.getOrigin();
-    Vector3D d = ray.getDirection();
+    Point3D o = modelRay.getOrigin();
+    Vector3D d = modelRay.getDirection();
 
     double A = d.length2();
     double B = 2*d.dot(o - m_pos);
@@ -233,71 +257,78 @@ bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect, Geometr
     bool hit = false;
     double t;
 
-    if(numRoots == 1 && ray.checkParam(roots[0])) {
+    if(numRoots == 1 && modelRay.checkParam(roots[0])) {
         t = roots[0];
         hit = true;
 
     } else if(numRoots == 2) {
-        if(ray.checkParam(roots[0]) && ray.checkParam(roots[1])) {
+        if(modelRay.checkParam(roots[0]) && modelRay.checkParam(roots[1])) {
             t = fmin(roots[0], roots[1]);
             hit = true;
 
-        } else if(ray.checkParam(roots[0])) {
+        } else if(modelRay.checkParam(roots[0])) {
             t = roots[0];
             hit = true;
 
-        } else if(ray.checkParam(roots[1])) {
+        } else if(modelRay.checkParam(roots[1])) {
             t = roots[1];
             hit = true;
         }
     }
 
-    if(hit) {
-        Point3D point = ray(t);
-        Vector3D normal = point - m_pos;
-        *isect = Intersection(point, t, object, normal);
+    if(hit && isect != NULL) {
+        Point3D point = modelRay(t);
+        Vector3D normal = m_inv.transpose() * (point - m_pos);
+
+        point = m_trans * point;
+        *isect = Intersection(point, t, m_material, normal);
     }
 
     return hit;
 }
 
-NonhierBox::NonhierBox() {
+NonhierBox::NonhierBox(const Point3D& pos, double size) :
+    m_pos(pos), m_size(size)
+{
     Point3D max = m_pos + Point3D(m_size, m_size, m_size);
-    Primitive(m_pos, max);
+    setBBox(m_pos, max);
 }
 
 NonhierBox::~NonhierBox()
 {
 }
 
-NonhierBox(const NonhierBox& other) {
+NonhierBox::NonhierBox(const NonhierBox& other) : Primitive(other)
+{
     m_pos = other.m_pos;
     m_size = other.m_size;
-
-    Primitive(other);
 }
 
-NonhierBox& operator=(const NonhierBox& other) {
-    m_pos = other.m_pos;
-    m_size = other.m_size;
+NonhierBox& NonhierBox::operator=(const NonhierBox& other) {
+    if(&other != this) {
+        Primitive::operator=(other);
 
-    Primitive(other);
+        m_pos = other.m_pos;
+        m_size = other.m_size;
+    }
+
     return *this;
 }
 
-// Slabs method from Real-time Rendering
-bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect) {
+bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {
+    Ray modelRay = ray.getTransform(m_inv);
+
     double t_min = -std::numeric_limits<double>::infinity();
     double t_max = std::numeric_limits<double>::infinity();
  
-    Vector3D p_min = m_pos - ray.getOrigin();
-    Vector3D p_max = Point3D(m_pos[0] + m_size, m_pos[1] + m_size, m_pos[2] + m_size) - ray.getOrigin();
+    Vector3D p_min = m_pos - modelRay.getOrigin();
+    Vector3D p_max = Point3D(m_pos[0] + m_size, m_pos[1] + m_size, m_pos[2] + m_size) - modelRay.getOrigin();
 
     Vector3D normal_min;
     Vector3D normal_max;
 
-    Vector3D d = ray.getDirection();
-    bool finite_ray = ray.hasEndpoint();
+    Vector3D d = modelRay.getDirection();
+    bool finite_ray = modelRay.hasEndpoint();
     
     for(int i = 0; i < 3; i++) {
         if(fabs(d[i]) > 1.0e-15) {
@@ -327,7 +358,7 @@ bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect, GeometryNo
                 }
             }
 
-            if(t_min > t_max || t_max < ray.getEpsilon()) {
+            if(t_min > t_max || t_max < modelRay.getEpsilon()) {
                 return false;
             }
 
@@ -338,12 +369,21 @@ bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect, GeometryNo
         if(finite_ray && t_min > 1) {
             return false;
         }
-    } 
+    }
+   
+    if(isect != NULL) { 
+        if(t_min > modelRay.getEpsilon()) {
+            Point3D point = m_trans * modelRay(t_min);
+            Vector3D normal = m_inv.transpose() * normal_min;
 
-    if(t_min > ray.getEpsilon()) {
-        *isect = Intersection(ray(t_min), t_min, object, normal_min);
-    } else {
-        *isect = Intersection(ray(t_max), t_max, object, normal_max);
+            *isect = Intersection(point, t_min, m_material, normal);
+
+        } else {
+            Point3D point = m_trans * modelRay(t_max);
+            Vector3D normal = m_inv.transpose() * normal_max;
+
+            *isect = Intersection(point, t_max, m_material, normal);
+        }
     }
 
     return true;

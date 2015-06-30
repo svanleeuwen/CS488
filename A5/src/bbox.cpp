@@ -15,25 +15,35 @@ AABB::AABB(const AABB& other) {
 }
 
 AABB& AABB::operator=(const AABB& other) {
-    m_min = other.m_min;
-    m_max = other.m_max;
+    if(&other != this) {
+        m_min = other.m_min;
+        m_max = other.m_max;
+    }
 
     return *this;
 }
 
-// Note: tracing may speed up if recompute AABB using primitive
-// I don't think I can recompute without transforming primitives instead of rays
-void AABB::transform(const Matrix4x4& trans) {
-    Point3D min = trans * m_min;
-    Point3D max = trans * m_max;
+AABB AABB::getTransform(const AABB& bbox, const Matrix4x4& trans) {
+    Vector4D m1 = trans.getColumn(0);
+    Vector4D m2 = trans.getColumn(1);
+    Vector4D m3 = trans.getColumn(2);
+    Vector4D m4 = trans.getColumn(3);
 
-    m_min[0] = fmin(min[0], max[0]);
-    m_min[1] = fmin(min[1], max[1]);
-    m_min[2] = fmin(min[2], max[2]);
+    Point3D xa = Point3D(m1 * bbox.m_min[0]);
+    Point3D xb = Point3D(m1 * bbox.m_max[0]);
 
-    m_max[0] = fmax(min[0], max[0]);
-    m_max[1] = fmax(min[1], max[1]);
-    m_max[2] = fmax(min[2], max[2]);
+    Point3D ya = Point3D(m2 * bbox.m_min[1]);
+    Point3D yb = Point3D(m2 * bbox.m_max[1]);
+
+    Point3D za = Point3D(m3 * bbox.m_min[2]);
+    Point3D zb = Point3D(m3 * bbox.m_max[2]);
+
+    Point3D t = Point3D(m4);
+
+    Point3D min = Point3D::min(xa, xb) + Point3D::min(ya, yb) + Point3D::min(za, zb) + t;
+    Point3D max = Point3D::max(xa, xb) + Point3D::max(ya, yb) + Point3D::max(za, zb) + t;
+
+    return AABB(min, max);
 }
 
 bool AABB::intersect(const Ray& ray) {

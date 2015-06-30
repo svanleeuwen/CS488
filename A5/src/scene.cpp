@@ -6,7 +6,7 @@
 using namespace std;
 
 SceneNode::SceneNode(const std::string& name)
-  : m_name(name), m_transformed(false)
+  : m_num_parents(0), m_name(name)
 {
 }
 
@@ -21,16 +21,21 @@ SceneNode::~SceneNode()
     }
 }
 
+void SceneNode::getPrimitives(vector<Primitive*>* primitives) {
+    Matrix4x4 eye;
+    getPrimitives(primitives, eye, eye);
+}
+
 void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {
     Matrix4x4 t_trans = trans * m_trans;
     Matrix4x4 t_inv = m_inv * inv;
-    
+   
     for(auto it = m_children.begin(); it != m_children.end(); it++) {
         (*it)->getPrimitives(primitives, t_trans, t_inv);
     }
 }
 
-bool SceneNode::exists_intersection(const Ray& ray) {
+/*bool SceneNode::exists_intersection(const Ray& ray) {
     Matrix4x4 eye;
     stack<Matrix4x4>* transStack = new stack<Matrix4x4>();
     transStack->push(eye);
@@ -131,6 +136,7 @@ bool SceneNode::get_intersection(const Ray& ray, Intersection* isect, stack<Matr
 
     return hitAny;
 }
+*/
 
 void SceneNode::rotate(char axis, double angle)
 {
@@ -139,8 +145,6 @@ void SceneNode::rotate(char axis, double angle)
 
     m_trans = m_trans * rotMat;
     m_inv = invMat * m_inv;
-
-    m_transformed = true;
 }
 
 void SceneNode::scale(const Vector3D& amount)
@@ -150,8 +154,6 @@ void SceneNode::scale(const Vector3D& amount)
 
     m_trans = m_trans * scaleMat;
     m_inv = invMat * m_inv;
-
-    m_transformed = true;
 }
 
 void SceneNode::translate(const Vector3D& amount)
@@ -161,8 +163,6 @@ void SceneNode::translate(const Vector3D& amount)
 
     m_trans = m_trans * transMat;
     m_inv = invMat * m_inv;
-
-    m_transformed = true;
 }
 
 bool SceneNode::is_joint() const
@@ -177,7 +177,6 @@ JointNode::JointNode(const std::string& name)
 
 JointNode::~JointNode()
 {
-    ~SceneNode();
 }
 
 bool JointNode::is_joint() const
@@ -205,13 +204,12 @@ void JointNode::set_joint_y(double min, double init, double max)
 
 GeometryNode::GeometryNode(const std::string& name, Primitive* primitive)
   : SceneNode(name),
-    m_primitive(primitive)
+    m_primitive(primitive), m_primitive_pushed(false)
 {
 }
 
 GeometryNode::~GeometryNode()
 {
-    ~SceneNode();
 }
 
 void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {
@@ -220,12 +218,16 @@ void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4
 
     if(!m_primitive_pushed) {
         m_primitive->setTransform(t_trans, t_inv);
-        primitives->push_back(*m_primitive);
+        m_primitive->setMaterial(m_material);
 
+        primitives->push_back(m_primitive);
         m_primitive_pushed = true;
 
     } else {
-        primitives->push_back(m_primitive->clone());
+        Primitive* prim = m_primitive->clone();
+        prim->setTransform(t_trans, t_inv);
+
+        primitives->push_back(prim);
     }
 
     for(auto it = m_children.begin(); it != m_children.end(); it++) {
@@ -233,7 +235,7 @@ void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4
     }
 }
 
-
+/*
 bool GeometryNode::exists_intersection(const Ray& ray, stack<Matrix4x4>* transStack, stack<Matrix4x4>* invStack) {
     bool hit = SceneNode::exists_intersection(ray, transStack, invStack);   
 
@@ -315,6 +317,7 @@ bool GeometryNode::get_intersection(const Ray& ray, Intersection* isect, stack<M
 
     return true;
 }
+*/
 
 Material* GeometryNode::get_material() {
     return m_material;

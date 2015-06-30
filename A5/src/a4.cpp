@@ -6,9 +6,11 @@
 
 #include <iostream>
 #include <pthread.h>
+#include <vector>
 
 using std::cout;
 using std::endl;
+using std::vector;
 
 #define NUMTHREADS 8
 
@@ -103,7 +105,14 @@ void a4_render(// What to render
         }
     }
 
-    Tracer tracer(root, cam, ambient, lights);
+#ifndef BIH
+    vector<Primitive*>* primitives = new vector<Primitive*>();
+    root->getPrimitives(primitives);
+    delete root;
+    
+    Tracer tracer(primitives, cam, ambient, lights);
+#endif
+
     Image img(width, height, 3);
 
     mydata.tracer = &tracer;

@@ -6,7 +6,6 @@
 #include "primitive.hpp"
 #include "algebra.hpp"
 #include "intersection.hpp"
-#include "scene.hpp"
 
 // A polygonal mesh.
 class Mesh : public Primitive {
@@ -19,13 +18,13 @@ public:
 
     virtual Mesh* clone() { return new Mesh(*this); }
 
-    virtual bool getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect = true);
+    virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
     typedef std::vector<int> Face;
   
 private:
     bool getPolyIntersection(const Face& poly, Intersection* isect);
-    bool getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* isect, GeometryNode* object);
+    bool getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* isect);
     
     Vector3D getPolyNormal(const Face& poly);
     Point3D getInnerPoint(const Face& poly);

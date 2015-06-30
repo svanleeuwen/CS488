@@ -8,23 +8,30 @@
 
 class Primitive {
 public:
-    Primitive(const Point3D& min, const Point3D& max);
+    Primitive() {}
     virtual ~Primitive();
 
     Primitive(const Primitive& other);
     Primitive& operator=(const Primitive& other);
 
-    virtual Primitive* clone() { return new Primitive(*this); }
-
-    virtual bool getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect = true) = 0;
-
     void setTransform(const Matrix4x4& trans, const Matrix4x4& inv);
 
-private:
+    Material* getMaterial() const { return m_material; }
+    void setMaterial(Material* material) { m_material = material; }
+
+    virtual Primitive* clone() = 0;
+    virtual bool getIntersection(const Ray& ray, Intersection* isect) = 0;
+
+protected:
+    void setBBox(const Point3D& min, const Point3D& max);
+
     Matrix4x4 m_trans;
     Matrix4x4 m_inv;
 
-    AABB m_bbox;
+    AABB m_modelBBox;
+    AABB m_worldBBox;
+
+    Material* m_material;
 };
 
 class Sphere : public Primitive {
@@ -37,7 +44,7 @@ public:
     Sphere(const Sphere& other);
     Sphere& operator=(const Sphere& other);
 
-    virtual bool getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect = true);
+    virtual bool getIntersection(const Ray& ray, Intersection* isect);
 };
 
 class Cube : public Primitive {
@@ -50,7 +57,7 @@ public:
 
     virtual Cube* clone() { return new Cube(*this); }
     
-    virtual bool getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect = true);
+    virtual bool getIntersection(const Ray& ray, Intersection* isect);
 };
 
 class NonhierSphere : public Primitive {
@@ -61,9 +68,9 @@ public:
     NonhierSphere(const NonhierSphere& other);
     NonhierSphere& operator=(const NonhierSphere& other);
 
-    virtual NonhierSphere* clone(const NonhierSphere& other) { return new NonhierSphere(*this); }
+    virtual NonhierSphere* clone() { return new NonhierSphere(*this); }
     
-    virtual bool getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect = true);
+    virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
 private:
     Point3D m_pos;
@@ -72,11 +79,7 @@ private:
 
 class NonhierBox : public Primitive {
 public:
-    NonhierBox(const Point3D& pos, double size)
-    : m_pos(pos), m_size(size)
-    {
-    }
-
+    NonhierBox(const Point3D& pos, double size);
     virtual ~NonhierBox();
 
     NonhierBox(const NonhierBox& other);
@@ -84,7 +87,7 @@ public:
 
     virtual NonhierBox* clone() { return new NonhierBox(*this); }
 
-    virtual bool getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object, bool getIsect = true);
+    virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
 private:
     Point3D m_pos;

@@ -23,6 +23,8 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+class Vector4D;
+
 class Point2D
 {
 public:
@@ -84,6 +86,8 @@ public:
     v_[2] = other.v_[2];
   }
 
+  Point3D(const Vector4D& vec);
+
   Point3D& operator =(const Point3D& other)
   {
     v_[0] = other.v_[0];
@@ -91,6 +95,9 @@ public:
     v_[2] = other.v_[2];
     return *this;
   }
+
+  static Point3D min(const Point3D& p1, const Point3D& p2);
+  static Point3D max(const Point3D& p1, const Point3D& p2);
 
   double& operator[](size_t idx) 
   {
@@ -105,7 +112,6 @@ private:
   double v_[3];
 };
 
-class Vector4D;
 
 class Vector3D
 {
@@ -128,6 +134,8 @@ public:
     v_[1] = p[1];
     v_[2] = p[2];
   }
+
+  Vector3D(const Vector4D& vec);
 
   Vector3D(const Vector3D& other)
   {
@@ -271,10 +279,17 @@ public:
     v_[3] = w;
   }
 
-  Vector4D(const Vector3D& vec, double w) {
+  Vector4D(const Vector3D& vec, double w = 0.0) {
       v_[0] = vec[0];
       v_[1] = vec[1];
       v_[2] = vec[2];
+      v_[3] = w;
+  }
+
+  Vector4D(const Point3D& point, double w = 1.0) {
+      v_[0] = point[0];
+      v_[1] = point[1];
+      v_[2] = point[2];
       v_[3] = w;
   }
 

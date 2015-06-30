@@ -14,6 +14,21 @@
 
 #include "algebra.hpp"
 
+Point3D::Point3D(const Vector4D& vec) {
+    v_[0] = vec[0] / vec[3];
+    v_[1] = vec[1] / vec[3];
+    v_[2] = vec[2] / vec[3];
+}
+
+
+
+Vector3D::Vector3D(const Vector4D& vec) {
+    v_[0] = vec[0] / vec[3];
+    v_[1] = vec[1] / vec[3];
+    v_[2] = vec[2] / vec[3];
+}
+
+
 double Vector3D::normalize()
 {
   double denom = 1.0;
@@ -59,6 +74,54 @@ double Vector3D::normalize()
   }
 
   return 0.0;
+}
+
+Point3D Point3D::min(const Point3D& p1, const Point3D& p2) {
+    Point3D minPoint;
+
+    if(p1[0] < p2[0]) {
+        minPoint[0] = p1[0];
+    } else {
+        minPoint[0] = p2[0];
+    }
+    
+    if(p1[1] < p2[1]) {
+        minPoint[1] = p1[1];
+    } else {
+        minPoint[1] = p2[1];
+    }
+
+    if(p1[2] < p2[2]) {
+        minPoint[2] = p1[2];
+    } else {
+        minPoint[2] = p2[2];
+    }
+
+    return minPoint;
+}
+
+Point3D Point3D::max(const Point3D& p1, const Point3D& p2) {
+    Point3D maxPoint;
+
+    if(p1[0] > p2[0]) {
+        maxPoint[0] = p1[0];
+    } else {
+        maxPoint[0] = p2[0];
+    }
+    
+    if(p1[1] > p2[1]) {
+        maxPoint[1] = p1[1];
+    } else {
+        maxPoint[1] = p2[1];
+    }
+
+    if(p1[2] > p2[2]) {
+        maxPoint[2] = p1[2];
+    } else {
+        maxPoint[2] = p2[2];
+    }
+
+    return maxPoint;
 }
 
 /*

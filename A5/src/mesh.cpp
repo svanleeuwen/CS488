@@ -1,6 +1,9 @@
 #include "mesh.hpp"
 #include <iostream>
 
+using std::cout;
+using std::endl;
+
 Mesh::Mesh(const std::vector<Point3D>& verts,
            const std::vector< std::vector<int> >& faces)
   : m_verts(verts),
@@ -20,21 +23,21 @@ Mesh::Mesh(const std::vector<Point3D>& verts,
         }   
     }
 
-    m_bbox = AABB(a_min, a_max);
+    setBBox(a_min, a_max);
 }
 
-Mesh(const Mesh& other) {
+Mesh::Mesh(const Mesh& other) : Primitive(other)
+{
     m_verts = other.m_verts;
     m_faces = other.m_faces;
-
-    Primitive(other);
 }
 
-Mesh& operator=(const Mesh& other) {
+Mesh& Mesh::operator=(const Mesh& other) {
+    Primitive::operator=(other);
+
     m_verts = other.m_verts;
     m_faces = other.m_faces;
-
-    Primitive(other);
+    
     return *this;
 }
 
@@ -53,37 +56,59 @@ int getMaxIndex(Vector3D& vec) {
     return index;
 }
 
-bool Mesh::getIntersection(const Ray& ray, Intersection* isect, GeometryNode* object) {
-    if(!m_bbox.intersect(ray)) {
+bool Mesh::getIntersection(const Ray& ray, Intersection* isect) {
+    Ray modelRay = ray.getTransform(m_inv);
+    
+    if(!m_modelBBox.intersect(modelRay)) {
         return false;
     }
     
-    bool hitAny = false;
+    Intersection* best = NULL;
 
     for(auto it = m_faces.begin(); it != m_faces.end(); it++) {
-        Intersection t_isect;
-        bool hit = getPlaneIntersection(*it, ray, &t_isect, object);
+        Intersection* next = new Intersection();
+        bool hit = getPlaneIntersection(*it, modelRay, next);
 
         if(hit) {
-            hit = getPolyIntersection(*it, &t_isect);
+            hit = getPolyIntersection(*it, next);
         }
 
-        if(hit) {
-            if(ray.checkParam(t_isect.getParam())) {
-                if(!hitAny) {
-                    hitAny = true;
-                    *isect = t_isect;
+        if(hit && isect == NULL && modelRay.checkParam(next->getParam())) {
+            delete next;
+            return true;
+        
+        } else if(hit) {
+            if(modelRay.checkParam(next->getParam())) {
+                if(best == NULL) {
+                    best = next;
+                    next = NULL;
+    
                 } else {
-                    if(t_isect.getParam() < isect->getParam()) {
-                        *isect = t_isect;
+                    if(next->getParam() < best->getParam()) {
+                        delete best;
+                        
+                        best = next;
+                        next = NULL;
                     }
                 }
             }
+        }
 
+        if(next != NULL) {
+            delete next;
         }
     }
 
-    return hitAny;
+    if(isect != NULL && best != NULL) {
+        Point3D point = m_trans * best->getPoint();
+        Vector3D normal = m_inv.transpose() * best->getNormal();
+
+        *isect = Intersection(point, best->getParam(), m_material, normal);
+        delete best;
+        return true;
+    }
+
+    return false;
 }
 
 Vector3D getLineNormal(const Point3D& p1, const Point3D& p2, const Point3D& innerPoint, const Vector3D& polyNormal) {
@@ -119,7 +144,7 @@ bool Mesh::getPolyIntersection(const Face& poly, Intersection* isect) {
     return true;
 }
 
-bool Mesh::getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* isect, GeometryNode* object) {
+bool Mesh::getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* isect) {
     Vector3D normal = getPolyNormal(poly);
     Point3D p = m_verts.at(poly.at(0));
 
@@ -131,7 +156,7 @@ bool Mesh::getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* 
     }
 
     double t = (normal.dot(Vector3D(p)) - normal.dot(Vector3D(o))) / (normal.dot(d));
-    *isect = Intersection(ray(t), t, object, normal);
+    *isect = Intersection(ray(t), t, m_material, normal);
 
     return true;
 }
