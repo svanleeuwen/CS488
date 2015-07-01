@@ -49,6 +49,10 @@ bool Tracer::getIntersection(Ray& ray, Intersection* isect) {
 
     return false;
 }
+#else
+bool Tracer::getIntersection(Ray& ray, Intersection* isect) {
+    return m_bih->getIntersection(ray, isect);
+}
 #endif
 
 Colour Tracer::castShadowRays(Ray& ray, Intersection* isect) {

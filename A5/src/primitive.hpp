@@ -22,6 +22,10 @@ public:
     virtual Primitive* clone() = 0;
     virtual bool getIntersection(const Ray& ray, Intersection* isect) = 0;
 
+    virtual bool isMesh() { return false; }
+
+    AABB* getWorldBBox() { return &m_worldBBox; }
+
 protected:
     void setBBox(const Point3D& min, const Point3D& max);
 

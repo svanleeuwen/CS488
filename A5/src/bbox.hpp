@@ -16,8 +16,8 @@ public:
     AABB() {}
     AABB(Point3D min, Point3D max);
     virtual ~AABB();
+
     AABB(const AABB& other);
-    
     AABB& operator=(const AABB& other);
 
     virtual bool intersect(const Ray& ray);

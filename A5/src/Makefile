@@ -3,7 +3,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 DEPENDS = $(SOURCES:.cpp=.d)
 LDFLAGS = $(shell pkg-config --libs lua5.1) -llua5.1 -lpng -lpthread
 CPPFLAGS = $(shell pkg-config --cflags lua5.1)
-CXXFLAGS = $(CPPFLAGS) -W -Wall -g -std=c++11 -pthread
+CXXFLAGS = $(CPPFLAGS) -W -Wall -g -std=c++11 -pthread -D TRANS_MESH
 CXX = g++
 MAIN = rt
 

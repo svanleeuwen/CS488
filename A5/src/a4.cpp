@@ -2,8 +2,9 @@
 #include "image.hpp"
 #include "camera.hpp"
 #include "tracer.hpp"
-#include <math.h>
+#include "primitive.hpp"
 
+#include <math.h>
 #include <iostream>
 #include <pthread.h>
 #include <vector>
@@ -105,12 +106,15 @@ void a4_render(// What to render
         }
     }
 
-#ifndef BIH
     vector<Primitive*>* primitives = new vector<Primitive*>();
     root->getPrimitives(primitives);
     delete root;
     
+#ifndef BIH
     Tracer tracer(primitives, cam, ambient, lights);
+#else
+    BIHTree* bih = new BIHTree(primitives); 
+    Tracer tracer(bih, cam, ambient, lights);
 #endif
 
     Image img(width, height, 3);

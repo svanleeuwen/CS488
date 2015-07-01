@@ -1,4 +1,6 @@
 #include "scene.hpp"
+#include "mesh.hpp"
+
 #include <iostream>
 #include <limits>
 #include <math.h>
@@ -34,109 +36,6 @@ void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& t
         (*it)->getPrimitives(primitives, t_trans, t_inv);
     }
 }
-
-/*bool SceneNode::exists_intersection(const Ray& ray) {
-    Matrix4x4 eye;
-    stack<Matrix4x4>* transStack = new stack<Matrix4x4>();
-    transStack->push(eye);
-
-    stack<Matrix4x4>* invStack = new stack<Matrix4x4>();
-    invStack->push(eye);
-
-    bool hit = exists_intersection(ray, transStack, invStack);
-    
-    delete transStack;
-    delete invStack;
-    return hit;
-    
-    for(auto it = m_children.begin(); it != m_children.end(); it++) {
-        bool hit = (*it)->exists_intersection(ray);
-
-        if(hit) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool SceneNode::exists_intersection(const Ray& ray, stack<Matrix4x4>* transStack, stack<Matrix4x4>* invStack) {
-    if(m_transformed) {
-        Matrix4x4 trans = transStack->top() * m_trans;
-        transStack->push(trans);
-
-        Matrix4x4 inv = m_inv * invStack->top();
-        invStack->push(inv);
-    }
-    
-    for(auto it = m_children.begin(); it != m_children.end(); it++) {
-        bool hit = (*it)->exists_intersection(ray, transStack, invStack);
-
-        if(hit) {
-            if(m_transformed) {
-                transStack->pop();
-                invStack->pop();
-            }
-            return true;
-        }
-    }
-    
-    if(m_transformed) {
-        transStack->pop();
-        invStack->pop();
-    }
-    return false;
-}
-
-bool SceneNode::get_intersection(const Ray& ray, Intersection* isect) {
-        Matrix4x4 eye;
-        stack<Matrix4x4>* transStack = new stack<Matrix4x4>();
-        transStack->push(eye);
-
-        stack<Matrix4x4>* invStack = new stack<Matrix4x4>();
-        invStack->push(eye);
-
-        bool hit = get_intersection(ray, isect, transStack, invStack);
-        
-        delete transStack;
-        delete invStack;
-        return hit;
-}
-
-bool SceneNode::get_intersection(const Ray& ray, Intersection* isect, stack<Matrix4x4>* transStack, stack<Matrix4x4>* invStack) {
-    double closest = numeric_limits<double>::infinity();
-    bool hitAny = false;
-    Intersection t_isect;
-
-    if(m_transformed) {
-        Matrix4x4 trans = transStack->top() * m_trans;
-        transStack->push(trans);
-
-        Matrix4x4 inv = m_inv * invStack->top();
-        invStack->push(inv);
-    }
-
-    for(auto it = m_children.begin(); it != m_children.end(); it++) {
-        bool hit = (*it)->get_intersection(ray, &t_isect, transStack, invStack);
-
-        if(hit) {
-            hitAny = true;
-            
-            if(t_isect.getParam() < closest) {
-                closest = t_isect.getParam();
-                *isect = t_isect;
-            }
-        }
-    }
-
-    if(m_transformed) {
-        transStack->pop();
-        invStack->pop();
-    }
-
-    return hitAny;
-}
-*/
 
 void SceneNode::rotate(char axis, double angle)
 {
@@ -220,104 +119,32 @@ void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4
         m_primitive->setTransform(t_trans, t_inv);
         m_primitive->setMaterial(m_material);
 
-        primitives->push_back(m_primitive);
+        if(!m_primitive->isMesh()) {
+            primitives->push_back(m_primitive);
+        
+        } else {
+            ((Mesh*)m_primitive)->addMeshPolygons(primitives);
+        }
+
         m_primitive_pushed = true;
 
     } else {
         Primitive* prim = m_primitive->clone();
         prim->setTransform(t_trans, t_inv);
-
-        primitives->push_back(prim);
+        
+        if(!prim->isMesh()) {
+            primitives->push_back(prim);
+        
+        } else {
+            ((Mesh*)prim)->addMeshPolygons(primitives);
+            delete prim;
+        }
     }
 
     for(auto it = m_children.begin(); it != m_children.end(); it++) {
         (*it)->getPrimitives(primitives, t_trans, t_inv);
     }
 }
-
-/*
-bool GeometryNode::exists_intersection(const Ray& ray, stack<Matrix4x4>* transStack, stack<Matrix4x4>* invStack) {
-    bool hit = SceneNode::exists_intersection(ray, transStack, invStack);   
-
-    if(hit) {
-        return true;
-    }
-
-    Intersection t_isect;
-    Ray modelRay;
-
-    Matrix4x4 trans = transStack->top() * m_trans;
-    transStack->push(trans);
-
-    Matrix4x4 inv = m_inv * invStack->top();
-    invStack->push(inv);
-
-    modelRay = ray.getTransform(inv);
-    hit = m_primitive->getIntersection(modelRay, &t_isect, this);
-    
-    transStack->pop();
-    invStack->pop();
-
-    return hit;
-}
-
-bool GeometryNode::get_intersection(const Ray& ray, Intersection* isect, stack<Matrix4x4>* transStack, stack<Matrix4x4>* invStack) {
-    Intersection t_isect1;
-    bool hit1 = SceneNode::get_intersection(ray, &t_isect1, transStack, invStack); 
-
-    Matrix4x4 trans;
-    Matrix4x4 inv;
-
-    if(m_transformed) {
-        trans = transStack->top() * m_trans;
-        transStack->push(trans);
-
-        inv = m_inv * invStack->top();
-        invStack->push(inv);
-
-    } else {
-        trans = transStack->top();
-        inv = invStack->top();
-    }
-   
-    Ray modelRay = ray.getTransform(inv);
-
-    Intersection t_isect2;
-    bool hit2 = m_primitive->getIntersection(modelRay, &t_isect2, this); 
-
-    if(hit1 && hit2) {
-        if(t_isect1.getParam() < t_isect2.getParam()) {
-            *isect = t_isect1;
-
-        } else {
-            Vector3D normal = inv.transpose() * t_isect2.getNormal();
-            *isect = Intersection(trans * t_isect2.getPoint(), t_isect2.getParam(), this, normal);
-        }
-
-    } else if(hit1) {
-        *isect = t_isect1;
-        
-    } else if(hit2) {
-        Vector3D normal = inv.transpose() * t_isect2.getNormal();
-        *isect = Intersection(trans * t_isect2.getPoint(), t_isect2.getParam(), this, normal);
-   
-    } else {
-        if(m_transformed) {
-            transStack->pop();
-            invStack->pop();
-        }
-
-        return false;
-    }
-
-    if(m_transformed) {
-        transStack->pop();
-        invStack->pop();
-    }
-
-    return true;
-}
-*/
 
 Material* GeometryNode::get_material() {
     return m_material;

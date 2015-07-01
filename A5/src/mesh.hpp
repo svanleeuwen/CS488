@@ -2,12 +2,13 @@
 #define CS488_MESH_HPP
 
 #include <vector>
-#include <iosfwd>
 #include "primitive.hpp"
 #include "algebra.hpp"
 #include "intersection.hpp"
 
-// A polygonal mesh.
+#include <iosfwd>
+#include <vector>
+
 class Mesh : public Primitive {
 public:
     Mesh(const std::vector<Point3D>& verts,
@@ -17,8 +18,10 @@ public:
     Mesh& operator=(const Mesh& other);
 
     virtual Mesh* clone() { return new Mesh(*this); }
-
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
+
+    virtual bool isMesh() { return true; }
+    void addMeshPolygons(std::vector<Primitive*>* primitives);
 
     typedef std::vector<int> Face;
   
@@ -33,6 +36,25 @@ private:
     std::vector<Face> m_faces;
 
     friend std::ostream& operator<<(std::ostream& out, const Mesh& mesh);
+};
+
+class Polygon : public Primitive {
+public:
+    Polygon(const std::vector<Point3D>& verts, const std::vector<int>& indices, const Matrix4x4& trans, const Matrix4x4& inv);
+    
+    Polygon(const Polygon& other);
+    Polygon& operator=(const Polygon& other);
+
+    virtual Polygon* clone() { return new Polygon(*this); }
+    virtual bool getIntersection(const Ray& ray, Intersection* isect);
+
+private:
+    bool getPlaneIntersection(const Ray& ray, Intersection* isect);
+
+    std::vector<Point3D> m_verts;
+    
+    Vector3D m_normal;
+    Point3D m_innerPoint;
 };
 
 #endif
