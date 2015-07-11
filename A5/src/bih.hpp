@@ -1,3 +1,4 @@
+#ifdef BIH
 #ifndef CS488_BIH_HPP
 #define CS488_BIH_HPP
 
@@ -6,15 +7,16 @@
 #include "intersection.hpp"
 
 #include <vector>
+#include <stack>
 
 class BIHNode;
 
 class BIHTree {
 public:
-    BIHTree(std::vector<Primitive*>* primitives);
+    BIHTree(Primitive** primitives, int size);
     virtual ~BIHTree();
 
-    bool getIntersection(Ray& ray, Intersection* isect);
+    bool getIntersection(const Ray& ray, Intersection* isect);
 
 private:
     void initGlobalBBox();
@@ -22,48 +24,48 @@ private:
     BIHNode* m_root;
     AABB m_globalBBox;
    
-    std::vector<Primitive*>* m_primitives;
+    Primitive** m_primitives;
+    int m_numPrimitives;
 };
 
 class BIHNode {
 public:
-    BIHNode();
+    BIHNode(Primitive** primitives, int size, const AABB& bbox, int depth = 0);
     virtual ~BIHNode();
 
-    virtual bool isLeaf() { return false; }
-};
+    void buildHierarchy(std::stack<BIHNode*>* nodes, std::stack<AABB>* bboxes, const AABB& uniformBBox);
 
-class BIHInner: public BIHNode {
-public:
-    BIHInner();
-    virtual ~BIHInner();
-    
+    bool getIntersection(const Ray& ray, Intersection* isect);
+
 private:
-    enum Axis {
+    enum Type {
         x_axis,
         y_axis,
         z_axis,
+        leaf
     };
 
-    Axis m_axis;
+    bool getLeafIntersection(const Ray& ray, Intersection* isect);
 
-    BIHNode* m_lchild;
-    BIHNode* m_rchild;
+    Type chooseAxis(const AABB& bbox);
+    AABB getLeftBBox(const AABB& bbox, double plane);
+    AABB getRightBBox(const AABB& bbox, double plane);
 
-    double m_planes[2];
+    Type m_type;
+
+    union {
+        BIHNode* m_children;
+        Primitive** m_primitives;
+    };
+   
+    union { 
+        double* m_planes;
+        int m_numPrimitives;
+    };
+
+    AABB m_bbox;
+    int m_depth;
 };
 
-class BIHLeaf : public BIHNode {
-public: 
-    BIHLeaf(std::vector<Primitive*>* primitives, int firstIndex, int numPrimitives);
-    virtual ~BIHLeaf();
-
-    virtual bool isLeaf() { return true; }
-
-private:
-    std::vector<Primitive*>* m_primitives;
-    int m_firstIndex;
-    int m_numPrimitives;
-};
-
+#endif
 #endif

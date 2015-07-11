@@ -22,12 +22,15 @@ public:
     const Vector3D& getDirection() const { return m_direction; }
 
     bool hasEndpoint() const { return m_hasEndpoint; }
+
     double getEpsilon() const { return m_epsilon; }
 
     bool checkParam(double t) const;
     Ray getTransform(Matrix4x4& trans) const;
 
 private:
+    void copy(const Ray& other);
+
     Point3D m_origin;
     Vector3D m_direction;
 

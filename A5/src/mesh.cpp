@@ -117,7 +117,7 @@ bool Mesh::getIntersection(const Ray& ray, Intersection* isect) {
 
     if(isect != NULL && best != NULL) {
         Point3D point = m_trans * best->getPoint();
-        Vector3D normal = m_inv.transpose() * best->getNormal();
+        Vector3D normal = transNorm(m_inv, best->getNormal());
 
         *isect = Intersection(point, best->getParam(), m_material, normal);
         delete best;
@@ -218,18 +218,48 @@ std::ostream& operator<<(std::ostream& out, const Mesh& mesh)
 Polygon::Polygon(const std::vector<Point3D>& verts, const std::vector<int>& indices,
         const Matrix4x4& trans, const Matrix4x4& inv) 
 {
-    setTransform(trans, inv);
+    Point3D point = trans * verts.at(indices.at(0));
 
-    for(auto it = indices.begin(); it != indices.end(); ++it) {
-        m_verts.push_back(m_trans * verts.at(*it));
+    Point3D min = point;
+    Point3D max = point;
+    m_verts.push_back(point);
+
+    for(auto it = indices.begin() + 1; it != indices.end(); ++it) {
+        point = trans * verts.at(*it);
+
+        min = Point3D::min(min, point);
+        max = Point3D::max(max, point);
+
+        m_verts.push_back(point);
     }
+
+    setBBox(min, max); 
 
     Point3D p1 = m_verts.at(0);
     Point3D p2 = m_verts.at(1);
     Point3D p3 = m_verts.at(2);
 
-    m_normal = m_inv * (p2 - p1).cross(p3 - p1);
-    m_innerPoint = 1.0/3.0 * (p1 + p2 + p3);
+    m_normal = (p2 - p1).cross(p3 - p1);
+    m_innerPoint = (1.0/3.0) * (p1 + p2 + p3);
+}
+
+Polygon::Polygon(const Polygon& other) : Primitive(other) 
+{
+    m_verts = other.m_verts;
+    m_normal = other.m_normal;
+    m_innerPoint = other.m_innerPoint;
+}
+
+Polygon& Polygon::operator=(const Polygon& other) {
+    if(this != &other) {
+        Primitive::operator=(other);
+
+        m_verts = other.m_verts;
+        m_normal = other.m_normal;
+        m_innerPoint = other.m_innerPoint;       
+    }
+
+    return *this;
 }
 
 bool Polygon::getIntersection(const Ray& ray, Intersection* isect) {
@@ -257,33 +287,13 @@ bool Polygon::getIntersection(const Ray& ray, Intersection* isect) {
         }
     }
 
-    if(isect != NULL) 
+    if(isect != NULL) {
         *isect = *t_isect;
+    }
     delete t_isect; 
 
     return true;
 }
-
-Polygon::Polygon(const Polygon& other) : Primitive(other) 
-{
-    m_verts = other.m_verts;
-    m_normal = other.m_normal;
-    m_innerPoint = other.m_innerPoint;
-}
-
-Polygon& Polygon::operator=(const Polygon& other) {
-    if(this != &other) {
-        Primitive::operator=(other);
-
-        m_verts = other.m_verts;
-        m_normal = other.m_normal;
-        m_innerPoint = other.m_innerPoint;       
-    }
-
-    return *this;
-}
-
-
 
 bool Polygon::getPlaneIntersection(const Ray& ray, Intersection* isect) {
     Point3D p = m_verts.at(0);
@@ -291,7 +301,7 @@ bool Polygon::getPlaneIntersection(const Ray& ray, Intersection* isect) {
     Point3D o = ray.getOrigin();
     Vector3D d = ray.getDirection();
 
-    if(abs(m_normal.dot(d)) < 1.0e-10) {
+    if(fabs(m_normal.dot(d)) < 1.0e-10) {
         return false;
     }
 

@@ -4,28 +4,28 @@
 #include "ray.hpp"
 #include "algebra.hpp"
 
-class BBox {
-public:
-    virtual ~BBox();
-
-    virtual bool intersect(const Ray& ray) = 0;
-};
-
-class AABB : public BBox {
+class AABB{
 public:
     AABB() {}
     AABB(Point3D min, Point3D max);
-    virtual ~AABB();
+    ~AABB();
 
     AABB(const AABB& other);
     AABB& operator=(const AABB& other);
 
-    virtual bool intersect(const Ray& ray);
+    bool intersect(const Ray& ray) const;
+    bool contains(const Ray& ray) const;
+
+    double getMedian(int axis) const;
 
     static AABB getTransform(const AABB& bbox, const Matrix4x4& trans);
     
     Point3D m_min;
     Point3D m_max;
 };
+
+inline double AABB::getMedian(int axis) const {
+    return (m_max[axis] + m_min[axis]) / 2.0;
+}
 
 #endif

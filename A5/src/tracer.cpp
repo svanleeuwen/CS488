@@ -1,61 +1,63 @@
 #include "tracer.hpp"
 #include "material.hpp"
+
 #include <iostream>
+#include <assert.h>
 
 using std::cout;
 using std::endl;
 using std::vector;
 
+#define MAX_DEPTH 5
+#define REFLECTION_ATTENUATION 0.5
+
 #ifndef BIH
-bool Tracer::getIntersection(Ray& ray, Intersection* isect) {
-    Intersection* best = NULL;
+Tracer::Tracer(std::vector<Primitive*>* primitives, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights) :
+    m_primitives(primitives), m_cam(&cam), m_ambient(ambient), m_lights(&lights) 
+{
+}
+#else
+Tracer::Tracer(BIHTree* bih, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights) :
+    m_bih(bih), m_cam(&cam), m_ambient(ambient), m_lights(&lights) 
+{
+}
+#endif
+
+#ifndef BIH
+bool Tracer::getIntersection(const Ray& ray, Intersection* isect) {
+    Ray testRay = ray;
+
+    Intersection* best = (isect == NULL) ? NULL : new Intersection();
+    bool hitAny = false;
 
     for(auto it = m_primitives->begin(); it != m_primitives->end(); it++) {
-        if(isect != NULL) {
-            Intersection* next = new Intersection();
-            bool hit = (*it)->getIntersection(ray, next);
+        bool hit = (*it)->getIntersection(testRay, best);
 
-            if(hit && best == NULL) {
-                best = next;
-
-            } else if(hit) {
-                if(next->getParam() < best->getParam()) {
-                    delete best;
-                    best = next;
-                
-                } else {
-                    delete next;
-                }
-
-            } else {
-                delete next;
-            }
+        if(isect != NULL && hit) {
+            hitAny = true;
+            testRay = Ray(testRay.getOrigin(), best->getPoint());
         
-        } else {
-            bool hit = (*it)->getIntersection(ray, NULL);
-
-            if(hit) {
-                return true;
-            }
+        } else if(hit) {
+            return true;
         }
     }
 
-    if(isect != NULL && best != NULL) {
-        *isect = *best;
+    if(isect != NULL) {
+        if(hitAny) {
+            *isect = *best;
+        }
         delete best;
-
-        return true;
     }
 
-    return false;
+    return hitAny;
 }
 #else
-bool Tracer::getIntersection(Ray& ray, Intersection* isect) {
+bool Tracer::getIntersection(const Ray& ray, Intersection* isect) {
     return m_bih->getIntersection(ray, isect);
 }
 #endif
 
-Colour Tracer::castShadowRays(Ray& ray, Intersection* isect) {
+Colour Tracer::castShadowRays(const Ray& ray, Intersection* isect) {
     Colour colour = Colour(0.0, 0.0, 0.0);
     Material* material = isect->getMaterial();
 
@@ -71,7 +73,75 @@ Colour Tracer::castShadowRays(Ray& ray, Intersection* isect) {
     return colour;
 }
 
-bool Tracer::traceRay(Ray& ray, Colour& colour) {
+Colour Tracer::castReflectionRay(const Ray& ray, Intersection* isect, int depth) {
+    if(depth > MAX_DEPTH) {
+        return Colour(0.0, 0.0, 0.0);
+    }
+
+    Vector3D dir = -ray.getDirection();
+    dir.normalize();
+
+    Vector3D norm = isect->getNormal();
+    norm.normalize();
+
+    if(norm.dot(dir) < 0) {
+        norm = -norm;
+    }
+
+    Vector3D refl = 2 * norm.dot(dir) * norm - dir;
+
+    PhongMaterial* material = isect->getMaterial();
+    Colour ks = material->getKS();
+
+    Ray reflected = Ray(isect->getPoint(), refl);
+    Colour colour(0.0, 0.0, 0.0);
+    
+    traceRay(reflected, colour, depth);
+    return REFLECTION_ATTENUATION * ks * colour;
+}
+
+// I got the equation for refracted from the Wikipedia entry for Snell's law
+Colour Tracer::castRefractionRay(const Ray& ray, Intersection* isect, int depth) {
+    if(depth > MAX_DEPTH) {
+        return Colour(0.0, 0.0, 0.0);
+    }
+
+    Vector3D in = ray.getDirection();
+    in.normalize();
+
+    Vector3D norm = isect->getNormal();
+    norm.normalize();
+
+    double cos_theta1 = -in.dot(norm);
+    bool incoming = cos_theta1 >= 0.0;
+
+    if(!incoming) {
+        norm = -norm;
+        cos_theta1 = -cos_theta1;
+    }
+
+    PhongMaterial* material = isect->getMaterial();
+    double materialMedium = material->getMedium();
+
+    double mediumRatio;
+
+    if(incoming) {
+        mediumRatio = 1.0 / materialMedium;
+    } else {
+        mediumRatio = materialMedium;
+    }
+
+    double cos_theta2 = sqrt(1 - (mediumRatio * mediumRatio) * (1 - (cos_theta1 * cos_theta1)));
+    Vector3D refracted = (mediumRatio * in) + ((mediumRatio * cos_theta1) - cos_theta2) * norm;
+
+    Ray refractedRay(isect->getPoint(), refracted);
+    Colour colour(0.0, 0.0, 0.0);
+
+    traceRay(refractedRay, colour, depth);
+    return colour;
+}
+
+bool Tracer::traceRay(Ray& ray, Colour& colour, int depth) {
     Intersection* isect = new Intersection();
     bool hit = getIntersection(ray, isect);
 
@@ -80,10 +150,26 @@ bool Tracer::traceRay(Ray& ray, Colour& colour) {
         return false;
     }
 
-    Material* material = isect->getMaterial();
-    colour = ((PhongMaterial*)material)->getKD() * m_ambient;
+    PhongMaterial* material = isect->getMaterial();
+    double transmitRatio = material->getTransmitRatio();
+    double reflectRatio = 1.0 - transmitRatio;
 
-    colour += castShadowRays(ray, isect);
+    if(reflectRatio > 1.0e-10) {    
+        if(material->isDiffuse()) {
+            colour = reflectRatio * material->getKD() * m_ambient;
+        }
+
+        colour += reflectRatio * castShadowRays(ray, isect);
+        
+        if(material->isSpecular()) {
+            colour += reflectRatio * castReflectionRay(ray, isect, depth + 1);
+        }
+    }
+
+    if(transmitRatio > 1.0e-10) {
+        colour += transmitRatio * castRefractionRay(ray, isect, depth + 1);
+    }
+
     delete isect;
     return true;
 }

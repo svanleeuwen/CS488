@@ -9,7 +9,7 @@ class Camera {
 public:
     Camera(int width, int height, const Point3D& eye, const Vector3D& view, const Vector3D& up, double fov);
 
-    Ray getRay(int xPos, int yPos);
+    Ray* getRay(double xPos, double yPos) const;
 
     Point3D getEye() const { return m_eye; }
 

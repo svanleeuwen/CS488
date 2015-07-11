@@ -9,23 +9,24 @@ Material::~Material()
 {
 }
 
-PhongMaterial::PhongMaterial(const Colour& kd, const Colour& ks, double shininess)
+PhongMaterial::PhongMaterial(const Colour& kd, const Colour& ks, double shininess, double transmitRatio, double medium)
   : m_kd(kd), m_ks(ks), m_shininess(shininess)
 {
+    m_transmitRatio = transmitRatio;
+    m_medium = medium;
 }
 
 PhongMaterial::~PhongMaterial()
 {
 }
-namespace {
-    double clamp(double val, double min, double max) {
-        if(val > max) {
-            return max;
-        }else if(val < min) {
-            return min;
-        } else {
-            return val;
-        }
+
+static double clamp(double val, double min, double max) {
+    if(val > max) {
+        return max;
+    }else if(val < min) {
+        return min;
+    } else {
+        return val;
     }
 }
 
@@ -48,6 +49,10 @@ Colour PhongMaterial::getColour(const Vector3D& l, const Vector3D& v, const Inte
 
     Vector3D normal = isect->getNormal();
     normal.normalize();
+
+    if(v_norm.dot(normal) < 0) {
+        normal = -normal;
+    }
 
     Point3D point = isect->getPoint();
     Colour intensity = light.getIntensity(point);

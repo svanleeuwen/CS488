@@ -3,12 +3,12 @@
 
 #include "algebra.hpp"
 
-class Material;
+class PhongMaterial;
 
 class Intersection {
 public:
     Intersection() {};
-    Intersection(const Point3D& point, double t, Material* material, const Vector3D& normal);
+    Intersection(const Point3D& point, double t, PhongMaterial* material, const Vector3D& normal);
 
     ~Intersection();
 
@@ -18,14 +18,14 @@ public:
     Point3D getPoint() const { return m_point; }
     double getParam() const { return m_param; }
     
-    Material* getMaterial() const { return m_material; }
+    PhongMaterial* getMaterial() const { return m_material; }
     Vector3D getNormal() const { return m_normal; }
 
 private:
     Point3D m_point;
     double m_param;
 
-    Material* m_material;
+    PhongMaterial* m_material;
     Vector3D m_normal;
 };
 

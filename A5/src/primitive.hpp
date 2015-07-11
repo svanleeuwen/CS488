@@ -16,8 +16,8 @@ public:
 
     void setTransform(const Matrix4x4& trans, const Matrix4x4& inv);
 
-    Material* getMaterial() const { return m_material; }
-    void setMaterial(Material* material) { m_material = material; }
+    PhongMaterial* getMaterial() const { return m_material; }
+    void setMaterial(PhongMaterial* material) { m_material = material; }
 
     virtual Primitive* clone() = 0;
     virtual bool getIntersection(const Ray& ray, Intersection* isect) = 0;
@@ -35,7 +35,7 @@ protected:
     AABB m_modelBBox;
     AABB m_worldBBox;
 
-    Material* m_material;
+    PhongMaterial* m_material;
 };
 
 class Sphere : public Primitive {

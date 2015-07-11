@@ -379,11 +379,18 @@ int gr_material_cmd(lua_State* L)
   get_tuple(L, 2, ks, 3);
 
   double shininess = luaL_checknumber(L, 3);
-  
-  data->material = new PhongMaterial(Colour(kd[0], kd[1], kd[2]),
-                                     Colour(ks[0], ks[1], ks[2]),
-                                     shininess);
 
+  if(lua_gettop(L) == 6) {
+      double transmitRatio = luaL_checknumber(L, 4);
+      double medium = luaL_checknumber(L, 5);
+      data->material = new PhongMaterial(Colour(kd[0], kd[1], kd[2]),
+                                         Colour(ks[0], ks[1], ks[2]),
+                                         shininess, transmitRatio, medium);
+  } else {
+      data->material = new PhongMaterial(Colour(kd[0], kd[1], kd[2]),
+                                         Colour(ks[0], ks[1], ks[2]),
+                                         shininess);
+  }
   luaL_newmetatable(L, "gr.material");
   lua_setmetatable(L, -2);
   

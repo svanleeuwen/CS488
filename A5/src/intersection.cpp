@@ -5,7 +5,7 @@
 using std::cout;
 using std::endl;
 
-Intersection::Intersection(const Point3D& point, double t, Material* material, const Vector3D& normal):
+Intersection::Intersection(const Point3D& point, double t, PhongMaterial* material, const Vector3D& normal):
     m_point(point), m_param(t), m_material(material), m_normal(normal)
 {
 }

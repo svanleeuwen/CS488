@@ -15,18 +15,19 @@
 class Tracer {
 public:
 #ifndef BIH
-    Tracer(std::vector<Primitive*>* primitives, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights) :
-        m_primitives(primitives), m_cam(&cam), m_ambient(ambient), m_lights(&lights) {}
+    Tracer(std::vector<Primitive*>* primitives, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights);
 #else
-    Tracer(BIHTree* bih, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights) :
-        m_bih(bih), m_cam(&cam), m_ambient(ambient), m_lights(&lights) {}
+    Tracer(BIHTree* bih, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights);
 #endif
 
-    bool traceRay(Ray& ray, Colour& colour);
+    bool traceRay(Ray& ray, Colour& colour, int depth = 0);
 
 private:
-    Colour castShadowRays(Ray& ray, Intersection* isect);
-    bool getIntersection(Ray& ray, Intersection* isect);
+    Colour castShadowRays(const Ray& ray, Intersection* isect);
+    Colour castReflectionRay(const Ray& ray, Intersection* isect, int depth);
+    Colour castRefractionRay(const Ray& ray, Intersection* isect, int depth);
+
+    bool getIntersection(const Ray& ray, Intersection* isect);
 
 #ifndef BIH
     std::vector<Primitive*>* m_primitives;

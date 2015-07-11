@@ -15,19 +15,30 @@
 #include "algebra.hpp"
 
 Point3D::Point3D(const Vector4D& vec) {
-    v_[0] = vec[0] / vec[3];
-    v_[1] = vec[1] / vec[3];
-    v_[2] = vec[2] / vec[3];
+    if(vec[3] == 0 || vec[3] == 1) {
+        v_[0] = vec[0];
+        v_[1] = vec[1];
+        v_[2] = vec[2];
+    } else {
+        v_[0] = vec[0] / vec[3];
+        v_[1] = vec[1] / vec[3];
+        v_[2] = vec[2] / vec[3];
+    }
 }
 
 
 
 Vector3D::Vector3D(const Vector4D& vec) {
-    v_[0] = vec[0] / vec[3];
-    v_[1] = vec[1] / vec[3];
-    v_[2] = vec[2] / vec[3];
+    if(vec[3] == 0 || vec[3] == 1) {
+        v_[0] = vec[0];
+        v_[1] = vec[1];
+        v_[2] = vec[2];
+    } else {
+        v_[0] = vec[0] / vec[3];
+        v_[1] = vec[1] / vec[3];
+        v_[2] = vec[2] / vec[3];
+    }
 }
-
 
 double Vector3D::normalize()
 {

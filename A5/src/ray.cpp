@@ -24,7 +24,7 @@ Ray::Ray(Point3D origin, Point3D endpoint, double epsilon) {
     m_epsilon = epsilon;
 }
 
-Ray::Ray(const Ray& other) {
+void Ray::copy(const Ray& other) {
     m_origin = other.m_origin;
     m_direction = other.m_direction;
 
@@ -32,17 +32,15 @@ Ray::Ray(const Ray& other) {
     m_endpoint = other.m_endpoint;
 
     m_epsilon = other.m_epsilon;
+}
+
+Ray::Ray(const Ray& other) {
+    copy(other);
 }   
 
 Ray& Ray::operator=(const Ray& other) {
     if(&other != this) {
-        m_origin = other.m_origin;
-        m_direction = other.m_direction;
-       
-        m_hasEndpoint = other.m_hasEndpoint;
-        m_endpoint = other.m_endpoint;
-      
-        m_epsilon = other.m_epsilon;   
+        copy(other);        
     }
 
     return *this;

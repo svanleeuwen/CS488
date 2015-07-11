@@ -1,7 +1,5 @@
 #include "bbox.hpp"
 
-BBox::~BBox() {}
-
 AABB::AABB(Point3D min, Point3D max) {
     m_min = min;
     m_max = max;
@@ -46,7 +44,7 @@ AABB AABB::getTransform(const AABB& bbox, const Matrix4x4& trans) {
     return AABB(min, max);
 }
 
-bool AABB::intersect(const Ray& ray) {
+bool AABB::intersect(const Ray& ray) const{
     double t_min = -std::numeric_limits<double>::infinity();
     double t_max = std::numeric_limits<double>::infinity();
 
@@ -90,5 +88,25 @@ bool AABB::intersect(const Ray& ray) {
         }
     }
 
+    if(finite_ray && t_min < ray.getEpsilon() && t_max > 1) {
+        return false;
+    }
+
     return true;
+}
+
+bool AABB::contains(const Ray& ray) const{
+    Point3D origin = ray.getOrigin();
+
+    bool inside = true;
+
+    inside = inside && origin[0] <= m_max[0] + 1.0e-10;
+    inside = inside && origin[1] <= m_max[1] + 1.0e-10;
+    inside = inside && origin[2] <= m_max[2] + 1.0e-10;
+
+    inside = inside && origin[0] >= m_min[0] - 1.0e-10;
+    inside = inside && origin[1] >= m_min[1] - 1.0e-10;
+    inside = inside && origin[2] >= m_min[2] - 1.0e-10;
+
+    return inside;
 }

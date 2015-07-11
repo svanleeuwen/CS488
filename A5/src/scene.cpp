@@ -117,7 +117,7 @@ void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4
 
     if(!m_primitive_pushed) {
         m_primitive->setTransform(t_trans, t_inv);
-        m_primitive->setMaterial(m_material);
+        m_primitive->setMaterial((PhongMaterial*)m_material);
 
         if(!m_primitive->isMesh()) {
             primitives->push_back(m_primitive);
@@ -131,7 +131,7 @@ void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4
     } else {
         Primitive* prim = m_primitive->clone();
         prim->setTransform(t_trans, t_inv);
-        
+ 
         if(!prim->isMesh()) {
             primitives->push_back(prim);
         

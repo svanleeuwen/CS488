@@ -3,6 +3,7 @@
 #include "camera.hpp"
 #include "tracer.hpp"
 #include "primitive.hpp"
+#include "packet.hpp"
 
 #include <math.h>
 #include <iostream>
@@ -16,19 +17,10 @@ using std::vector;
 #define NUMTHREADS 8
 
 namespace {
-    int i;
-    int j;
+    int index;
     int k;
 
-    struct thread_data{
-        Image* img;
-        Ray* rays;
-        Tracer* tracer;
-        int width;
-        int height;
-    };
-
-    struct thread_data mydata;
+    vector<Packet*>* packets;
 
     pthread_t threads[NUMTHREADS];
     pthread_mutex_t mutex;
@@ -37,49 +29,35 @@ namespace {
 void* computeImage(void* arg) {
     (void)arg;
 
-    int x;
-    int y;
-
-    Ray* rays = mydata.rays;
-    Image* img = mydata.img;
-    Tracer* tracer = mydata.tracer;
-    int width = mydata.width;
-    int height = mydata.height;
+    int numPackets = packets->size();
+    int l_index;
 
     while(true) {
         pthread_mutex_lock(&mutex);
-        if(j >= height) {
+        if(index >= numPackets) {
             pthread_mutex_unlock(&mutex);
             pthread_exit((void*) 0);
         }
 
-        x = i;
-        y = j;
-
-        if(++i >= width) {
-            i = 0;
-            j++;
-        }
+        l_index = index++; 
         pthread_mutex_unlock(&mutex);
 
-        if(y*height + x == (int) ((k/10.0) * (width*height))) {
+        packets->at(l_index)->trace();
+
+        if(l_index == (int) ((k/10.0) * numPackets)) {
             cout << k*10 << "\% complete" << endl;
             k++;
         }
-       
-        Colour colour = Colour(0.0, 0.0, 0.0);
-        bool hit = tracer->traceRay(rays[y*height + x], colour);
+    }       
+}
 
-        if(hit) {
-            (*img)(x, y, 0) = colour.R();
-            (*img)(x, y, 1) = colour.G();
-            (*img)(x, y, 2) = colour.B();
-        } else {
-            (*img)(x, y, 0) = ((double)x)/(double)width;
-            (*img)(x, y, 1) = ((double)y)/(double)height;
-            (*img)(x, y, 2) = 1.0 - ((double)x)/(double)width;
-        }
+Primitive** unpackPrimitives(vector<Primitive*>* primitives) {
+    Primitive** primArray = new Primitive* [primitives->size()];
+    for(uint i = 0; i < primitives->size(); i++) {
+        primArray[i] = primitives->at(i);
     }
+
+    return primArray;
 }
 
 void a4_render(// What to render
@@ -98,14 +76,6 @@ void a4_render(// What to render
 {
     Camera cam(width, height, eye, view, up, fov);
 
-    mydata.rays = new Ray[height*width];
-
-    for(int y = 0; y < height; y++) {
-        for(int x = 0; x < width; x++) {
-            mydata.rays[y*height + x] = cam.getRay(x, y);
-        }
-    }
-
     vector<Primitive*>* primitives = new vector<Primitive*>();
     root->getPrimitives(primitives);
     delete root;
@@ -113,20 +83,17 @@ void a4_render(// What to render
 #ifndef BIH
     Tracer tracer(primitives, cam, ambient, lights);
 #else
-    BIHTree* bih = new BIHTree(primitives); 
+    Primitive** primArray = unpackPrimitives(primitives);
+    BIHTree* bih = new BIHTree(primArray, primitives->size());
+    
+    delete primitives; 
     Tracer tracer(bih, cam, ambient, lights);
 #endif
 
     Image img(width, height, 3);
 
-    mydata.tracer = &tracer;
-    mydata.img = &img;
-
-    mydata.width = width;
-    mydata.height = height;
-
-    i = 0;
-    j = 0;
+    packets = Packet::genPackets(&img, &tracer, cam);
+    index = 0;
     k = 1;
 
     pthread_mutex_init(&mutex, NULL);

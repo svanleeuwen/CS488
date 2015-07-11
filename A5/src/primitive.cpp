@@ -106,7 +106,7 @@ bool Sphere::getIntersection(const Ray& ray, Intersection* isect) {
 
     if(hit && isect != NULL) {
         Point3D point = modelRay(t);
-        Vector3D normal = m_inv.transpose() * Vector3D(point);
+        Vector3D normal = transNorm(m_inv, Vector3D(point));
 
         point = m_trans * point;
         *isect = Intersection(point, t, m_material, normal);
@@ -189,16 +189,20 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
         }
     } 
 
+    if(finite_ray && t_min <= modelRay.getEpsilon() && t_max > 1) {
+        return false;
+    }
+
     if(isect != NULL) {
         if(t_min > modelRay.getEpsilon()) {
             Point3D point = m_trans * modelRay(t_min);
-            Vector3D normal = m_inv.transpose() * normal_min;
+            Vector3D normal = transNorm(m_inv, normal_min);
 
             *isect = Intersection(point, t_min, m_material, normal);
 
         } else {
             Point3D point = m_trans * modelRay(t_max);
-            Vector3D normal = m_inv.transpose() * normal_max;
+            Vector3D normal = transNorm(m_inv, normal_max);
 
             *isect = Intersection(point, t_max, m_material, normal);
         }
@@ -278,7 +282,7 @@ bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect) {
 
     if(hit && isect != NULL) {
         Point3D point = modelRay(t);
-        Vector3D normal = m_inv.transpose() * (point - m_pos);
+        Vector3D normal = transNorm(m_inv, (point - m_pos));
 
         point = m_trans * point;
         *isect = Intersection(point, t, m_material, normal);
@@ -370,17 +374,21 @@ bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {
             return false;
         }
     }
-   
+ 
+    if(finite_ray && t_min <= modelRay.getEpsilon() && t_max > 1) {
+        return false;
+    }  
+
     if(isect != NULL) { 
         if(t_min > modelRay.getEpsilon()) {
             Point3D point = m_trans * modelRay(t_min);
-            Vector3D normal = m_inv.transpose() * normal_min;
+            Vector3D normal = transNorm(m_inv, normal_min);
 
             *isect = Intersection(point, t_min, m_material, normal);
 
         } else {
             Point3D point = m_trans * modelRay(t_max);
-            Vector3D normal = m_inv.transpose() * normal_max;
+            Vector3D normal = transNorm(m_inv, normal_max);
 
             *isect = Intersection(point, t_max, m_material, normal);
         }
