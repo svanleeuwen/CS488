@@ -1,0 +1,535 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AABB	bbox.cpp	/^AABB::AABB(Point3D min, Point3D max) {$/;"	f	class:AABB
+AABB	bbox.cpp	/^AABB::AABB(const AABB& other) {$/;"	f	class:AABB
+AABB	bbox.hpp	/^    AABB() {}$/;"	f	class:AABB
+AABB	bbox.hpp	/^class AABB{$/;"	c
+AR	Makefile	/^AR            = ar cqs$/;"	m
+B	algebra.hpp	/^  double B() const $/;"	f	class:Colour
+BIHNode	bih.cpp	/^BIHNode::BIHNode(Primitive** primitives, int size, const AABB& bbox, int depth) :$/;"	f	class:BIHNode
+BIHNode	bih.hpp	/^class BIHNode {$/;"	c
+BIHTree	bih.cpp	/^BIHTree::BIHTree(Primitive** primitives, int size) :$/;"	f	class:BIHTree
+BIHTree	bih.hpp	/^class BIHTree {$/;"	c
+CAMERA_HPP	camera.hpp	2;"	d
+CC	Makefile	/^CC            = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIE $(DEFINES)$/;"	m
+CHK_DIR_EXISTS	Makefile	/^CHK_DIR_EXISTS= test -d$/;"	m
+COMPRESS	Makefile	/^COMPRESS      = gzip -9f$/;"	m
+COPY	Makefile	/^COPY          = cp -f$/;"	m
+COPY_DIR	Makefile	/^COPY_DIR      = cp -f -R$/;"	m
+COPY_FILE	Makefile	/^COPY_FILE     = cp -f$/;"	m
+CS488_A4_HPP	a4.hpp	2;"	d
+CS488_ALGEBRA_HPP	algebra.hpp	16;"	d
+CS488_BBOX_HPP	bbox.hpp	2;"	d
+CS488_BIH_HPP	bih.hpp	3;"	d
+CS488_IMAGE_HPP	image.hpp	2;"	d
+CS488_LIGHT_HPP	light.hpp	2;"	d
+CS488_MATERIAL_HPP	material.hpp	2;"	d
+CS488_MESH_HPP	mesh.hpp	2;"	d
+CS488_PACKET_HPP	packet.hpp	2;"	d
+CS488_POLYROOTS_HPP	polyroots.hpp	14;"	d
+CS488_PRIMITIVE_HPP	primitive.hpp	2;"	d
+CXX	Makefile	/^CXX           = g++$/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS      = -pipe -W -Wall -g -pthread -D BIH -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIE $(DEFINES)$/;"	m
+Camera	camera.cpp	/^Camera::Camera(int width, int height, const Point3D& eye, const Vector3D& view, const Vector3D& up, double fov):$/;"	f	class:Camera
+Camera	camera.hpp	/^class Camera {$/;"	c
+ChildList	scene.hpp	/^    typedef std::list<SceneNode*> ChildList;$/;"	t	class:SceneNode
+Colour	algebra.hpp	/^  Colour(const Colour& other)$/;"	f	class:Colour
+Colour	algebra.hpp	/^  Colour(double c)$/;"	f	class:Colour
+Colour	algebra.hpp	/^  Colour(double r, double g, double b)$/;"	f	class:Colour
+Colour	algebra.hpp	/^class Colour$/;"	c
+Cube	primitive.cpp	/^Cube::Cube() {$/;"	f	class:Cube
+Cube	primitive.cpp	/^Cube::Cube(const Cube& other) : Primitive(other) {}$/;"	f	class:Cube
+Cube	primitive.hpp	/^class Cube : public Primitive {$/;"	c
+DEFINES	Makefile	/^DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB$/;"	m
+DEL_DIR	Makefile	/^DEL_DIR       = rmdir$/;"	m
+DEL_FILE	Makefile	/^DEL_FILE      = rm -f$/;"	m
+DESTDIR	Makefile	/^DESTDIR       = #avoid trailing-slash linebreak$/;"	m
+DIST	Makefile	/^DIST          = \/usr\/lib\/i386-linux-gnu\/qt5\/mkspecs\/features\/spec_pre.prf \\$/;"	m
+DirectoryOfThisScript	.ycm_extra_conf.py	/^def DirectoryOfThisScript():$/;"	f
+Face	mesh.hpp	/^    typedef std::vector<int> Face;$/;"	t	class:Mesh
+FlagsForFile	.ycm_extra_conf.py	/^def FlagsForFile( filename, **kwargs ):$/;"	f
+G	algebra.hpp	/^  double G() const $/;"	f	class:Colour
+GRLUA_DEBUG	scene_lua.cpp	53;"	d	file:
+GRLUA_DEBUG	scene_lua.cpp	56;"	d	file:
+GRLUA_DEBUG_CALL	scene_lua.cpp	54;"	d	file:
+GRLUA_DEBUG_CALL	scene_lua.cpp	57;"	d	file:
+GeometryNode	scene.cpp	/^GeometryNode::GeometryNode(const std::string& name, Primitive* primitive)$/;"	f	class:GeometryNode
+GeometryNode	scene.hpp	/^class GeometryNode : public SceneNode {$/;"	c
+GetCompilationInfoForFile	.ycm_extra_conf.py	/^def GetCompilationInfoForFile( filename ):$/;"	f
+INCPATH	Makefile	/^INCPATH       = -I\/usr\/lib\/i386-linux-gnu\/qt5\/mkspecs\/linux-g++ -I. -I. -I\/usr\/include\/lua5.1 -I\/usr\/include\/qt5 -I\/usr\/include\/qt5\/QtWidgets -I\/usr\/include\/qt5\/QtGui -I\/usr\/include\/qt5\/QtCore -I.$/;"	m
+INSTALL_DIR	Makefile	/^INSTALL_DIR   = $(COPY_DIR)$/;"	m
+INSTALL_FILE	Makefile	/^INSTALL_FILE  = install -m 644 -p$/;"	m
+INSTALL_PROGRAM	Makefile	/^INSTALL_PROGRAM = install -m 755 -p$/;"	m
+INTERSECTION_HPP	intersection.hpp	2;"	d
+Image	image.cpp	/^Image::Image()$/;"	f	class:Image
+Image	image.cpp	/^Image::Image(const Image& other)$/;"	f	class:Image
+Image	image.cpp	/^Image::Image(int width, int height, int elements)$/;"	f	class:Image
+Image	image.hpp	/^class Image {$/;"	c
+Intersection	intersection.cpp	/^Intersection::Intersection(const Intersection& other) {$/;"	f	class:Intersection
+Intersection	intersection.cpp	/^Intersection::Intersection(const Point3D& point, double t, PhongMaterial* material, const Vector3D& normal):$/;"	f	class:Intersection
+Intersection	intersection.hpp	/^    Intersection() {};$/;"	f	class:Intersection
+Intersection	intersection.hpp	/^class Intersection {$/;"	c
+IsHeaderFile	.ycm_extra_conf.py	/^def IsHeaderFile( filename ):$/;"	f
+JointNode	scene.cpp	/^JointNode::JointNode(const std::string& name)$/;"	f	class:JointNode
+JointNode	scene.hpp	/^class JointNode : public SceneNode {$/;"	c
+JointRange	scene.hpp	/^    struct JointRange {$/;"	s	class:JointNode
+LFLAGS	Makefile	/^LFLAGS        = -Wl,-O1$/;"	m
+LIBS	Makefile	/^LIBS          = $(SUBLIBS) -llua5.1 -lQt5Widgets -L\/usr\/lib\/i386-linux-gnu -lQt5Gui -lQt5Core -lGL -lpthread $/;"	m
+LINK	Makefile	/^LINK          = g++$/;"	m
+LUA_HPP	lua488.hpp	2;"	d
+Light	light.cpp	/^Light::Light()$/;"	f	class:Light
+Light	light.hpp	/^struct Light {$/;"	s
+MAKEFILE	Makefile	/^MAKEFILE      = Makefile$/;"	m
+MAX_DEPTH	bih.cpp	15;"	d	file:
+MAX_DEPTH	tracer.cpp	11;"	d	file:
+MKDIR	Makefile	/^MKDIR         = mkdir -p$/;"	m
+MOVE	Makefile	/^MOVE          = mv -f$/;"	m
+M_PI	algebra.hpp	23;"	d
+MakeRelativePathsInFlagsAbsolute	.ycm_extra_conf.py	/^def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):$/;"	f
+Material	material.hpp	/^  Material()$/;"	f	class:Material
+Material	material.hpp	/^class Material {$/;"	c
+Matrix4x4	algebra.hpp	/^  Matrix4x4()$/;"	f	class:Matrix4x4
+Matrix4x4	algebra.hpp	/^  Matrix4x4(const Matrix4x4& other)$/;"	f	class:Matrix4x4
+Matrix4x4	algebra.hpp	/^  Matrix4x4(const Vector4D row1, const Vector4D row2, const Vector4D row3, $/;"	f	class:Matrix4x4
+Matrix4x4	algebra.hpp	/^  Matrix4x4(double *vals)$/;"	f	class:Matrix4x4
+Matrix4x4	algebra.hpp	/^class Matrix4x4$/;"	c
+Mesh	mesh.cpp	/^Mesh::Mesh(const Mesh& other) : Primitive(other)$/;"	f	class:Mesh
+Mesh	mesh.cpp	/^Mesh::Mesh(const std::vector<Point3D>& verts,$/;"	f	class:Mesh
+Mesh	mesh.hpp	/^class Mesh : public Primitive {$/;"	c
+NUMTHREADS	a4.cpp	17;"	d	file:
+NonhierBox	primitive.cpp	/^NonhierBox::NonhierBox(const NonhierBox& other) : Primitive(other)$/;"	f	class:NonhierBox
+NonhierBox	primitive.cpp	/^NonhierBox::NonhierBox(const Point3D& pos, double size) :$/;"	f	class:NonhierBox
+NonhierBox	primitive.hpp	/^class NonhierBox : public Primitive {$/;"	c
+NonhierSphere	primitive.cpp	/^NonhierSphere::NonhierSphere(const NonhierSphere& other) : Primitive(other)$/;"	f	class:NonhierSphere
+NonhierSphere	primitive.cpp	/^NonhierSphere::NonhierSphere(const Point3D& pos, double radius) :$/;"	f	class:NonhierSphere
+NonhierSphere	primitive.hpp	/^class NonhierSphere : public Primitive {$/;"	c
+OBJECTS	Makefile	/^OBJECTS       = a4.o \\$/;"	m
+OBJECTS_DIR	Makefile	/^OBJECTS_DIR   = .\/$/;"	m
+PACKET_WIDTH	packet.cpp	9;"	d	file:
+PAINTCANVAS_HPP	paintcanvas.hpp	5;"	d
+PAINTWINDOW_HPP	paintwindow.hpp	5;"	d
+Packet	packet.cpp	/^Packet::Packet(const Packet& other) {$/;"	f	class:Packet
+Packet	packet.cpp	/^Packet::Packet(int width, int height, int i, int j, QImage* img, Tracer* tracer) :$/;"	f	class:Packet
+Packet	packet.hpp	/^    Packet() {}$/;"	f	class:Packet
+Packet	packet.hpp	/^class Packet {$/;"	c
+PaintCanvas	paintcanvas.cpp	/^PaintCanvas::PaintCanvas(QWidget *parent) $/;"	f	class:PaintCanvas
+PaintCanvas	paintcanvas.hpp	/^class PaintCanvas : public QWidget {$/;"	c
+PaintWindow	paintwindow.cpp	/^PaintWindow::PaintWindow() {$/;"	f	class:PaintWindow
+PaintWindow	paintwindow.hpp	/^class PaintWindow : public QMainWindow$/;"	c
+PhongMaterial	material.cpp	/^PhongMaterial::PhongMaterial(const Colour& kd, const Colour& ks, double shininess, double transmitRatio, double medium)$/;"	f	class:PhongMaterial
+PhongMaterial	material.hpp	/^class PhongMaterial : public Material {$/;"	c
+Point2D	algebra.hpp	/^  Point2D()$/;"	f	class:Point2D
+Point2D	algebra.hpp	/^  Point2D(const Point2D& other)$/;"	f	class:Point2D
+Point2D	algebra.hpp	/^  Point2D(double x, double y)$/;"	f	class:Point2D
+Point2D	algebra.hpp	/^class Point2D$/;"	c
+Point3D	algebra.cpp	/^Point3D::Point3D(const Vector4D& vec) {$/;"	f	class:Point3D
+Point3D	algebra.hpp	/^  Point3D()$/;"	f	class:Point3D
+Point3D	algebra.hpp	/^  Point3D(const Point3D& other)$/;"	f	class:Point3D
+Point3D	algebra.hpp	/^  Point3D(double x, double y, double z)$/;"	f	class:Point3D
+Point3D	algebra.hpp	/^class Point3D$/;"	c
+PolishRoot	polyroots.cpp	/^static double PolishRoot( $/;"	f	file:
+Polygon	mesh.cpp	/^Polygon::Polygon(const Polygon& other) : Primitive(other) $/;"	f	class:Polygon
+Polygon	mesh.cpp	/^Polygon::Polygon(const std::vector<Point3D>& verts, const std::vector<int>& indices,$/;"	f	class:Polygon
+Polygon	mesh.hpp	/^class Polygon : public Primitive {$/;"	c
+Primitive	primitive.cpp	/^Primitive::Primitive(const Primitive& other) {$/;"	f	class:Primitive
+Primitive	primitive.hpp	/^    Primitive() {}$/;"	f	class:Primitive
+Primitive	primitive.hpp	/^class Primitive {$/;"	c
+QMAKE	Makefile	/^QMAKE         = \/usr\/lib\/i386-linux-gnu\/qt5\/bin\/qmake$/;"	m
+QMAKE_TARGET	Makefile	/^QMAKE_TARGET  = rt$/;"	m
+R	algebra.hpp	/^  double R() const $/;"	f	class:Colour
+RANLIB	Makefile	/^RANLIB        = $/;"	m
+RAY_HPP	ray.hpp	2;"	d
+REFLECTION_ATTENUATION	tracer.cpp	12;"	d	file:
+Ray	ray.cpp	/^Ray::Ray(Point3D origin, Point3D endpoint, double epsilon) {$/;"	f	class:Ray
+Ray	ray.cpp	/^Ray::Ray(Point3D origin, Vector3D direction, double epsilon) {$/;"	f	class:Ray
+Ray	ray.cpp	/^Ray::Ray(const Ray& other) {$/;"	f	class:Ray
+Ray	ray.hpp	/^    Ray() {}$/;"	f	class:Ray
+Ray	ray.hpp	/^class Ray {$/;"	c
+SAMPLE	sample.hpp	2;"	d
+SAMPLE_WIDTH	packet.cpp	8;"	d	file:
+SCENE_HPP	scene.hpp	2;"	d
+SCENE_LUA_HPP	scene_lua.hpp	2;"	d
+SED	Makefile	/^SED           = sed$/;"	m
+SIGN	polyroots.cpp	83;"	d	file:
+SOURCES	Makefile	/^SOURCES       = a4.cpp \\$/;"	m
+SOURCE_EXTENSIONS	.ycm_extra_conf.py	/^SOURCE_EXTENSIONS = [ '.cpp', '.cxx', '.cc', '.c', '.m', '.mm' ]$/;"	v
+SQRT3	polyroots.cpp	80;"	d	file:
+STRIP	Makefile	/^STRIP         = strip$/;"	m
+SYMLINK	Makefile	/^SYMLINK       = ln -f -s$/;"	m
+Sample	sample.hpp	/^class Sample {$/;"	c
+SceneNode	scene.cpp	/^SceneNode::SceneNode(const std::string& name)$/;"	f	class:SceneNode
+SceneNode	scene.hpp	/^class SceneNode {$/;"	c
+Sphere	primitive.cpp	/^Sphere::Sphere() {$/;"	f	class:Sphere
+Sphere	primitive.cpp	/^Sphere::Sphere(const Sphere& other) : Primitive(other) {}$/;"	f	class:Sphere
+Sphere	primitive.hpp	/^class Sphere : public Primitive {$/;"	c
+TAR	Makefile	/^TAR           = tar -cf$/;"	m
+TARGET	Makefile	/^TARGET        = rt$/;"	m
+TRACER_HPP	tracer.hpp	2;"	d
+Tracer	tracer.cpp	/^Tracer::Tracer(std::vector<Primitive*>* primitives, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights) :$/;"	f	class:Tracer
+Tracer	tracer.hpp	/^class Tracer {$/;"	c
+Type	bih.hpp	/^    enum Type {$/;"	g	class:BIHNode
+Vector3D	algebra.cpp	/^Vector3D::Vector3D(const Vector4D& vec) {$/;"	f	class:Vector3D
+Vector3D	algebra.hpp	/^  Vector3D()$/;"	f	class:Vector3D
+Vector3D	algebra.hpp	/^  Vector3D(const Point3D& p) {$/;"	f	class:Vector3D
+Vector3D	algebra.hpp	/^  Vector3D(const Vector3D& other)$/;"	f	class:Vector3D
+Vector3D	algebra.hpp	/^  Vector3D(double x, double y, double z)$/;"	f	class:Vector3D
+Vector3D	algebra.hpp	/^class Vector3D$/;"	c
+Vector4D	algebra.hpp	/^  Vector4D()$/;"	f	class:Vector4D
+Vector4D	algebra.hpp	/^  Vector4D(const Point3D& point, double w = 1.0) {$/;"	f	class:Vector4D
+Vector4D	algebra.hpp	/^  Vector4D(const Vector3D& vec, double w = 0.0) {$/;"	f	class:Vector4D
+Vector4D	algebra.hpp	/^  Vector4D(const Vector4D& other)$/;"	f	class:Vector4D
+Vector4D	algebra.hpp	/^  Vector4D(double x, double y, double z, double w)$/;"	f	class:Vector4D
+Vector4D	algebra.hpp	/^class Vector4D$/;"	c
+addMeshPolygons	mesh.cpp	/^void Mesh::addMeshPolygons(vector<Primitive*>* primitives) {$/;"	f	class:Mesh
+add_child	scene.hpp	/^    void add_child(SceneNode* child)$/;"	f	class:SceneNode
+b_	algebra.hpp	/^  double b_;$/;"	m	class:Colour
+begin	algebra.hpp	/^  const double *begin() const$/;"	f	class:Matrix4x4
+buildHierarchy	bih.cpp	/^void BIHNode::buildHierarchy(stack<BIHNode*>* nodes, stack<AABB>* bboxes, const AABB& uniformBBox) {$/;"	f	class:BIHNode
+castReflectionRay	tracer.cpp	/^Colour Tracer::castReflectionRay(const Ray& ray, Intersection* isect, int depth) {$/;"	f	class:Tracer
+castRefractionRay	tracer.cpp	/^Colour Tracer::castRefractionRay(const Ray& ray, Intersection* isect, int depth) {$/;"	f	class:Tracer
+castShadowRays	tracer.cpp	/^Colour Tracer::castShadowRays(const Ray& ray, Intersection* isect) {$/;"	f	class:Tracer
+cbrt	polyroots.cpp	/^static double cbrt( double t )$/;"	f	file:
+checkParam	ray.cpp	/^bool Ray::checkParam(double t) const {$/;"	f	class:Ray
+chooseAxis	bih.cpp	/^BIHNode::Type BIHNode::chooseAxis(const AABB& bbox) {$/;"	f	class:BIHNode
+clamp	material.cpp	/^static double clamp(double val, double min, double max) {$/;"	f	file:
+clear	paintcanvas.cpp	/^void PaintCanvas::clear(){$/;"	f	class:PaintCanvas
+clone	mesh.hpp	/^    virtual Mesh* clone() { return new Mesh(*this); }$/;"	f	class:Mesh
+clone	mesh.hpp	/^    virtual Polygon* clone() { return new Polygon(*this); }$/;"	f	class:Polygon
+clone	primitive.hpp	/^    virtual Cube* clone() { return new Cube(*this); }$/;"	f	class:Cube
+clone	primitive.hpp	/^    virtual NonhierBox* clone() { return new NonhierBox(*this); }$/;"	f	class:NonhierBox
+clone	primitive.hpp	/^    virtual NonhierSphere* clone() { return new NonhierSphere(*this); }$/;"	f	class:NonhierSphere
+clone	primitive.hpp	/^    virtual Sphere* clone() { return new Sphere(*this); }$/;"	f	class:Sphere
+colour	light.hpp	/^  Colour colour;$/;"	m	struct:Light
+compilation_database_folder	.ycm_extra_conf.py	/^compilation_database_folder = ''$/;"	v
+computeQImage	a4.cpp	/^void* computeQImage(void* arg) {$/;"	f
+contains	bbox.cpp	/^bool AABB::contains(const Ray& ray) const{$/;"	f	class:AABB
+copy	packet.cpp	/^void Packet::copy(const Packet& other) {$/;"	f	class:Packet
+copy	ray.cpp	/^void Ray::copy(const Ray& other) {$/;"	f	class:Ray
+cosk_lookup	polyroots.cpp	/^static double cosk_lookup(double t)$/;"	f	file:
+createMenu	paintwindow.cpp	/^void PaintWindow::createMenu() {$/;"	f	class:PaintWindow
+cross	algebra.hpp	/^  Vector3D cross(const Vector3D& other) const$/;"	f	class:Vector3D
+cross	algebra.hpp	/^inline Vector3D cross(const Vector3D& a, const Vector3D& b) $/;"	f
+cubicRoots	polyroots.cpp	/^size_t cubicRoots( double p, double q, double r, double roots[3] )$/;"	f
+data	image.cpp	/^const double* Image::data() const$/;"	f	class:Image
+data	image.cpp	/^double* Image::data()$/;"	f	class:Image
+database	.ycm_extra_conf.py	/^  database = None$/;"	v
+database	.ycm_extra_conf.py	/^  database = ycm_core.CompilationDatabase( compilation_database_folder )$/;"	v
+deletePackets	packet.cpp	/^void Packet::deletePackets(vector<Packet*>* packets) {$/;"	f	class:Packet
+dividerow	algebra.cpp	/^static void dividerow(Matrix4x4& a, size_t r, double fac)$/;"	f	file:
+dot	algebra.hpp	/^  double dot(const Vector3D& other) const$/;"	f	class:Vector3D
+elements	image.cpp	/^int Image::elements() const$/;"	f	class:Image
+end	algebra.hpp	/^  const double *end() const$/;"	f	class:Matrix4x4
+fabs	polyroots.cpp	77;"	d	file:
+falloff	light.hpp	/^  double falloff[3];$/;"	m	struct:Light
+flags	.ycm_extra_conf.py	/^flags = [$/;"	v
+g_	algebra.hpp	/^  double g_;$/;"	m	class:Colour
+g_index	a4.cpp	/^    int g_index;$/;"	m	namespace:__anon3	file:
+genPackets	packet.cpp	/^vector<Packet*>* Packet::genPackets(QImage* img, Tracer* tracer, const Camera& cam) {$/;"	f	class:Packet
+genRays	packet.cpp	/^void Packet::genRays(const Camera& cam) {$/;"	f	class:Packet
+getColour	material.cpp	/^Colour PhongMaterial::getColour(const Vector3D& l, const Vector3D& v, const Intersection* isect, const Light& light) {$/;"	f	class:PhongMaterial
+getColumn	algebra.hpp	/^  Vector4D getColumn(size_t col) const$/;"	f	class:Matrix4x4
+getDirection	ray.hpp	/^    const Vector3D& getDirection() const { return m_direction; }$/;"	f	class:Ray
+getEpsilon	ray.hpp	/^    double getEpsilon() const { return m_epsilon; }$/;"	f	class:Ray
+getEye	camera.hpp	/^    Point3D getEye() const { return m_eye; }$/;"	f	class:Camera
+getInnerPoint	mesh.cpp	/^Point3D Mesh::getInnerPoint(const Face& poly) {$/;"	f	class:Mesh
+getIntensity	light.cpp	/^Colour Light::getIntensity(Point3D& point) const {$/;"	f	class:Light
+getIntersection	bih.cpp	/^bool BIHNode::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:BIHNode
+getIntersection	bih.cpp	/^bool BIHTree::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:BIHTree
+getIntersection	mesh.cpp	/^bool Mesh::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:Mesh
+getIntersection	mesh.cpp	/^bool Polygon::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:Polygon
+getIntersection	primitive.cpp	/^bool Cube::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:Cube
+getIntersection	primitive.cpp	/^bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:NonhierBox
+getIntersection	primitive.cpp	/^bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:NonhierSphere
+getIntersection	primitive.cpp	/^bool Sphere::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:Sphere
+getIntersection	tracer.cpp	/^bool Tracer::getIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:Tracer
+getKD	material.hpp	/^  Colour getKD() const { return m_kd; }$/;"	f	class:PhongMaterial
+getKS	material.hpp	/^  Colour getKS() const { return m_ks; }$/;"	f	class:PhongMaterial
+getLeafIntersection	bih.cpp	/^bool BIHNode::getLeafIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:BIHNode
+getLeftBBox	bih.cpp	/^AABB BIHNode::getLeftBBox(const AABB& bbox, double plane) {$/;"	f	class:BIHNode
+getLineNormal	mesh.cpp	/^static Vector3D getLineNormal(const Point3D& p1, const Point3D& p2, const Point3D& innerPoint, const Vector3D& polyNormal) {$/;"	f	file:
+getMaterial	intersection.hpp	/^    PhongMaterial* getMaterial() const { return m_material; }$/;"	f	class:Intersection
+getMaterial	primitive.hpp	/^    PhongMaterial* getMaterial() const { return m_material; }$/;"	f	class:Primitive
+getMaxIndex	mesh.cpp	/^int getMaxIndex(Vector3D& vec) {$/;"	f
+getMedian	bbox.hpp	/^inline double AABB::getMedian(int axis) const {$/;"	f	class:AABB
+getMedium	material.hpp	/^  double getMedium() const { return m_medium; }$/;"	f	class:PhongMaterial
+getNormal	intersection.hpp	/^    Vector3D getNormal() const { return m_normal; }$/;"	f	class:Intersection
+getOrigin	ray.hpp	/^    const Point3D& getOrigin() const { return m_origin; }$/;"	f	class:Ray
+getParam	intersection.hpp	/^    double getParam() const { return m_param; }$/;"	f	class:Intersection
+getPlaneIntersection	mesh.cpp	/^bool Mesh::getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* isect) {$/;"	f	class:Mesh
+getPlaneIntersection	mesh.cpp	/^bool Polygon::getPlaneIntersection(const Ray& ray, Intersection* isect) {$/;"	f	class:Polygon
+getPoint	intersection.hpp	/^    Point3D getPoint() const { return m_point; }$/;"	f	class:Intersection
+getPolyIntersection	mesh.cpp	/^bool Mesh::getPolyIntersection(const Face& poly, Intersection* isect) {$/;"	f	class:Mesh
+getPolyNormal	mesh.cpp	/^Vector3D Mesh::getPolyNormal(const Face& poly) {$/;"	f	class:Mesh
+getPrimitives	scene.cpp	/^void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {$/;"	f	class:GeometryNode
+getPrimitives	scene.cpp	/^void SceneNode::getPrimitives(vector<Primitive*>* primitives) {$/;"	f	class:SceneNode
+getPrimitives	scene.cpp	/^void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {$/;"	f	class:SceneNode
+getRay	camera.cpp	/^Ray* Camera::getRay(double xPos, double yPos) const{$/;"	f	class:Camera
+getRightBBox	bih.cpp	/^AABB BIHNode::getRightBBox(const AABB& bbox, double plane) {$/;"	f	class:BIHNode
+getRotMat	algebra.cpp	/^Matrix4x4 Matrix4x4::getRotMat(char axis, double angle) {$/;"	f	class:Matrix4x4
+getRow	algebra.hpp	/^  Vector4D getRow(size_t row) const$/;"	f	class:Matrix4x4
+getRow	algebra.hpp	/^  double *getRow(size_t row) $/;"	f	class:Matrix4x4
+getScaleMat	algebra.cpp	/^Matrix4x4 Matrix4x4::getScaleMat(const Vector3D& amount) {$/;"	f	class:Matrix4x4
+getShininess	material.hpp	/^  double getShininess() const { return m_shininess; }$/;"	f	class:PhongMaterial
+getTransMat	algebra.cpp	/^Matrix4x4 Matrix4x4::getTransMat(const Vector3D& amount) {$/;"	f	class:Matrix4x4
+getTransform	bbox.cpp	/^AABB AABB::getTransform(const AABB& bbox, const Matrix4x4& trans) {$/;"	f	class:AABB
+getTransform	ray.cpp	/^Ray Ray::getTransform(Matrix4x4& trans) const {$/;"	f	class:Ray
+getTransmitRatio	material.hpp	/^  double getTransmitRatio() const { return m_transmitRatio; }$/;"	f	class:PhongMaterial
+getViewToWorld	camera.cpp	/^Matrix4x4 Camera::getViewToWorld() {$/;"	f	class:Camera
+getWorldBBox	primitive.hpp	/^    AABB* getWorldBBox() { return &m_worldBBox; }$/;"	f	class:Primitive
+get_inverse	scene.hpp	/^    const Matrix4x4& get_inverse() const { return m_inv ; }$/;"	f	class:SceneNode
+get_material	scene.cpp	/^Material* GeometryNode::get_material() {$/;"	f	class:GeometryNode
+get_primitive	scene.cpp	/^Primitive* GeometryNode::get_primitive() {$/;"	f	class:GeometryNode
+get_transform	scene.hpp	/^    const Matrix4x4& get_transform() const { return m_trans ; }$/;"	f	class:SceneNode
+get_tuple	scene_lua.cpp	/^void get_tuple(lua_State* L, int arg, T* data, int n)$/;"	f
+gr_cube_cmd	scene_lua.cpp	/^int gr_cube_cmd(lua_State* L)$/;"	f
+gr_joint_cmd	scene_lua.cpp	/^int gr_joint_cmd(lua_State* L)$/;"	f
+gr_light_cmd	scene_lua.cpp	/^int gr_light_cmd(lua_State* L)$/;"	f
+gr_light_ud	scene_lua.cpp	/^struct gr_light_ud {$/;"	s	file:
+gr_material_cmd	scene_lua.cpp	/^int gr_material_cmd(lua_State* L)$/;"	f
+gr_material_ud	scene_lua.cpp	/^struct gr_material_ud {$/;"	s	file:
+gr_mesh_cmd	scene_lua.cpp	/^int gr_mesh_cmd(lua_State* L)$/;"	f
+gr_nh_box_cmd	scene_lua.cpp	/^int gr_nh_box_cmd(lua_State* L)$/;"	f
+gr_nh_sphere_cmd	scene_lua.cpp	/^int gr_nh_sphere_cmd(lua_State* L)$/;"	f
+gr_node_add_child_cmd	scene_lua.cpp	/^int gr_node_add_child_cmd(lua_State* L)$/;"	f
+gr_node_cmd	scene_lua.cpp	/^int gr_node_cmd(lua_State* L)$/;"	f
+gr_node_gc_cmd	scene_lua.cpp	/^int gr_node_gc_cmd(lua_State* L)$/;"	f
+gr_node_rotate_cmd	scene_lua.cpp	/^int gr_node_rotate_cmd(lua_State* L)$/;"	f
+gr_node_scale_cmd	scene_lua.cpp	/^int gr_node_scale_cmd(lua_State* L)$/;"	f
+gr_node_set_material_cmd	scene_lua.cpp	/^int gr_node_set_material_cmd(lua_State* L)$/;"	f
+gr_node_translate_cmd	scene_lua.cpp	/^int gr_node_translate_cmd(lua_State* L)$/;"	f
+gr_node_ud	scene_lua.cpp	/^struct gr_node_ud {$/;"	s	file:
+gr_render_cmd	scene_lua.cpp	/^int gr_render_cmd(lua_State* L)$/;"	f
+gr_sphere_cmd	scene_lua.cpp	/^int gr_sphere_cmd(lua_State* L)$/;"	f
+grlib_functions	scene_lua.cpp	/^static const luaL_reg grlib_functions[] = {$/;"	v	file:
+grlib_node_methods	scene_lua.cpp	/^static const luaL_reg grlib_node_methods[] = {$/;"	v	file:
+hasEndpoint	ray.hpp	/^    bool hasEndpoint() const { return m_hasEndpoint; }$/;"	f	class:Ray
+height	image.cpp	/^int Image::height() const$/;"	f	class:Image
+init	scene.hpp	/^        double min, init, max;$/;"	m	struct:JointNode::JointRange
+initGlobalBBox	bih.cpp	/^void BIHTree::initGlobalBBox() {$/;"	f	class:BIHTree
+intersect	bbox.cpp	/^bool AABB::intersect(const Ray& ray) const{$/;"	f	class:AABB
+invert	algebra.cpp	/^Matrix4x4 Matrix4x4::invert() const$/;"	f	class:Matrix4x4
+isDiffuse	material.hpp	/^  inline bool isDiffuse() const { return m_kd.R() > 1.0e-10 || m_kd.G() > 1.0e-10 || m_kd.B() > 1.0e-10; }$/;"	f	class:PhongMaterial
+isMesh	mesh.hpp	/^    virtual bool isMesh() { return true; }$/;"	f	class:Mesh
+isMesh	primitive.hpp	/^    virtual bool isMesh() { return false; }$/;"	f	class:Primitive
+isSpecular	material.hpp	/^  inline bool isSpecular() const { return m_ks.R() > 1.0e-10 || m_ks.G() > 1.0e-10 || m_ks.B() > 1.0e-10; }$/;"	f	class:PhongMaterial
+is_joint	scene.cpp	/^bool JointNode::is_joint() const$/;"	f	class:JointNode
+is_joint	scene.cpp	/^bool SceneNode::is_joint() const$/;"	f	class:SceneNode
+k	a4.cpp	/^    int k;$/;"	m	namespace:__anon3	file:
+launch_qt	a4.cpp	/^void launch_qt(\/\/ What to render$/;"	f
+leaf	bih.hpp	/^        leaf$/;"	e	enum:BIHNode::Type
+length	algebra.hpp	/^  double length() const$/;"	f	class:Vector3D
+length2	algebra.hpp	/^  double length2() const$/;"	f	class:Vector3D
+light	scene_lua.cpp	/^  Light* light;$/;"	m	struct:gr_light_ud	file:
+loadPng	image.cpp	/^bool Image::loadPng(const std::string& filename)$/;"	f	class:Image
+m_ambient	paintwindow.hpp	/^    Colour m_ambient;$/;"	m	class:PaintWindow
+m_ambient	tracer.hpp	/^    Colour m_ambient;$/;"	m	class:Tracer
+m_bbox	bih.hpp	/^    AABB m_bbox;$/;"	m	class:BIHNode
+m_bih	tracer.hpp	/^    BIHTree* m_bih;    $/;"	m	class:Tracer
+m_cam	paintwindow.hpp	/^    Camera* m_cam;$/;"	m	class:PaintWindow
+m_cam	tracer.hpp	/^    const Camera* m_cam;$/;"	m	class:Tracer
+m_canvas	paintwindow.hpp	/^    PaintCanvas* m_canvas;$/;"	m	class:PaintWindow
+m_children	bih.hpp	/^        BIHNode* m_children;$/;"	m	union:BIHNode::__anon1
+m_children	scene.hpp	/^    ChildList m_children;$/;"	m	class:SceneNode
+m_data	image.hpp	/^  double* m_data;$/;"	m	class:Image
+m_depth	bih.hpp	/^    int m_depth;$/;"	m	class:BIHNode
+m_direction	ray.hpp	/^    Vector3D m_direction;$/;"	m	class:Ray
+m_elements	image.hpp	/^  int m_elements;$/;"	m	class:Image
+m_endpoint	ray.hpp	/^    Point3D m_endpoint;$/;"	m	class:Ray
+m_epsilon	ray.hpp	/^    double m_epsilon;$/;"	m	class:Ray
+m_eye	camera.hpp	/^    Point3D m_eye;$/;"	m	class:Camera
+m_faces	mesh.hpp	/^    std::vector<Face> m_faces;$/;"	m	class:Mesh
+m_fov	camera.hpp	/^    double m_fov;$/;"	m	class:Camera
+m_globalBBox	bih.hpp	/^    AABB m_globalBBox;$/;"	m	class:BIHTree
+m_hasEndpoint	ray.hpp	/^    bool m_hasEndpoint;$/;"	m	class:Ray
+m_height	camera.hpp	/^    int m_height;$/;"	m	class:Camera
+m_height	image.hpp	/^  int m_width, m_height;$/;"	m	class:Image
+m_height	packet.hpp	/^    int m_height;$/;"	m	class:Packet
+m_i	packet.hpp	/^    int m_i;$/;"	m	class:Packet
+m_id	scene.hpp	/^    int m_id;$/;"	m	class:SceneNode
+m_img	packet.hpp	/^    QImage* m_img;$/;"	m	class:Packet
+m_innerPoint	mesh.hpp	/^    Point3D m_innerPoint;$/;"	m	class:Polygon
+m_inv	primitive.hpp	/^    Matrix4x4 m_inv;$/;"	m	class:Primitive
+m_inv	scene.hpp	/^    Matrix4x4 m_inv;$/;"	m	class:SceneNode
+m_j	packet.hpp	/^    int m_j;$/;"	m	class:Packet
+m_joint_x	scene.hpp	/^    JointRange m_joint_x, m_joint_y;$/;"	m	class:JointNode
+m_joint_y	scene.hpp	/^    JointRange m_joint_x, m_joint_y;$/;"	m	class:JointNode
+m_kd	material.hpp	/^  Colour m_kd;$/;"	m	class:PhongMaterial
+m_ks	material.hpp	/^  Colour m_ks;$/;"	m	class:PhongMaterial
+m_lights	paintwindow.hpp	/^    std::list<Light*>* m_lights;$/;"	m	class:PaintWindow
+m_lights	tracer.hpp	/^    const std::list<Light*>* m_lights;$/;"	m	class:Tracer
+m_material	intersection.hpp	/^    PhongMaterial* m_material;$/;"	m	class:Intersection
+m_material	primitive.hpp	/^    PhongMaterial* m_material;$/;"	m	class:Primitive
+m_material	scene.hpp	/^    Material* m_material;$/;"	m	class:GeometryNode
+m_max	bbox.hpp	/^    Point3D m_max;$/;"	m	class:AABB
+m_medium	material.hpp	/^  double m_medium;$/;"	m	class:PhongMaterial
+m_menu_app	paintwindow.hpp	/^    QMenu* m_menu_app;$/;"	m	class:PaintWindow
+m_min	bbox.hpp	/^    Point3D m_min;$/;"	m	class:AABB
+m_modelBBox	primitive.hpp	/^    AABB m_modelBBox;$/;"	m	class:Primitive
+m_name	scene.hpp	/^    std::string m_name;$/;"	m	class:SceneNode
+m_normal	intersection.hpp	/^    Vector3D m_normal;$/;"	m	class:Intersection
+m_normal	mesh.hpp	/^    Vector3D m_normal;$/;"	m	class:Polygon
+m_numPrimitives	bih.hpp	/^        int m_numPrimitives;$/;"	m	union:BIHNode::__anon2
+m_numPrimitives	bih.hpp	/^    int m_numPrimitives;$/;"	m	class:BIHTree
+m_num_parents	scene.hpp	/^    int m_num_parents;$/;"	m	class:SceneNode
+m_origin	ray.hpp	/^    Point3D m_origin;$/;"	m	class:Ray
+m_param	intersection.hpp	/^    double m_param;$/;"	m	class:Intersection
+m_planes	bih.hpp	/^        double* m_planes;$/;"	m	union:BIHNode::__anon2
+m_point	intersection.hpp	/^    Point3D m_point;$/;"	m	class:Intersection
+m_pos	primitive.hpp	/^    Point3D m_pos;$/;"	m	class:NonhierBox
+m_pos	primitive.hpp	/^    Point3D m_pos;$/;"	m	class:NonhierSphere
+m_primitive	scene.hpp	/^    Primitive* m_primitive;$/;"	m	class:GeometryNode
+m_primitive_pushed	scene.hpp	/^    bool m_primitive_pushed;$/;"	m	class:GeometryNode
+m_primitives	bih.hpp	/^        Primitive** m_primitives;$/;"	m	union:BIHNode::__anon1
+m_primitives	bih.hpp	/^    Primitive** m_primitives;$/;"	m	class:BIHTree
+m_primitives	paintwindow.hpp	/^    vector<Primitive*>* m_primitives;$/;"	m	class:PaintWindow
+m_primitives	tracer.hpp	/^    std::vector<Primitive*>* m_primitives;$/;"	m	class:Tracer
+m_radius	primitive.hpp	/^    double m_radius;$/;"	m	class:NonhierSphere
+m_rays	packet.hpp	/^    std::vector<Ray*> m_rays;$/;"	m	class:Packet
+m_root	bih.hpp	/^    BIHNode* m_root;$/;"	m	class:BIHTree
+m_sampleWidth	packet.hpp	/^    int m_sampleWidth;$/;"	m	class:Packet
+m_screenToWorld	camera.hpp	/^    Matrix4x4 m_screenToWorld;$/;"	m	class:Camera
+m_shininess	material.hpp	/^  double m_shininess;$/;"	m	class:PhongMaterial
+m_size	primitive.hpp	/^    double m_size;$/;"	m	class:NonhierBox
+m_tracer	packet.hpp	/^    Tracer* m_tracer;$/;"	m	class:Packet
+m_trans	primitive.hpp	/^    Matrix4x4 m_trans;$/;"	m	class:Primitive
+m_trans	scene.hpp	/^    Matrix4x4 m_trans;$/;"	m	class:SceneNode
+m_transmitRatio	material.hpp	/^  double m_transmitRatio;$/;"	m	class:PhongMaterial
+m_type	bih.hpp	/^    Type m_type;$/;"	m	class:BIHNode
+m_up	camera.hpp	/^    Vector3D m_up;$/;"	m	class:Camera
+m_verts	mesh.hpp	/^    std::vector<Point3D> m_verts;$/;"	m	class:Mesh
+m_verts	mesh.hpp	/^    std::vector<Point3D> m_verts;$/;"	m	class:Polygon
+m_view	camera.hpp	/^    Vector3D m_view;$/;"	m	class:Camera
+m_width	camera.hpp	/^    int m_width;$/;"	m	class:Camera
+m_width	image.hpp	/^  int m_width, m_height;$/;"	m	class:Image
+m_width	packet.hpp	/^    int m_width;$/;"	m	class:Packet
+m_worldBBox	primitive.hpp	/^    AABB m_worldBBox;$/;"	m	class:Primitive
+main	main.cpp	/^int main(int argc, char** argv)$/;"	f
+material	scene_lua.cpp	/^  Material* material;$/;"	m	struct:gr_material_ud	file:
+max	algebra.cpp	/^Point3D Point3D::max(const Point3D& p1, const Point3D& p2) {$/;"	f	class:Point3D
+max	scene.hpp	/^        double min, init, max;$/;"	m	struct:JointNode::JointRange
+min	algebra.cpp	/^Point3D Point3D::min(const Point3D& p1, const Point3D& p2) {$/;"	f	class:Point3D
+min	scene.hpp	/^        double min, init, max;$/;"	m	struct:JointNode::JointRange
+minimumSizeHint	paintcanvas.cpp	/^QSize PaintCanvas::minimumSizeHint() const {$/;"	f	class:PaintCanvas
+mutex	a4.cpp	/^    pthread_mutex_t mutex;$/;"	m	namespace:__anon3	file:
+node	scene_lua.cpp	/^  SceneNode* node;$/;"	m	struct:gr_node_ud	file:
+normalize	algebra.cpp	/^double Vector3D::normalize()$/;"	f	class:Vector3D
+operator ()	image.cpp	/^double Image::operator()(int x, int y, int i) const$/;"	f	class:Image
+operator ()	image.cpp	/^double& Image::operator()(int x, int y, int i)$/;"	f	class:Image
+operator ()	ray.hpp	/^    Point3D operator() (double t) const { return m_origin + t * m_direction; }$/;"	f	class:Ray
+operator *	algebra.hpp	/^inline Colour operator *(const Colour& a, const Colour& b)$/;"	f
+operator *	algebra.hpp	/^inline Colour operator *(double s, const Colour& a)$/;"	f
+operator *	algebra.hpp	/^inline Matrix4x4 operator *(const Matrix4x4& a, const Matrix4x4& b)$/;"	f
+operator *	algebra.hpp	/^inline Point3D operator *(const Matrix4x4& M, const Point3D& p)$/;"	f
+operator *	algebra.hpp	/^inline Point3D operator *(double s, const Point3D& p)$/;"	f
+operator *	algebra.hpp	/^inline Vector3D operator *(const Matrix4x4& M, const Vector3D& v)$/;"	f
+operator *	algebra.hpp	/^inline Vector3D operator *(const Vector3D& v, double s)$/;"	f
+operator *	algebra.hpp	/^inline Vector3D operator *(double s, const Vector3D& v)$/;"	f
+operator *	ray.hpp	/^inline Ray operator*(const Matrix4x4& mat, const Ray& ray) {$/;"	f
+operator +	algebra.hpp	/^inline Colour operator +(const Colour& a, const Colour& b)$/;"	f
+operator +	algebra.hpp	/^inline Point3D operator +(const Point3D& a, const Point3D& b)$/;"	f
+operator +	algebra.hpp	/^inline Point3D operator +(const Point3D& a, const Vector3D& b)$/;"	f
+operator +	algebra.hpp	/^inline Vector3D operator +(const Vector3D& a, const Vector3D& b)$/;"	f
+operator +=	algebra.cpp	/^Colour& Colour::operator +=(const Colour& other) {$/;"	f	class:Colour
+operator -	algebra.hpp	/^inline Point3D operator -(const Point3D& a, const Vector3D& b)$/;"	f
+operator -	algebra.hpp	/^inline Vector3D operator -(const Point3D& a, const Point3D& b)$/;"	f
+operator -	algebra.hpp	/^inline Vector3D operator -(const Vector3D& a)$/;"	f
+operator -	algebra.hpp	/^inline Vector3D operator -(const Vector3D& a, const Vector3D& b)$/;"	f
+operator <<	algebra.hpp	/^inline std::ostream& operator <<(std::ostream& os, const Colour& c)$/;"	f
+operator <<	algebra.hpp	/^inline std::ostream& operator <<(std::ostream& os, const Matrix4x4& M)$/;"	f
+operator <<	algebra.hpp	/^inline std::ostream& operator <<(std::ostream& os, const Point2D& p)$/;"	f
+operator <<	algebra.hpp	/^inline std::ostream& operator <<(std::ostream& os, const Point3D& p)$/;"	f
+operator <<	algebra.hpp	/^inline std::ostream& operator <<(std::ostream& os, const Vector3D& v)$/;"	f
+operator <<	intersection.cpp	/^std::ostream& operator<<(std::ostream& out, const Intersection& isect)$/;"	f
+operator <<	light.cpp	/^std::ostream& operator<<(std::ostream& out, const Light& l)$/;"	f
+operator <<	mesh.cpp	/^std::ostream& operator<<(std::ostream& out, const Mesh& mesh)$/;"	f
+operator =	algebra.hpp	/^  Colour& operator =(const Colour& other)$/;"	f	class:Colour
+operator =	algebra.hpp	/^  Matrix4x4& operator=(const Matrix4x4& other)$/;"	f	class:Matrix4x4
+operator =	algebra.hpp	/^  Point2D& operator =(const Point2D& other)$/;"	f	class:Point2D
+operator =	algebra.hpp	/^  Point3D& operator =(const Point3D& other)$/;"	f	class:Point3D
+operator =	algebra.hpp	/^  Vector3D& operator =(const Vector3D& other)$/;"	f	class:Vector3D
+operator =	algebra.hpp	/^  Vector4D& operator =(const Vector4D& other)$/;"	f	class:Vector4D
+operator =	bbox.cpp	/^AABB& AABB::operator=(const AABB& other) {$/;"	f	class:AABB
+operator =	image.cpp	/^Image& Image::operator=(const Image& other)$/;"	f	class:Image
+operator =	intersection.cpp	/^Intersection& Intersection::operator=(const Intersection& other) {$/;"	f	class:Intersection
+operator =	mesh.cpp	/^Mesh& Mesh::operator=(const Mesh& other) {$/;"	f	class:Mesh
+operator =	mesh.cpp	/^Polygon& Polygon::operator=(const Polygon& other) {$/;"	f	class:Polygon
+operator =	packet.cpp	/^Packet& Packet::operator=(const Packet& other) {$/;"	f	class:Packet
+operator =	primitive.cpp	/^Cube& Cube::operator=(const Cube& other) {$/;"	f	class:Cube
+operator =	primitive.cpp	/^NonhierBox& NonhierBox::operator=(const NonhierBox& other) {$/;"	f	class:NonhierBox
+operator =	primitive.cpp	/^NonhierSphere& NonhierSphere::operator=(const NonhierSphere& other) {$/;"	f	class:NonhierSphere
+operator =	primitive.cpp	/^Primitive& Primitive::operator=(const Primitive& other) {$/;"	f	class:Primitive
+operator =	primitive.cpp	/^Sphere& Sphere::operator=(const Sphere& other) {$/;"	f	class:Sphere
+operator =	ray.cpp	/^Ray& Ray::operator=(const Ray& other) {$/;"	f	class:Ray
+operator []	algebra.hpp	/^  Vector4D operator[](size_t row) const$/;"	f	class:Matrix4x4
+operator []	algebra.hpp	/^  double *operator[](size_t row) $/;"	f	class:Matrix4x4
+operator []	algebra.hpp	/^  double operator[](size_t idx) const $/;"	f	class:Point2D
+operator []	algebra.hpp	/^  double operator[](size_t idx) const $/;"	f	class:Point3D
+operator []	algebra.hpp	/^  double operator[](size_t idx) const $/;"	f	class:Vector3D
+operator []	algebra.hpp	/^  double operator[](size_t idx) const $/;"	f	class:Vector4D
+operator []	algebra.hpp	/^  double& operator[](size_t idx) $/;"	f	class:Point2D
+operator []	algebra.hpp	/^  double& operator[](size_t idx) $/;"	f	class:Point3D
+operator []	algebra.hpp	/^  double& operator[](size_t idx) $/;"	f	class:Vector3D
+operator []	algebra.hpp	/^  double& operator[](size_t idx) $/;"	f	class:Vector4D
+packets	a4.cpp	/^    vector<Packet*>* packets;$/;"	m	namespace:__anon3	file:
+paintEvent	paintcanvas.cpp	/^void PaintCanvas::paintEvent(QPaintEvent * event) {$/;"	f	class:PaintCanvas
+position	light.hpp	/^  Point3D position;$/;"	m	struct:Light
+quadraticRoots	polyroots.cpp	/^size_t quadraticRoots( double A, double B, double C, double roots[2] )$/;"	f
+quarticRoots	polyroots.cpp	/^size_t quarticRoots( $/;"	f
+r_	algebra.hpp	/^  double r_;$/;"	m	class:Colour
+remove_child	scene.hpp	/^    void remove_child(SceneNode* child)$/;"	f	class:SceneNode
+rotate	scene.cpp	/^void SceneNode::rotate(char axis, double angle)$/;"	f	class:SceneNode
+run_lua	scene_lua.cpp	/^bool run_lua(const std::string& filename)$/;"	f
+savePng	image.cpp	/^bool Image::savePng(const std::string& filename)$/;"	f	class:Image
+scale	scene.cpp	/^void SceneNode::scale(const Vector3D& amount)$/;"	f	class:SceneNode
+setBBox	primitive.cpp	/^void Primitive::setBBox(const Point3D& min, const Point3D& max) {$/;"	f	class:Primitive
+setMaterial	primitive.hpp	/^    void setMaterial(PhongMaterial* material) { m_material = material; }$/;"	f	class:Primitive
+setTransform	primitive.cpp	/^void Primitive::setTransform(const Matrix4x4& trans, const Matrix4x4& inv) {$/;"	f	class:Primitive
+set_joint_x	scene.cpp	/^void JointNode::set_joint_x(double min, double init, double max)$/;"	f	class:JointNode
+set_joint_y	scene.cpp	/^void JointNode::set_joint_y(double min, double init, double max)$/;"	f	class:JointNode
+set_material	scene.hpp	/^    void set_material(Material* material)$/;"	f	class:GeometryNode
+sink_lookup	polyroots.cpp	/^static double sink_lookup(double t)$/;"	f	file:
+sizeHint	paintcanvas.cpp	/^QSize PaintCanvas::sizeHint() const {$/;"	f	class:PaintCanvas
+submultrow	algebra.cpp	/^static void submultrow(Matrix4x4& a, size_t dest, size_t src, double fac)$/;"	f	file:
+swaprows	algebra.cpp	/^static void swaprows(Matrix4x4& a, size_t r1, size_t r2)$/;"	f	file:
+threads	a4.cpp	/^    pthread_t threads[NUMTHREADS];$/;"	m	namespace:__anon3	file:
+toInt	algebra.cpp	/^uint Colour::toInt() const {$/;"	f	class:Colour
+trace	packet.cpp	/^void Packet::trace() {$/;"	f	class:Packet
+tracePixel	packet.cpp	/^void Packet::tracePixel(int i, int j) {$/;"	f	class:Packet
+traceRay	tracer.cpp	/^bool Tracer::traceRay(Ray& ray, Colour& colour, int depth) {$/;"	f	class:Tracer
+transNorm	algebra.hpp	/^inline Vector3D transNorm(const Matrix4x4& M, const Vector3D& n)$/;"	f
+translate	scene.cpp	/^void SceneNode::translate(const Vector3D& amount)$/;"	f	class:SceneNode
+transpose	algebra.hpp	/^  Matrix4x4 transpose() const$/;"	f	class:Matrix4x4
+unpackPrimitives	a4.cpp	/^Primitive** unpackPrimitives(vector<Primitive*>* primitives) {$/;"	f
+v_	algebra.hpp	/^  double v_[16];$/;"	m	class:Matrix4x4
+v_	algebra.hpp	/^  double v_[2];$/;"	m	class:Point2D
+v_	algebra.hpp	/^  double v_[3];$/;"	m	class:Point3D
+v_	algebra.hpp	/^  double v_[3];$/;"	m	class:Vector3D
+v_	algebra.hpp	/^  double v_[4];$/;"	m	class:Vector4D
+width	image.cpp	/^int Image::width() const$/;"	f	class:Image
+x_axis	bih.hpp	/^        x_axis,$/;"	e	enum:BIHNode::Type
+y_axis	bih.hpp	/^        y_axis,$/;"	e	enum:BIHNode::Type
+z_axis	bih.hpp	/^        z_axis,$/;"	e	enum:BIHNode::Type
+~AABB	bbox.cpp	/^AABB::~AABB() {}$/;"	f	class:AABB
+~BIHNode	bih.cpp	/^BIHNode::~BIHNode() {$/;"	f	class:BIHNode
+~BIHTree	bih.cpp	/^BIHTree::~BIHTree() {$/;"	f	class:BIHTree
+~Cube	primitive.cpp	/^Cube::~Cube()$/;"	f	class:Cube
+~GeometryNode	scene.cpp	/^GeometryNode::~GeometryNode()$/;"	f	class:GeometryNode
+~Image	image.cpp	/^Image::~Image()$/;"	f	class:Image
+~Intersection	intersection.cpp	/^Intersection::~Intersection() {}$/;"	f	class:Intersection
+~JointNode	scene.cpp	/^JointNode::~JointNode()$/;"	f	class:JointNode
+~Material	material.cpp	/^Material::~Material()$/;"	f	class:Material
+~NonhierBox	primitive.cpp	/^NonhierBox::~NonhierBox()$/;"	f	class:NonhierBox
+~NonhierSphere	primitive.cpp	/^NonhierSphere::~NonhierSphere()$/;"	f	class:NonhierSphere
+~Packet	packet.cpp	/^Packet::~Packet() {$/;"	f	class:Packet
+~PaintCanvas	paintcanvas.cpp	/^PaintCanvas::~PaintCanvas() {$/;"	f	class:PaintCanvas
+~PaintWindow	paintwindow.hpp	/^    virtual ~PaintWindow() {}$/;"	f	class:PaintWindow
+~PhongMaterial	material.cpp	/^PhongMaterial::~PhongMaterial()$/;"	f	class:PhongMaterial
+~Primitive	primitive.cpp	/^Primitive::~Primitive()$/;"	f	class:Primitive
+~Ray	ray.hpp	/^    ~Ray() {}$/;"	f	class:Ray
+~SceneNode	scene.cpp	/^SceneNode::~SceneNode()$/;"	f	class:SceneNode
+~Sphere	primitive.cpp	/^Sphere::~Sphere()$/;"	f	class:Sphere

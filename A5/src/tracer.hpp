@@ -14,11 +14,7 @@
 
 class Tracer {
 public:
-#ifndef BIH
-    Tracer(std::vector<Primitive*>* primitives, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights);
-#else
-    Tracer(BIHTree* bih, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights);
-#endif
+    Tracer(std::vector<Primitive*>* primitives, const Colour& ambient, const std::list<Light*>* lights);
 
     bool traceRay(Ray& ray, Colour& colour, int depth = 0);
 
@@ -29,9 +25,8 @@ private:
 
     bool getIntersection(const Ray& ray, Intersection* isect);
 
-#ifndef BIH
     std::vector<Primitive*>* m_primitives;
-#else
+#ifdef BIH
     BIHTree* m_bih;    
 #endif
 

@@ -6,7 +6,7 @@
 #include "scene.hpp"
 #include "light.hpp"
 
-void a4_render(// What to render
+bool launch_qt(// What to render
                SceneNode* root,
                // Where to output the image
                const std::string& filename,

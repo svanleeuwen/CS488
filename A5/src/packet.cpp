@@ -8,7 +8,7 @@ using std::endl;
 #define SAMPLE_WIDTH 4
 #define PACKET_WIDTH 16
 
-Packet::Packet(int width, int height, int i, int j, Image* img, Tracer* tracer) :
+Packet::Packet(int width, int height, int i, int j, QImage* img, Tracer* tracer) :
     m_width(width), m_height(height), m_i(i), m_j(j), m_img(img),
     m_tracer(tracer)
 {}
@@ -106,13 +106,11 @@ void Packet::tracePixel(int i, int j) {
     double factor = 1.0 / (SAMPLE_WIDTH * SAMPLE_WIDTH);
     averageColour = factor * averageColour;
 
-    (*m_img)(img_i, img_j, 0) = averageColour.R();
-    (*m_img)(img_i, img_j, 1) = averageColour.G();
-    (*m_img)(img_i, img_j, 2) = averageColour.B();
+    m_img->setPixel(img_i, img_j, averageColour.toInt());
 }
 
 // Static functions to help manage vectors of packets
-vector<Packet*>* Packet::genPackets(Image* img, Tracer* tracer, const Camera& cam) {
+vector<Packet*>* Packet::genPackets(QImage* img, Tracer* tracer, const Camera& cam) {
     int width = img->width();
     int height = img->height();
 

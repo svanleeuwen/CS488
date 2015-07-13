@@ -514,6 +514,8 @@ public:
     return b_;
   }
 
+  uint toInt() const;
+
 private:
   double r_;
   double g_;

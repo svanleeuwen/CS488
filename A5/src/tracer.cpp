@@ -11,17 +11,23 @@ using std::vector;
 #define MAX_DEPTH 5
 #define REFLECTION_ATTENUATION 0.5
 
-#ifndef BIH
-Tracer::Tracer(std::vector<Primitive*>* primitives, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights) :
-    m_primitives(primitives), m_cam(&cam), m_ambient(ambient), m_lights(&lights) 
-{
+static Primitive** unpackPrimitives(vector<Primitive*>* primitives) {
+    Primitive** primArray = new Primitive* [primitives->size()];
+    for(uint i = 0; i < primitives->size(); i++) {
+        primArray[i] = primitives->at(i);
+    }
+
+    return primArray;
 }
-#else
-Tracer::Tracer(BIHTree* bih, const Camera& cam, const Colour& ambient, const std::list<Light*>& lights) :
-    m_bih(bih), m_cam(&cam), m_ambient(ambient), m_lights(&lights) 
+
+Tracer::Tracer(std::vector<Primitive*>* primitives, const Colour& ambient, const std::list<Light*>* lights) :
+    m_primitives(primitives), m_ambient(ambient), m_lights(lights) 
 {
-}
+#ifdef BIH
+    Primitive** primArray = unpackPrimitives(primitives);
+    m_bih = new BIHTree(primArray, primitives->size());
 #endif
+}
 
 #ifndef BIH
 bool Tracer::getIntersection(const Ray& ray, Intersection* isect) {

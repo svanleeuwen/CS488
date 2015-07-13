@@ -1,0 +1,41 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{WMG{\etalchar{+}}09}
+
+\bibitem[BEL{\etalchar{+}}07]{BEL07}
+Solomon Boulos, Dave Edwards, J.~Dylan Lacewell, Joe Kniss, Jan Kautz, Peter
+  Shirley, and Ingo Wald.
+\newblock Packet-based whitted and distribution ray tracing.
+\newblock In {\em Proceedings of Graphics Interface 2007}, GI '07, pages
+  177--184, New York, NY, USA, 2007. ACM.
+
+\bibitem[BWS06]{BWS06}
+Solomon Boulos, Ingo Wald, and Peter Shirley.
+\newblock Geometric and arithmetic culling methods for entire ray packets.
+\newblock {\em Tech. Rep. UUCS-06-010, SCI Institute, University of Utah},
+  2006.
+
+\bibitem[PH10]{PG10}
+Matt Pharr and Greg Humphreys.
+\newblock {\em Physically Based Rendering: From Theory to Implementation
+  (Second Edition)}, pages 346--358,428--446.
+\newblock Morgan Kaufmann, 2010.
+
+\bibitem[WBS07]{WBS07}
+Ingo Wald, Solomon Boulos, and Peter Shirley.
+\newblock Ray tracing deformable scenes using dynamic bounding volume
+  hierarchies.
+\newblock {\em ACM Trans. Graph.}, 26(1), January 2007.
+
+\bibitem[WK06]{Wa06}
+Carsten Wächter and Alexander Keller.
+\newblock Instant ray tracing: The bounding interval hierarchy.
+\newblock In {\em IN RENDERING TECHNIQUES 2006 – PROCEEDINGS OF THE 17TH
+  EUROGRAPHICS SYMPOSIUM ON RENDERING}, pages 139--149, 2006.
+
+\bibitem[WMG{\etalchar{+}}09]{CGF13}
+Ingo Wald, William~R. Mark, Johannes Günther, Solomon Boulos, Thiago Ize,
+  Warren Hunt, Steven~G. Parker, and Peter Shirley.
+\newblock State of the art in ray tracing animated scenes.
+\newblock {\em Computer Graphics Forum}, 28(6):1691--1722, 2009.
+
+\end{thebibliography}

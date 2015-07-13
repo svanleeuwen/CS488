@@ -2,15 +2,15 @@
 #define  CS488_PACKET_HPP
 
 #include<vector>
+#include<QImage>
 
 #include "ray.hpp"
-#include "image.hpp"
 #include "tracer.hpp"
 
 class Packet {
 public:
     Packet() {}
-    Packet(int width, int height, int i, int j, Image* img, Tracer* tracer);
+    Packet(int width, int height, int i, int j, QImage* img, Tracer* tracer);
 
     ~Packet();
 
@@ -21,7 +21,7 @@ public:
     void trace();
 
     // Static functions to help manage vectors of packets
-    static std::vector<Packet*>* genPackets(Image* img, Tracer* tracer, const Camera& cam);
+    static std::vector<Packet*>* genPackets(QImage* img, Tracer* tracer, const Camera& cam);
     static void deletePackets(std::vector<Packet*>* packets);
 
 private:
@@ -36,7 +36,7 @@ private:
     int m_i;
     int m_j;
 
-    Image* m_img;
+    QImage* m_img;
     Tracer* m_tracer;
 
     std::vector<Ray*> m_rays;

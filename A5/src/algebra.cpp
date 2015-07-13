@@ -14,6 +14,8 @@
 
 #include "algebra.hpp"
 
+using std::min;
+
 Point3D::Point3D(const Vector4D& vec) {
     if(vec[3] == 0 || vec[3] == 1) {
         v_[0] = vec[0];
@@ -262,4 +264,8 @@ Matrix4x4 Matrix4x4::getTransMat(const Vector3D& amount) {
 Colour& Colour::operator +=(const Colour& other) {
     (*this) = (*this) + other;
     return *this;
+}
+
+uint Colour::toInt() const {
+    return min(255u, (uint)(b_ * 255)) + (min(255u, (uint)(g_ * 255)) << 8) + (min(255u, (uint)(r_ * 255)) << 16);
 }
