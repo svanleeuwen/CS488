@@ -42,13 +42,9 @@ Colour PhongMaterial::getColour(const Vector3D& l, const Vector3D& v, const Inte
     Colour colour(0.0, 0.0, 0.0);
 
     Vector3D l_norm = l;
-    l_norm.normalize();
-
     Vector3D v_norm = v;
-    v_norm.normalize();
 
     Vector3D normal = isect->getNormal();
-    normal.normalize();
 
     if(v_norm.dot(normal) < 0) {
         normal = -normal;

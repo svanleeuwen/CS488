@@ -24,6 +24,7 @@ public:
     bool hasEndpoint() const { return m_hasEndpoint; }
 
     double getEpsilon() const { return m_epsilon; }
+    double getLength() const { return m_length; }
 
     bool checkParam(double t) const;
     Ray getTransform(Matrix4x4& trans) const;
@@ -38,6 +39,7 @@ private:
     Point3D m_endpoint;
 
     double m_epsilon;
+    double m_length;
 };
 
 inline Ray operator*(const Matrix4x4& mat, const Ray& ray) {

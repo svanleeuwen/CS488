@@ -53,6 +53,7 @@ bool AABB::intersect(const Ray& ray) const{
 
     Vector3D d = ray.getDirection();
     bool finite_ray = ray.hasEndpoint();
+    double ray_length = ray.getLength();
 
     for(int i = 0; i < 3; i++) {
         if(fabs(d[i]) > 1.0e-15) {
@@ -83,12 +84,12 @@ bool AABB::intersect(const Ray& ray) const{
             return false;
         }
 
-        if(finite_ray && t_min > 1) {
+        if(finite_ray && t_min > ray_length) {
             return false;
         }
     }
 
-    if(finite_ray && t_min < ray.getEpsilon() && t_max > 1) {
+    if(finite_ray && t_min < ray.getEpsilon() && t_max > ray_length) {
         return false;
     }
 

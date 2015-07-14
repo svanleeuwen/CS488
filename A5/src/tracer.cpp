@@ -85,10 +85,7 @@ Colour Tracer::castReflectionRay(const Ray& ray, Intersection* isect, int depth)
     }
 
     Vector3D dir = -ray.getDirection();
-    dir.normalize();
-
     Vector3D norm = isect->getNormal();
-    norm.normalize();
 
     if(norm.dot(dir) < 0) {
         norm = -norm;
@@ -113,10 +110,7 @@ Colour Tracer::castRefractionRay(const Ray& ray, Intersection* isect, int depth)
     }
 
     Vector3D in = ray.getDirection();
-    in.normalize();
-
     Vector3D norm = isect->getNormal();
-    norm.normalize();
 
     double cos_theta1 = -in.dot(norm);
     bool incoming = cos_theta1 >= 0.0;

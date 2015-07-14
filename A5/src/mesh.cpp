@@ -118,6 +118,7 @@ bool Mesh::getIntersection(const Ray& ray, Intersection* isect) {
     if(isect != NULL && best != NULL) {
         Point3D point = m_trans * best->getPoint();
         Vector3D normal = transNorm(m_inv, best->getNormal());
+        normal.normalize();
 
         *isect = Intersection(point, best->getParam(), m_material, normal);
         delete best;
@@ -156,7 +157,7 @@ bool Mesh::getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* 
     Point3D o = ray.getOrigin();
     Vector3D d = ray.getDirection();
 
-    if(abs(normal.dot(d)) < 1.0e-10) {
+    if(fabs(normal.dot(d)) < 1.0e-10) {
         return false;
     }
 
@@ -240,6 +241,8 @@ Polygon::Polygon(const std::vector<Point3D>& verts, const std::vector<int>& indi
     Point3D p3 = m_verts.at(2);
 
     m_normal = (p2 - p1).cross(p3 - p1);
+    m_normal.normalize();
+
     m_innerPoint = (1.0/3.0) * (p1 + p2 + p3);
 }
 
