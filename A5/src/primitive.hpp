@@ -5,6 +5,7 @@
 #include "ray.hpp"
 #include "intersection.hpp"
 #include "bbox.hpp"
+#include "packet.hpp"
 
 class Primitive {
 public:
@@ -20,6 +21,8 @@ public:
     void setMaterial(PhongMaterial* material) { m_material = material; }
 
     virtual Primitive* clone() = 0;
+
+    virtual bool packetTest(const Packet& packet) = 0;
     virtual bool getIntersection(const Ray& ray, Intersection* isect) = 0;
 
     virtual bool isMesh() { return false; }
@@ -48,6 +51,7 @@ public:
     Sphere(const Sphere& other);
     Sphere& operator=(const Sphere& other);
 
+    virtual bool packetTest(const Packet& packet);
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 };
 
@@ -60,7 +64,8 @@ public:
     Cube& operator=(const Cube& other);
 
     virtual Cube* clone() { return new Cube(*this); }
-    
+
+    virtual bool packetTest(const Packet& packet); 
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 };
 
@@ -73,7 +78,8 @@ public:
     NonhierSphere& operator=(const NonhierSphere& other);
 
     virtual NonhierSphere* clone() { return new NonhierSphere(*this); }
-    
+
+    virtual bool packetTest(const Packet& packet);   
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
 private:
@@ -91,6 +97,7 @@ public:
 
     virtual NonhierBox* clone() { return new NonhierBox(*this); }
 
+    virtual bool packetTest(const Packet& packet);
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
 private:

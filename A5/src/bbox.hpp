@@ -3,6 +3,8 @@
 
 #include "ray.hpp"
 #include "algebra.hpp"
+#include "packet.hpp"
+#include "interval.hpp"
 
 class AABB{
 public:
@@ -13,6 +15,8 @@ public:
     AABB(const AABB& other);
     AABB& operator=(const AABB& other);
 
+    bool packetTest(const Packet& packet);
+
     bool intersect(const Ray& ray) const;
     bool contains(const Ray& ray) const;
 
@@ -22,6 +26,8 @@ public:
     
     Point3D m_min;
     Point3D m_max;
+
+    IVector3D m_ibbox;
 };
 
 inline double AABB::getMedian(int axis) const {

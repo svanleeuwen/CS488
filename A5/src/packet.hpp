@@ -5,7 +5,10 @@
 #include<QImage>
 
 #include "ray.hpp"
-#include "tracer.hpp"
+#include "interval.hpp"
+#include "camera.hpp"
+
+class Tracer;
 
 class Packet {
 public:
@@ -17,6 +20,13 @@ public:
     Packet(const Packet& other);
     Packet& operator=(const Packet& other);
 
+    IVector3D getOrigin() const { return m_origin; }
+    IVector3D getDirection() const { return m_direction; }
+    IVector3D getRatio() const { return m_ratio; }
+
+    bool isFinite() const { return m_finite; }
+    double getLength() const { return m_length; }
+
     void genRays(const Camera& cam);
     void trace();
 
@@ -26,7 +36,19 @@ public:
 
 private:
     void copy(const Packet& other);
+
+    void updateRatio(const Point3D& o, const Vector3D& d);
+    void updateIntervals();
+
     void tracePixel(int i, int j);
+
+    IVector3D m_origin;
+    IVector3D m_direction;
+
+    IVector3D m_ratio;
+
+    bool m_finite;
+    double m_length;
 
     int m_width;
     int m_height;

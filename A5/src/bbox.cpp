@@ -3,6 +3,9 @@
 AABB::AABB(Point3D min, Point3D max) {
     m_min = min;
     m_max = max;
+
+    m_ibbox = IVector3D(min);
+    m_ibbox.extend(max);
 }
 
 AABB::~AABB() {}
@@ -10,12 +13,16 @@ AABB::~AABB() {}
 AABB::AABB(const AABB& other) {
     m_min = other.m_min;
     m_max = other.m_max;
+
+    m_ibbox = other.m_ibbox;
 }
 
 AABB& AABB::operator=(const AABB& other) {
     if(&other != this) {
         m_min = other.m_min;
         m_max = other.m_max;
+
+        m_ibbox = other.m_ibbox;
     }
 
     return *this;
@@ -42,6 +49,22 @@ AABB AABB::getTransform(const AABB& bbox, const Matrix4x4& trans) {
     Point3D max = Point3D::max(xa, xb) + Point3D::max(ya, yb) + Point3D::max(za, zb) + t;
 
     return AABB(min, max);
+}
+
+bool AABB::packetTest(const Packet& packet) {
+    IVector3D direction = packet.getDirection();
+    IVector3D ratio = packet.getRatio();
+
+    bool is_finite = packet.isFinite();
+    Interval ilength = Interval(0, packet.getLength());
+
+    IVector3D T = (m_ibbox * direction.reciprocal()) - ratio;
+
+    if(is_finite) {
+        return !Interval::set_intersection(T.intersectMembers(), ilength).isEmpty();
+    } else {
+        return !T.intersectMembers().isEmpty();
+    }
 }
 
 bool AABB::intersect(const Ray& ray) const{

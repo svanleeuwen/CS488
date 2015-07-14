@@ -1,5 +1,6 @@
 #include <iostream>
 #include "packet.hpp"
+#include "tracer.hpp"
 
 using std::vector;
 using std::cout;
@@ -60,6 +61,46 @@ void Packet::genRays(const Camera& cam) {
         
         j += pixelFraction;
     }
+
+    updateIntervals();
+}
+
+void Packet::updateIntervals() {
+    m_origin = IVector3D();
+    m_direction = IVector3D();
+    m_ratio = IVector3D();
+
+    m_finite = false;
+    m_length = std::numeric_limits<double>::infinity();
+
+    for(auto it = m_rays.begin(); it != m_rays.end(); ++it) {
+        Point3D o = (*it)->getOrigin();
+        Vector3D d = (*it)->getDirection();
+
+        m_origin.extend(o);
+        m_direction.extend(d);
+
+        updateRatio(o, d);
+
+        if((*it)->hasEndpoint()) {
+            m_finite = true;
+            m_length = fmin(m_length, (*it)->getLength());
+        }
+    }
+}
+
+void Packet::updateRatio(const Point3D& o, const Vector3D& d) {
+    Vector3D v;
+
+    for(int i = 0; i < 3; i++) {
+        if(fabs(d[i]) < 1.0e-10) {
+            v[i] = d[i] >= 0 ? std::numeric_limits<double>::infinity() : -std::numeric_limits<double>::infinity();
+        } else {
+            v[i] = o[i]/d[i];
+        }
+    }
+        
+    m_ratio.extend(v);
 }
 
 void Packet::trace() {

@@ -65,6 +65,10 @@ Sphere& Sphere::operator=(const Sphere& other) {
     return *this;
 }
 
+bool Sphere::packetTest(const Packet& packet) {
+    return m_worldBBox.packetTest(packet);
+}
+
 bool Sphere::getIntersection(const Ray& ray, Intersection* isect) {
     Ray modelRay = ray.getTransform(m_inv);
 
@@ -132,6 +136,10 @@ Cube::Cube(const Cube& other) : Primitive(other) {}
 Cube& Cube::operator=(const Cube& other) {
     Primitive::operator=(other);
     return *this;
+}
+
+bool Cube::packetTest(const Packet& packet) {
+    return m_worldBBox.packetTest(packet);
 }
 
 bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
@@ -245,6 +253,10 @@ NonhierSphere& NonhierSphere::operator=(const NonhierSphere& other) {
     return *this;
 }
 
+bool NonhierSphere::packetTest(const Packet& packet) {
+    return m_worldBBox.packetTest(packet);
+}
+
 bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect) {
     Ray modelRay = ray.getTransform(m_inv);
 
@@ -322,6 +334,10 @@ NonhierBox& NonhierBox::operator=(const NonhierBox& other) {
     }
 
     return *this;
+}
+
+bool NonhierBox::packetTest(const Packet& packet) {
+    return m_worldBBox.packetTest(packet);
 }
 
 bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {

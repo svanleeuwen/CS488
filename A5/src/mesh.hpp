@@ -18,6 +18,8 @@ public:
     Mesh& operator=(const Mesh& other);
 
     virtual Mesh* clone() { return new Mesh(*this); }
+
+    virtual bool packetTest(const Packet& packet);
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
     virtual bool isMesh() { return true; }
@@ -40,21 +42,35 @@ private:
 
 class Polygon : public Primitive {
 public:
-    Polygon(const std::vector<Point3D>& verts, const std::vector<int>& indices, const Matrix4x4& trans, const Matrix4x4& inv);
+    Polygon(const std::vector<Point3D>& verts, const std::vector<int>& indices, const Matrix4x4& trans);
     
     Polygon(const Polygon& other);
     Polygon& operator=(const Polygon& other);
 
     virtual Polygon* clone() { return new Polygon(*this); }
+
+    virtual bool packetTest(const Packet& packet);
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
-private:
+protected:
     bool getPlaneIntersection(const Ray& ray, Intersection* isect);
 
     std::vector<Point3D> m_verts;
     
     Vector3D m_normal;
     Point3D m_innerPoint;
+};
+
+class Triangle : public Polygon {
+public:
+    Triangle(const std::vector<Point3D>& verts, const std::vector<int>& indices, const Matrix4x4& trans);
+    
+    Triangle(const Triangle& other);
+    Triangle& operator=(const Triangle& other);
+    
+    virtual Triangle* clone() { return new Triangle(*this); }
+
+    virtual bool packetTest(const Packet& packet);
 };
 
 #endif

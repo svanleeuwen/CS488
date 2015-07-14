@@ -54,7 +54,5 @@ bool launch_qt(// What to render
         window.showMaximized();
     }
 
-    window.resizeCanvas();
-
     return app.exec();
 }

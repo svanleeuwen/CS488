@@ -72,6 +72,10 @@ int getMaxIndex(Vector3D& vec) {
     return index;
 }
 
+bool Mesh::packetTest(const Packet& packet) {
+    return m_worldBBox.packetTest(packet);
+}
+
 bool Mesh::getIntersection(const Ray& ray, Intersection* isect) {
     Ray modelRay = ray.getTransform(m_inv);
     
@@ -184,11 +188,20 @@ Point3D Mesh::getInnerPoint(const Face& poly) {
 }
 
 void Mesh::addMeshPolygons(vector<Primitive*>* primitives) {
-    for(auto it = m_faces.begin(); it != m_faces.end(); ++it) {
-        Polygon* poly = new Polygon(m_verts, (*it), m_trans, m_inv);
-        poly->setMaterial(m_material);
+    if(m_faces.at(0).size() == 3) {
+       for(auto it = m_faces.begin(); it != m_faces.end(); ++it) {
+            Triangle* poly = new Triangle(m_verts, (*it), m_trans);
+            poly->setMaterial(m_material);
 
-        primitives->push_back(poly);
+            primitives->push_back(poly);
+        }
+    } else {
+       for(auto it = m_faces.begin(); it != m_faces.end(); ++it) {
+            Polygon* poly = new Polygon(m_verts, (*it), m_trans);
+            poly->setMaterial(m_material);
+
+            primitives->push_back(poly);
+        }
     }
 }
 
@@ -217,7 +230,7 @@ std::ostream& operator<<(std::ostream& out, const Mesh& mesh)
 // **************************** Polygon **********************************
 
 Polygon::Polygon(const std::vector<Point3D>& verts, const std::vector<int>& indices,
-        const Matrix4x4& trans, const Matrix4x4& inv) 
+        const Matrix4x4& trans) 
 {
     Point3D point = trans * verts.at(indices.at(0));
 
@@ -263,6 +276,10 @@ Polygon& Polygon::operator=(const Polygon& other) {
     }
 
     return *this;
+}
+
+bool Polygon::packetTest(const Packet& packet) {
+    return m_worldBBox.packetTest(packet);
 }
 
 bool Polygon::getIntersection(const Ray& ray, Intersection* isect) {
@@ -312,4 +329,22 @@ bool Polygon::getPlaneIntersection(const Ray& ray, Intersection* isect) {
     *isect = Intersection(ray(t), t, m_material, m_normal);
 
     return true;
+}
+
+Triangle::Triangle(const std::vector<Point3D>& verts, const std::vector<int>& indices, const Matrix4x4& trans) :
+    Polygon(verts, indices, trans)
+{}
+    
+Triangle::Triangle(const Triangle& other) : Polygon(other)
+{}
+
+Triangle& Triangle::operator=(const Triangle& other) {
+    Polygon::operator=(other);
+
+    return *this;
+}
+    
+bool Triangle::packetTest(const Packet& packet) {
+    // TODO: update packet test
+    return m_worldBBox.packetTest(packet);
 }
