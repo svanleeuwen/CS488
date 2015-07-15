@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <cmath>
 #include <iostream>
+#include <QElapsedTimer>
 
 #include "paintcanvas.hpp"
 
@@ -97,6 +98,9 @@ void PaintCanvas::resizeEvent(QResizeEvent* event) {
 }
 
 void PaintCanvas::computeQImage() {
+    QElapsedTimer timer;
+    timer.start();
+
     m_index = 0;
     m_k = 1;
 
@@ -123,6 +127,9 @@ void PaintCanvas::computeQImage() {
     cout << "100\% complete" << endl;
 
     pthread_mutex_destroy(&m_mutex);
+
+    cout << "Time to compute image: " << timer.elapsed() << endl;
+    timer.invalidate();
 }
 
 void* PaintCanvas::thread_bootstrap(void* canvas) {

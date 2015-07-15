@@ -1,11 +1,14 @@
 #include "primitive.hpp"
 #include "polyroots.hpp"
+
 #include <math.h>
 #include <iostream>
 #include <limits>
+#include <vector>
 
 using std::cout;
 using std::endl;
+using std::vector;
 
 Primitive::~Primitive()
 {
@@ -47,6 +50,34 @@ void Primitive::setBBox(const Point3D& min, const Point3D& max) {
     m_worldBBox = AABB(min, max);
 }
 
+bool Primitive::allMiss(const Packet& packet) {
+    return m_worldBBox.allMiss(packet);
+}
+
+void Primitive::getIntersection(Packet& packet, int firstActive, vector<bool>& v_hit, vector<Intersection>* v_isect) {
+    if(allMiss(packet)) {
+        return;
+    }
+
+    vector<Ray>* rays = &packet.m_rays;
+    int n = rays->size();
+
+    for(int i = firstActive; i < n; ++i) {
+        Ray* ray = &rays->at(i);
+
+        Intersection* isect = v_isect == NULL ? NULL : &v_isect->at(i);
+        bool hit = getIntersection(*ray, isect);
+
+        if(hit) {
+            v_hit.at(i) = true;
+
+            if(isect != NULL) {
+                rays->at(i) = Ray(ray->getOrigin(), isect->getPoint());
+            }
+        }
+    }
+}
+
 Sphere::Sphere() {
     Point3D min(-1, -1, -1);
     Point3D max(1, 1, 1);
@@ -63,10 +94,6 @@ Sphere::Sphere(const Sphere& other) : Primitive(other) {}
 Sphere& Sphere::operator=(const Sphere& other) {
     Primitive::operator=(other);
     return *this;
-}
-
-bool Sphere::packetTest(const Packet& packet) {
-    return m_worldBBox.packetTest(packet);
 }
 
 bool Sphere::getIntersection(const Ray& ray, Intersection* isect) {
@@ -136,10 +163,6 @@ Cube::Cube(const Cube& other) : Primitive(other) {}
 Cube& Cube::operator=(const Cube& other) {
     Primitive::operator=(other);
     return *this;
-}
-
-bool Cube::packetTest(const Packet& packet) {
-    return m_worldBBox.packetTest(packet);
 }
 
 bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
@@ -253,10 +276,6 @@ NonhierSphere& NonhierSphere::operator=(const NonhierSphere& other) {
     return *this;
 }
 
-bool NonhierSphere::packetTest(const Packet& packet) {
-    return m_worldBBox.packetTest(packet);
-}
-
 bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect) {
     Ray modelRay = ray.getTransform(m_inv);
 
@@ -336,9 +355,7 @@ NonhierBox& NonhierBox::operator=(const NonhierBox& other) {
     return *this;
 }
 
-bool NonhierBox::packetTest(const Packet& packet) {
-    return m_worldBBox.packetTest(packet);
-}
+
 
 bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {
     Ray modelRay = ray.getTransform(m_inv);

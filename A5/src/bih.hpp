@@ -17,6 +17,7 @@ public:
     virtual ~BIHTree();
 
     bool getIntersection(const Ray& ray, Intersection* isect);
+    void getIntersection(Packet& packet, std::vector<bool>& v_hit, std::vector<Intersection>* v_isect = NULL); 
 
 private:
     void initGlobalBBox();
@@ -36,20 +37,14 @@ public:
     void buildHierarchy(std::stack<BIHNode*>* nodes, std::stack<AABB>* bboxes, const AABB& uniformBBox);
 
     bool getIntersection(const Ray& ray, Intersection* isect);
+    int traversalOrder(const Ray& ray);
 
-private:
     enum Type {
         x_axis,
         y_axis,
         z_axis,
         leaf
     };
-
-    bool getLeafIntersection(const Ray& ray, Intersection* isect);
-
-    Type chooseAxis(const AABB& bbox);
-    AABB getLeftBBox(const AABB& bbox, double plane);
-    AABB getRightBBox(const AABB& bbox, double plane);
 
     Type m_type;
 
@@ -64,6 +59,14 @@ private:
     };
 
     AABB m_bbox;
+
+private:
+    bool getLeafIntersection(const Ray& ray, Intersection* isect);
+
+    Type chooseAxis(const AABB& bbox);
+    AABB getLeftBBox(const AABB& bbox, double plane);
+    AABB getRightBBox(const AABB& bbox, double plane);
+
     int m_depth;
 };
 

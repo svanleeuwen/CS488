@@ -72,10 +72,6 @@ int getMaxIndex(Vector3D& vec) {
     return index;
 }
 
-bool Mesh::packetTest(const Packet& packet) {
-    return m_worldBBox.packetTest(packet);
-}
-
 bool Mesh::getIntersection(const Ray& ray, Intersection* isect) {
     Ray modelRay = ray.getTransform(m_inv);
     
@@ -278,10 +274,6 @@ Polygon& Polygon::operator=(const Polygon& other) {
     return *this;
 }
 
-bool Polygon::packetTest(const Packet& packet) {
-    return m_worldBBox.packetTest(packet);
-}
-
 bool Polygon::getIntersection(const Ray& ray, Intersection* isect) {
     Intersection* t_isect = new Intersection();
     bool hit = getPlaneIntersection(ray, t_isect);
@@ -342,9 +334,4 @@ Triangle& Triangle::operator=(const Triangle& other) {
     Polygon::operator=(other);
 
     return *this;
-}
-    
-bool Triangle::packetTest(const Packet& packet) {
-    // TODO: update packet test
-    return m_worldBBox.packetTest(packet);
 }

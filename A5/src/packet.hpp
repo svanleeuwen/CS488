@@ -34,6 +34,8 @@ public:
     static std::vector<Packet*>* genPackets(QImage* img, Tracer* tracer, const Camera& cam);
     static void deletePackets(std::vector<Packet*>* packets);
 
+    std::vector<Ray> m_rays;
+
 private:
     void copy(const Packet& other);
 
@@ -41,6 +43,7 @@ private:
     void updateIntervals();
 
     void tracePixel(int i, int j);
+    void tracePixel(int i, int j, std::vector<Colour>& colours, std::vector<bool>& v_hit);
 
     IVector3D m_origin;
     IVector3D m_direction;
@@ -60,8 +63,6 @@ private:
 
     QImage* m_img;
     Tracer* m_tracer;
-
-    std::vector<Ray*> m_rays;
 };
 
 #endif

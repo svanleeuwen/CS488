@@ -141,6 +141,43 @@ Colour Tracer::castRefractionRay(const Ray& ray, Intersection* isect, int depth)
     return colour;
 }
 
+#ifdef BIH
+void Tracer::tracePacket(Packet& packet, vector<Colour>& colours, vector<bool>& v_hit, int depth) {
+    vector<Ray>* rays = &packet.m_rays;
+    int n = rays->size();
+
+    vector<Intersection> v_isect(n);
+    m_bih->getIntersection(packet, v_hit, &v_isect); 
+    
+    // TODO: packets for secondary/shadow rays
+    for(int i = 0; i < n; i++) {
+        if(v_hit.at(i)) {
+            Intersection* isect = &v_isect.at(i);
+
+            PhongMaterial* material = isect->getMaterial();
+            double transmitRatio = material->getTransmitRatio();
+            double reflectRatio = 1.0 - transmitRatio;
+
+            if(reflectRatio > 1.0e-10) {    
+                if(material->isDiffuse()) {
+                    colours.at(i) = reflectRatio * material->getKD() * m_ambient;
+                }
+
+                colours.at(i) += reflectRatio * castShadowRays(rays->at(i), isect);
+                
+                if(material->isSpecular()) {
+                    colours.at(i) += reflectRatio * castReflectionRay(rays->at(i), isect, depth + 1);
+                }
+            }
+
+            if(transmitRatio > 1.0e-10) {
+                colours.at(i) += transmitRatio * castRefractionRay(rays->at(i), isect, depth + 1);
+            }
+        }
+    }
+}
+#endif
+
 bool Tracer::traceRay(Ray& ray, Colour& colour, int depth) {
     Intersection* isect = new Intersection();
     bool hit = getIntersection(ray, isect);

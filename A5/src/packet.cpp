@@ -15,18 +15,29 @@ Packet::Packet(int width, int height, int i, int j, QImage* img, Tracer* tracer)
 {}
 
 Packet::~Packet() {
-    for(auto it = m_rays.begin(); it != m_rays.end(); it++) {
-        delete (*it);
-    }
 }
 
 void Packet::copy(const Packet& other) {
+    m_origin = other.m_origin;
+    m_direction = other.m_direction;
+
+    m_ratio = other.m_ratio;
+
+    m_finite = other.m_finite;
+    m_length = other.m_length;
+
+    m_sampleWidth = other.m_sampleWidth;
+   
     m_width = other.m_width;
     m_height = other.m_height;
 
     m_i = other.m_i;
     m_j = other.m_j;
+
     m_img = other.m_img;
+    m_tracer = other.m_tracer;
+
+    m_rays = other.m_rays;
 }
 
 Packet::Packet(const Packet& other) {
@@ -70,21 +81,23 @@ void Packet::updateIntervals() {
     m_direction = IVector3D();
     m_ratio = IVector3D();
 
-    m_finite = false;
-    m_length = std::numeric_limits<double>::infinity();
+    m_finite = true;
+    m_length = 0;
 
     for(auto it = m_rays.begin(); it != m_rays.end(); ++it) {
-        Point3D o = (*it)->getOrigin();
-        Vector3D d = (*it)->getDirection();
+        Point3D o = (*it).getOrigin();
+        Vector3D d = (*it).getDirection();
 
         m_origin.extend(o);
         m_direction.extend(d);
 
         updateRatio(o, d);
 
-        if((*it)->hasEndpoint()) {
-            m_finite = true;
-            m_length = fmin(m_length, (*it)->getLength());
+        if((*it).hasEndpoint() && m_finite) {
+            m_length = fmax(m_length, (*it).getLength());
+        } else {
+            m_finite = false;
+            m_length = std::numeric_limits<double>::infinity();
         }
     }
 }
@@ -103,6 +116,7 @@ void Packet::updateRatio(const Point3D& o, const Vector3D& d) {
     m_ratio.extend(v);
 }
 
+#ifndef PACKET 
 void Packet::trace() {
     for(int j = 0; j < m_height; j++) {
         for(int i = 0; i < m_width; i++) {
@@ -110,6 +124,22 @@ void Packet::trace() {
         }
     }
 }
+#else
+void Packet::trace() {
+    int n = m_rays.size();
+
+    vector<Colour> colours(n);
+    vector<bool> v_hit(n);
+    
+    m_tracer->tracePacket(*this, colours, v_hit);
+
+    for(int j = 0; j < m_height; j++) {
+        for(int i = 0; i < m_width; i++) {
+            tracePixel(i, j, colours, v_hit);
+        }
+    }
+}
+#endif
 
 void Packet::tracePixel(int i, int j) {
     int width = m_img->width();
@@ -134,10 +164,47 @@ void Packet::tracePixel(int i, int j) {
             int index = packetWidth * ((SAMPLE_WIDTH * j) + y) + SAMPLE_WIDTH * i + x;
             
             Colour colour(0.0, 0.0, 0.0);
-            bool hit = m_tracer->traceRay(*(m_rays.at(index)), colour);
+            bool hit = m_tracer->traceRay((m_rays.at(index)), colour);
 
             if(hit) {
                 averageColour += colour;
+            } else {
+                averageColour += backgroundColour;
+            }
+        }
+    }
+
+    double factor = 1.0 / (SAMPLE_WIDTH * SAMPLE_WIDTH);
+    averageColour = factor * averageColour;
+
+    m_img->setPixel(img_i, img_j, averageColour.toInt());
+}
+
+void Packet::tracePixel(int i, int j, vector<Colour>& colours, vector<bool>& v_hit) {
+    int width = m_img->width();
+    int height = m_img->height();
+
+    int packetWidth = m_width * SAMPLE_WIDTH;
+
+    int img_i = m_i + i;
+    int img_j = m_j + j;
+
+    Colour averageColour;
+   
+#ifdef BLACK_BACKGROUND 
+    Colour backgroundColour;
+#else
+    Colour backgroundColour( ((double)img_i)/(double)width, ((double)img_j)/(double)height, 
+       (1.0 - ((double)img_i)/(double)width) );
+#endif
+
+    for(int y = 0; y < SAMPLE_WIDTH; y++) {
+        for(int x = 0; x < SAMPLE_WIDTH; x++) {
+            int index = packetWidth * ((SAMPLE_WIDTH * j) + y) + SAMPLE_WIDTH * i + x;
+            bool hit = v_hit.at(index);
+
+            if(hit) {
+                averageColour += colours.at(index);
             } else {
                 averageColour += backgroundColour;
             }

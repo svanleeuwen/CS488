@@ -18,8 +18,6 @@ public:
     Mesh& operator=(const Mesh& other);
 
     virtual Mesh* clone() { return new Mesh(*this); }
-
-    virtual bool packetTest(const Packet& packet);
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
     virtual bool isMesh() { return true; }
@@ -48,8 +46,6 @@ public:
     Polygon& operator=(const Polygon& other);
 
     virtual Polygon* clone() { return new Polygon(*this); }
-
-    virtual bool packetTest(const Packet& packet);
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
 protected:
@@ -69,8 +65,6 @@ public:
     Triangle& operator=(const Triangle& other);
     
     virtual Triangle* clone() { return new Triangle(*this); }
-
-    virtual bool packetTest(const Packet& packet);
 };
 
 #endif

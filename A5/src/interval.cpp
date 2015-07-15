@@ -1,5 +1,11 @@
 #include "interval.hpp"
 #include <limits>
+#include <iostream>
+
+using std::min;
+using std::max;
+using std::cout;
+using std::endl;
 
 // ************************* Interval ********************************
 
@@ -14,32 +20,31 @@ Interval::Interval(double low, double high)
     m_empty = low > high;
 }
 
-Interval::Interval(double val) {
-    Interval(val, val);
-}
+Interval::Interval(double val) : Interval(val, val) {}
+
+Interval::~Interval() {}
 
 void Interval::copy(const Interval& other) {
     v_[0] = other[0];
     v_[1] = other[1];
+    m_empty = other.m_empty;
 }
 
 Interval::Interval(const Interval& other) {
     copy(other);    
 }
 
-Interval::~Interval() {}
-
 Interval& Interval::operator=(const Interval& other) {
     if(this != &other) {
         copy(other);
     }
-
     return *this;
 }
 
 Interval Interval::reciprocal() {
     if(v_[0] < 1.0e-10 || v_[1] < 1.0e-10) {
-        return Interval(-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+        return Interval(-1000, 1000);
+        //return Interval(-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
     } else {
         return Interval(1.0/v_[1], 1.0/v_[0]);
     }
@@ -51,11 +56,11 @@ bool Interval::less(const Interval& a, const Interval& b) {
 }
 
 Interval Interval::set_intersection(const Interval& a, const Interval& b) {
-    return Interval(fmin(a[0], b[0]), fmax(a[1], b[1]));
+    return Interval(max(a[0], b[0]), min(a[1], b[1]));
 }
 
 Interval Interval::set_union(const Interval& a, const Interval& b) {
-    return Interval(fmax(a[0], b[0]), fmin(a[1], b[1]));
+    return Interval(min(a[0], b[0]), max(a[1], b[1]));
 }
 
 void Interval::extend(double val) {
@@ -66,18 +71,18 @@ void Interval::extend(double val) {
         return;
     }
 
-    v_[0] = fmax(v_[0], val);
-    v_[1] = fmin(v_[1], val);
+    v_[0] = min(v_[0], val);
+    v_[1] = max(v_[1], val);
 }
 
 Interval operator*(const Interval& a, const Interval& b) {
-    double min1 = fmin(a[0]*b[0], a[0]*b[1]);
-    double min2 = fmin(a[1]*b[0], a[1]*b[1]);
+    double min1 = min(a[0]*b[0], a[0]*b[1]);
+    double min2 = min(a[1]*b[0], a[1]*b[1]);
 
-    double max1 = fmax(a[0]*b[0], a[0]*b[1]);
-    double max2 = fmax(a[1]*b[0], a[1]*b[1]);
+    double max1 = max(a[0]*b[0], a[0]*b[1]);
+    double max2 = max(a[1]*b[0], a[1]*b[1]);
 
-    return Interval(fmin(min1, min2), fmax(max1, max2));
+    return Interval(min(min1, min2), max(max1, max2));
 }
 
 Interval operator*(const Interval& a, double val) {
@@ -141,7 +146,7 @@ IVector3D& IVector3D::operator=(const IVector3D& other) {
 }
 
 void IVector3D::extend(const Vector3D& vec) {
-    if(m_empty == true) {
+    if(m_empty) {
         IVector3D(vec);
         m_empty = false;
         return;
@@ -153,8 +158,8 @@ void IVector3D::extend(const Vector3D& vec) {
 }
 
 void IVector3D::extend(const Point3D& point) {
-    if(m_empty == true) {
-        IVector3D(vec);
+    if(m_empty) {
+        IVector3D(point);
         m_empty = false;
         return;
     }

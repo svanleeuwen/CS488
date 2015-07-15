@@ -20,9 +20,10 @@ public:
     PhongMaterial* getMaterial() const { return m_material; }
     void setMaterial(PhongMaterial* material) { m_material = material; }
 
+    virtual bool allMiss(const Packet& packet);
+    void getIntersection(Packet& packet, int firstActive, std::vector<bool>& v_hit, std::vector<Intersection>* v_isect);   
+    
     virtual Primitive* clone() = 0;
-
-    virtual bool packetTest(const Packet& packet) = 0;
     virtual bool getIntersection(const Ray& ray, Intersection* isect) = 0;
 
     virtual bool isMesh() { return false; }
@@ -46,12 +47,10 @@ public:
     Sphere();
     virtual ~Sphere();
 
-    virtual Sphere* clone() { return new Sphere(*this); }
-
     Sphere(const Sphere& other);
     Sphere& operator=(const Sphere& other);
-
-    virtual bool packetTest(const Packet& packet);
+   
+    virtual Sphere* clone() { return new Sphere(*this); }
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 };
 
@@ -64,8 +63,6 @@ public:
     Cube& operator=(const Cube& other);
 
     virtual Cube* clone() { return new Cube(*this); }
-
-    virtual bool packetTest(const Packet& packet); 
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 };
 
@@ -78,8 +75,6 @@ public:
     NonhierSphere& operator=(const NonhierSphere& other);
 
     virtual NonhierSphere* clone() { return new NonhierSphere(*this); }
-
-    virtual bool packetTest(const Packet& packet);   
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
 private:
@@ -96,8 +91,6 @@ public:
     NonhierBox& operator=(const NonhierBox& other);
 
     virtual NonhierBox* clone() { return new NonhierBox(*this); }
-
-    virtual bool packetTest(const Packet& packet);
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
 private:

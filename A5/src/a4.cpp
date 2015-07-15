@@ -14,8 +14,6 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-#define NUMTHREADS 8
-
 bool launch_qt(// What to render
                SceneNode* root,
                // Where to output the image

@@ -16,6 +16,9 @@ class Tracer {
 public:
     Tracer(std::vector<Primitive*>* primitives, const Colour& ambient, const std::list<Light*>* lights);
 
+#ifdef BIH
+    void tracePacket(Packet& packet, std::vector<Colour>& colours, std::vector<bool>& v_hit, int depth = 0);
+#endif
     bool traceRay(Ray& ray, Colour& colour, int depth = 0);
 
 private:

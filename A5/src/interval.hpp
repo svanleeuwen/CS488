@@ -93,15 +93,15 @@ public:
     }
 
     void extend(const Vector3D& vec);
-    void extend(const Point3D& vec);
+    void extend(const Point3D& point);
 
     IVector3D reciprocal();
     Interval intersectMembers();
 
 private:
     void copy(const IVector3D& other);
-    Interval v_[3];
 
+    Interval v_[3];
     bool m_empty;
 };
 
@@ -133,6 +133,16 @@ inline IVector3D operator -(const IVector3D& a, const IVector3D& b)
 inline IVector3D operator -(const IVector3D& a)
 {
   return IVector3D(-a[0], -a[1], -a[2]);
+}
+
+inline std::ostream& operator <<(std::ostream& os, const Interval& I)
+{
+  return os << "I[" << I[0] << "," << I[1] << "]";
+}
+
+inline std::ostream& operator <<(std::ostream& os, const IVector3D& iv)
+{
+  return os << "iv<" << iv[0] << "," << iv[1] << "," << iv[2] << ">";
 }
 
 #endif

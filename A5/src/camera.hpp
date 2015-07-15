@@ -12,7 +12,7 @@ public:
     Camera(const Camera& other);
     Camera& operator=(const Camera& other);
 
-    Ray* getRay(double xPos, double yPos) const;
+    Ray getRay(double xPos, double yPos) const;
 
     Point3D getEye() const { return m_eye; }
 

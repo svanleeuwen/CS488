@@ -1,4 +1,11 @@
+#include <vector>
+#include <iostream>
+
 #include "bbox.hpp"
+
+using std::cout;
+using std::endl;
+using std::vector;
 
 AABB::AABB(Point3D min, Point3D max) {
     m_min = min;
@@ -51,7 +58,7 @@ AABB AABB::getTransform(const AABB& bbox, const Matrix4x4& trans) {
     return AABB(min, max);
 }
 
-bool AABB::packetTest(const Packet& packet) {
+bool AABB::allMiss(const Packet& packet) {
     IVector3D direction = packet.getDirection();
     IVector3D ratio = packet.getRatio();
 
@@ -61,10 +68,32 @@ bool AABB::packetTest(const Packet& packet) {
     IVector3D T = (m_ibbox * direction.reciprocal()) - ratio;
 
     if(is_finite) {
-        return !Interval::set_intersection(T.intersectMembers(), ilength).isEmpty();
+        return Interval::set_intersection(T.intersectMembers(), ilength).isEmpty();
     } else {
-        return !T.intersectMembers().isEmpty();
+        return T.intersectMembers().isEmpty();
     }
+}
+
+int AABB::packetTest(Packet& packet, int firstActive) {
+    vector<Ray>* rays = &packet.m_rays;
+
+    if(intersect(rays->at(firstActive))) {
+        return firstActive;
+    }
+
+    int n = rays->size();
+
+    if(allMiss(packet)) {
+        return n;
+    }
+
+    for(int i = firstActive + 1; i < n; i++) {
+        if(intersect(rays->at(i))) {
+            return i;
+        }
+    }
+
+    return n;
 }
 
 bool AABB::intersect(const Ray& ray) const{

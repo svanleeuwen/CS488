@@ -15,7 +15,8 @@ public:
     AABB(const AABB& other);
     AABB& operator=(const AABB& other);
 
-    bool packetTest(const Packet& packet);
+    bool allMiss(const Packet& packet);
+    int packetTest(Packet& packet, int firstActive);
 
     bool intersect(const Ray& ray) const;
     bool contains(const Ray& ray) const;

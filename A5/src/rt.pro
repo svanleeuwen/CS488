@@ -4,7 +4,7 @@
 
 QT += widgets
 CONFIG += c++11
-QMAKE_CXXFLAGS += -W -Wall -g -pthread -D BIH
+QMAKE_CXXFLAGS += -W -Wall -g -pthread -D BIH -D PACKET
 TEMPLATE = app
 TARGET = rt
 INCLUDEPATH += . "/usr/include/lua5.1" 

@@ -45,7 +45,78 @@ BIHTree::~BIHTree() {
 }
 
 bool BIHTree::getIntersection(const Ray& ray, Intersection* isect) {
-    return m_root->getIntersection(ray, isect);
+    bool hit = m_root->getIntersection(ray, isect);
+    return hit;
+}
+
+namespace {
+    struct Node{
+        Node(BIHNode* node, int firstActive) :
+            m_node(node), m_firstActive(firstActive) {}
+
+        BIHNode* m_node;
+        int m_firstActive;
+    };
+}
+
+void BIHTree::getIntersection(Packet& packet, vector<bool>& v_hit, vector<Intersection>* v_isect) {
+    BIHNode* node = m_root;
+    int firstActive = 0;
+   
+    vector<Ray>* rays = &packet.m_rays;
+    int n = rays->size();
+
+    stack<Node> hitNodes;
+
+    for(int i = 0; i < n; i++) {
+        v_hit.at(i) = false;
+    }
+
+    while(true) {
+        firstActive = node->m_bbox.packetTest(packet, firstActive);
+
+        if(firstActive < n) {
+            if(node->m_type != BIHNode::Type::leaf) {
+                int first = node->traversalOrder(rays->at(firstActive));
+                hitNodes.push(Node(node->m_children + (1 - first), firstActive));
+
+                node = node->m_children + first;
+                continue;
+
+            } else {
+                for(int i = 0; i < node->m_numPrimitives; i++) {
+                    if(!(v_isect == NULL && v_hit.at(i))) {
+                        node->m_primitives[i]->getIntersection(packet, firstActive, v_hit, v_isect);
+                    }
+                }
+            }
+        }
+
+        if(hitNodes.empty()) {
+            return;
+        }
+
+        if(v_isect == NULL) {
+            bool allHit = true;
+
+            for(int i = 0; i < n; i++) {
+                if(!v_hit.at(i)) {
+                    allHit = false;
+                    break;
+                }
+            }
+
+            if(allHit) {
+                return;
+            }
+        }
+
+        Node next = hitNodes.top();
+        hitNodes.pop();
+
+        node = next.m_node;
+        firstActive = next.m_firstActive;
+    }
 }
 
 void BIHTree::initGlobalBBox() {
@@ -144,6 +215,11 @@ void BIHNode::buildHierarchy(stack<BIHNode*>* nodes, stack<AABB>* bboxes, const 
         nodes->push(m_children + 1);
         bboxes->push(r_bbox);
     }
+}
+
+int BIHNode::traversalOrder(const Ray& ray) {
+    Vector3D direction = ray.getDirection();
+    return (direction[(int)m_type] > 0) ? 0 : 1;
 }
 
 bool BIHNode::getIntersection(const Ray& ray, Intersection* isect) {

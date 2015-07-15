@@ -1,0 +1,686 @@
+tracer.cpp: In member function ‘void Tracer::tracePacket(Packet&, std::vector<Colour>&, std::vector<bool>&, int)’:
+tracer.cpp:167:64: error: no match for ‘operator*’ (operand type is ‘__gnu_cxx::__alloc_traits<std::allocator<Ray> >::value_type {aka Ray}’)
+                 colours.at(i) += reflectRatio * castShadowRays(*rays->at(i), isect);
+                                                                ^
+tracer.cpp:167:64: note: candidates are:
+In file included from camera.hpp:4:0,
+                 from tracer.hpp:4,
+                 from tracer.cpp:1:
+algebra.hpp:192:17: note: Vector3D operator*(double, const Vector3D&)
+ inline Vector3D operator *(double s, const Vector3D& v)
+                 ^
+algebra.hpp:192:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:197:17: note: Vector3D operator*(const Vector3D&, double)
+ inline Vector3D operator *(const Vector3D& v, double s)
+                 ^
+algebra.hpp:197:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:212:16: note: Point3D operator*(double, const Point3D&)
+ inline Point3D operator *(double s, const Point3D& p)
+                ^
+algebra.hpp:212:16: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:423:18: note: Matrix4x4 operator*(const Matrix4x4&, const Matrix4x4&)
+ inline Matrix4x4 operator *(const Matrix4x4& a, const Matrix4x4& b)
+                  ^
+algebra.hpp:423:18: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:439:17: note: Vector3D operator*(const Matrix4x4&, const Vector3D&)
+ inline Vector3D operator *(const Matrix4x4& M, const Vector3D& v)
+                 ^
+algebra.hpp:439:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:447:16: note: Point3D operator*(const Matrix4x4&, const Point3D&)
+ inline Point3D operator *(const Matrix4x4& M, const Point3D& p)
+                ^
+algebra.hpp:447:16: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:527:15: note: Colour operator*(double, const Colour&)
+ inline Colour operator *(double s, const Colour& a)
+               ^
+algebra.hpp:527:15: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:532:15: note: Colour operator*(const Colour&, const Colour&)
+ inline Colour operator *(const Colour& a, const Colour& b)
+               ^
+algebra.hpp:532:15: note:   candidate expects 2 arguments, 1 provided
+In file included from camera.hpp:5:0,
+                 from tracer.hpp:4,
+                 from tracer.cpp:1:
+ray.hpp:45:12: note: Ray operator*(const Matrix4x4&, const Ray&)
+ inline Ray operator*(const Matrix4x4& mat, const Ray& ray) {
+            ^
+ray.hpp:45:12: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qpolygon.h:46:0,
+                 from /usr/include/qt5/QtGui/qmatrix.h:45,
+                 from /usr/include/qt5/QtGui/qtransform.h:44,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtCore/qpoint.h:169:38: note: constexpr const QPoint operator*(const QPoint&, float)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, float factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:169:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:178:38: note: constexpr const QPoint operator*(float, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(float factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:178:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:172:38: note: constexpr const QPoint operator*(const QPoint&, double)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, double factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:172:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:181:38: note: constexpr const QPoint operator*(double, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(double factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:181:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:175:38: note: constexpr const QPoint operator*(const QPoint&, int)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, int factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:175:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:184:38: note: constexpr const QPoint operator*(int, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(int factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:184:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:362:39: note: constexpr const QPointF operator*(qreal, const QPointF&)
+ Q_DECL_CONSTEXPR inline const QPointF operator*(qreal c, const QPointF &p)
+                                       ^
+/usr/include/qt5/QtCore/qpoint.h:362:39: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:357:39: note: constexpr const QPointF operator*(const QPointF&, qreal)
+ Q_DECL_CONSTEXPR inline const QPointF operator*(const QPointF &p, qreal c)
+                                       ^
+/usr/include/qt5/QtCore/qpoint.h:357:39: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtCore/qrect.h:45:0,
+                 from /usr/include/qt5/QtGui/qpolygon.h:47,
+                 from /usr/include/qt5/QtGui/qmatrix.h:45,
+                 from /usr/include/qt5/QtGui/qtransform.h:44,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtCore/qsize.h:175:37: note: constexpr const QSize operator*(const QSize&, qreal)
+ Q_DECL_CONSTEXPR inline const QSize operator*(const QSize &s, qreal c)
+                                     ^
+/usr/include/qt5/QtCore/qsize.h:175:37: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:178:37: note: constexpr const QSize operator*(qreal, const QSize&)
+ Q_DECL_CONSTEXPR inline const QSize operator*(qreal c, const QSize &s)
+                                     ^
+/usr/include/qt5/QtCore/qsize.h:178:37: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:340:38: note: constexpr const QSizeF operator*(const QSizeF&, qreal)
+ Q_DECL_CONSTEXPR inline const QSizeF operator*(const QSizeF &s, qreal c)
+                                      ^
+/usr/include/qt5/QtCore/qsize.h:340:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:343:38: note: constexpr const QSizeF operator*(qreal, const QSizeF&)
+ Q_DECL_CONSTEXPR inline const QSizeF operator*(qreal c, const QSizeF &s)
+                                      ^
+/usr/include/qt5/QtCore/qsize.h:343:38: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qtransform.h:44:0,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtGui/qmatrix.h:138:15: note: QPoint operator*(const QPoint&, const QMatrix&)
+ inline QPoint operator*(const QPoint &p, const QMatrix &m)
+               ^
+/usr/include/qt5/QtGui/qmatrix.h:138:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:140:16: note: QPointF operator*(const QPointF&, const QMatrix&)
+ inline QPointF operator*(const QPointF &p, const QMatrix &m)
+                ^
+/usr/include/qt5/QtGui/qmatrix.h:140:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:142:15: note: QLineF operator*(const QLineF&, const QMatrix&)
+ inline QLineF operator*(const QLineF &l, const QMatrix &m)
+               ^
+/usr/include/qt5/QtGui/qmatrix.h:142:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:144:14: note: QLine operator*(const QLine&, const QMatrix&)
+ inline QLine operator*(const QLine &l, const QMatrix &m)
+              ^
+/usr/include/qt5/QtGui/qmatrix.h:144:14: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:146:17: note: QPolygon operator*(const QPolygon&, const QMatrix&)
+ inline QPolygon operator *(const QPolygon &a, const QMatrix &m)
+                 ^
+/usr/include/qt5/QtGui/qmatrix.h:146:17: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:148:18: note: QPolygonF operator*(const QPolygonF&, const QMatrix&)
+ inline QPolygonF operator *(const QPolygonF &a, const QMatrix &m)
+                  ^
+/usr/include/qt5/QtGui/qmatrix.h:148:18: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:150:16: note: QRegion operator*(const QRegion&, const QMatrix&)
+ inline QRegion operator *(const QRegion &r, const QMatrix &m)
+                ^
+/usr/include/qt5/QtGui/qmatrix.h:150:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:152:27: note: QPainterPath operator*(const QPainterPath&, const QMatrix&)
+ Q_GUI_EXPORT QPainterPath operator *(const QPainterPath &p, const QMatrix &m);
+                           ^
+/usr/include/qt5/QtGui/qmatrix.h:152:27: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qimage.h:45:0,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtGui/qtransform.h:358:15: note: QPoint operator*(const QPoint&, const QTransform&)
+ inline QPoint operator*(const QPoint &p, const QTransform &m)
+               ^
+/usr/include/qt5/QtGui/qtransform.h:358:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:360:16: note: QPointF operator*(const QPointF&, const QTransform&)
+ inline QPointF operator*(const QPointF &p, const QTransform &m)
+                ^
+/usr/include/qt5/QtGui/qtransform.h:360:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:362:15: note: QLineF operator*(const QLineF&, const QTransform&)
+ inline QLineF operator*(const QLineF &l, const QTransform &m)
+               ^
+/usr/include/qt5/QtGui/qtransform.h:362:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:364:14: note: QLine operator*(const QLine&, const QTransform&)
+ inline QLine operator*(const QLine &l, const QTransform &m)
+              ^
+/usr/include/qt5/QtGui/qtransform.h:364:14: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:366:17: note: QPolygon operator*(const QPolygon&, const QTransform&)
+ inline QPolygon operator *(const QPolygon &a, const QTransform &m)
+                 ^
+/usr/include/qt5/QtGui/qtransform.h:366:17: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:368:18: note: QPolygonF operator*(const QPolygonF&, const QTransform&)
+ inline QPolygonF operator *(const QPolygonF &a, const QTransform &m)
+                  ^
+/usr/include/qt5/QtGui/qtransform.h:368:18: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:370:16: note: QRegion operator*(const QRegion&, const QTransform&)
+ inline QRegion operator *(const QRegion &r, const QTransform &m)
+                ^
+/usr/include/qt5/QtGui/qtransform.h:370:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:372:21: note: QPainterPath operator*(const QPainterPath&, const QTransform&)
+ inline QPainterPath operator *(const QPainterPath &p, const QTransform &m)
+                     ^
+/usr/include/qt5/QtGui/qtransform.h:372:21: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:375:19: note: QTransform operator*(const QTransform&, qreal)
+ inline QTransform operator *(const QTransform &a, qreal n)
+                   ^
+/usr/include/qt5/QtGui/qtransform.h:375:19: note:   candidate expects 2 arguments, 1 provided
+In file included from packet.hpp:8:0,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+interval.hpp:67:10: note: Interval operator*(const Interval&, const Interval&)
+ Interval operator*(const Interval& a, const Interval& b);
+          ^
+interval.hpp:67:10: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:69:10: note: Interval operator*(const Interval&, double)
+ Interval operator*(const Interval& a, double val);
+          ^
+interval.hpp:69:10: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:108:18: note: IVector3D operator*(const Interval&, const IVector3D&)
+ inline IVector3D operator *(const Interval& s, const IVector3D& v)
+                  ^
+interval.hpp:108:18: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:113:18: note: IVector3D operator*(const IVector3D&, const Interval&)
+ inline IVector3D operator *(const IVector3D& v, const Interval& s)
+                  ^
+interval.hpp:113:18: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:123:18: note: IVector3D operator*(const IVector3D&, const IVector3D&)
+ inline IVector3D operator *(const IVector3D& a, const IVector3D& b)
+                  ^
+interval.hpp:123:18: note:   candidate expects 2 arguments, 1 provided
+tracer.cpp:170:71: error: no match for ‘operator*’ (operand type is ‘__gnu_cxx::__alloc_traits<std::allocator<Ray> >::value_type {aka Ray}’)
+                     colours.at(i) += reflectRatio * castReflectionRay(*rays->at(i), isect, depth + 1);
+                                                                       ^
+tracer.cpp:170:71: note: candidates are:
+In file included from camera.hpp:4:0,
+                 from tracer.hpp:4,
+                 from tracer.cpp:1:
+algebra.hpp:192:17: note: Vector3D operator*(double, const Vector3D&)
+ inline Vector3D operator *(double s, const Vector3D& v)
+                 ^
+algebra.hpp:192:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:197:17: note: Vector3D operator*(const Vector3D&, double)
+ inline Vector3D operator *(const Vector3D& v, double s)
+                 ^
+algebra.hpp:197:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:212:16: note: Point3D operator*(double, const Point3D&)
+ inline Point3D operator *(double s, const Point3D& p)
+                ^
+algebra.hpp:212:16: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:423:18: note: Matrix4x4 operator*(const Matrix4x4&, const Matrix4x4&)
+ inline Matrix4x4 operator *(const Matrix4x4& a, const Matrix4x4& b)
+                  ^
+algebra.hpp:423:18: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:439:17: note: Vector3D operator*(const Matrix4x4&, const Vector3D&)
+ inline Vector3D operator *(const Matrix4x4& M, const Vector3D& v)
+                 ^
+algebra.hpp:439:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:447:16: note: Point3D operator*(const Matrix4x4&, const Point3D&)
+ inline Point3D operator *(const Matrix4x4& M, const Point3D& p)
+                ^
+algebra.hpp:447:16: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:527:15: note: Colour operator*(double, const Colour&)
+ inline Colour operator *(double s, const Colour& a)
+               ^
+algebra.hpp:527:15: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:532:15: note: Colour operator*(const Colour&, const Colour&)
+ inline Colour operator *(const Colour& a, const Colour& b)
+               ^
+algebra.hpp:532:15: note:   candidate expects 2 arguments, 1 provided
+In file included from camera.hpp:5:0,
+                 from tracer.hpp:4,
+                 from tracer.cpp:1:
+ray.hpp:45:12: note: Ray operator*(const Matrix4x4&, const Ray&)
+ inline Ray operator*(const Matrix4x4& mat, const Ray& ray) {
+            ^
+ray.hpp:45:12: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qpolygon.h:46:0,
+                 from /usr/include/qt5/QtGui/qmatrix.h:45,
+                 from /usr/include/qt5/QtGui/qtransform.h:44,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtCore/qpoint.h:169:38: note: constexpr const QPoint operator*(const QPoint&, float)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, float factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:169:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:178:38: note: constexpr const QPoint operator*(float, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(float factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:178:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:172:38: note: constexpr const QPoint operator*(const QPoint&, double)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, double factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:172:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:181:38: note: constexpr const QPoint operator*(double, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(double factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:181:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:175:38: note: constexpr const QPoint operator*(const QPoint&, int)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, int factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:175:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:184:38: note: constexpr const QPoint operator*(int, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(int factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:184:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:362:39: note: constexpr const QPointF operator*(qreal, const QPointF&)
+ Q_DECL_CONSTEXPR inline const QPointF operator*(qreal c, const QPointF &p)
+                                       ^
+/usr/include/qt5/QtCore/qpoint.h:362:39: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:357:39: note: constexpr const QPointF operator*(const QPointF&, qreal)
+ Q_DECL_CONSTEXPR inline const QPointF operator*(const QPointF &p, qreal c)
+                                       ^
+/usr/include/qt5/QtCore/qpoint.h:357:39: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtCore/qrect.h:45:0,
+                 from /usr/include/qt5/QtGui/qpolygon.h:47,
+                 from /usr/include/qt5/QtGui/qmatrix.h:45,
+                 from /usr/include/qt5/QtGui/qtransform.h:44,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtCore/qsize.h:175:37: note: constexpr const QSize operator*(const QSize&, qreal)
+ Q_DECL_CONSTEXPR inline const QSize operator*(const QSize &s, qreal c)
+                                     ^
+/usr/include/qt5/QtCore/qsize.h:175:37: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:178:37: note: constexpr const QSize operator*(qreal, const QSize&)
+ Q_DECL_CONSTEXPR inline const QSize operator*(qreal c, const QSize &s)
+                                     ^
+/usr/include/qt5/QtCore/qsize.h:178:37: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:340:38: note: constexpr const QSizeF operator*(const QSizeF&, qreal)
+ Q_DECL_CONSTEXPR inline const QSizeF operator*(const QSizeF &s, qreal c)
+                                      ^
+/usr/include/qt5/QtCore/qsize.h:340:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:343:38: note: constexpr const QSizeF operator*(qreal, const QSizeF&)
+ Q_DECL_CONSTEXPR inline const QSizeF operator*(qreal c, const QSizeF &s)
+                                      ^
+/usr/include/qt5/QtCore/qsize.h:343:38: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qtransform.h:44:0,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtGui/qmatrix.h:138:15: note: QPoint operator*(const QPoint&, const QMatrix&)
+ inline QPoint operator*(const QPoint &p, const QMatrix &m)
+               ^
+/usr/include/qt5/QtGui/qmatrix.h:138:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:140:16: note: QPointF operator*(const QPointF&, const QMatrix&)
+ inline QPointF operator*(const QPointF &p, const QMatrix &m)
+                ^
+/usr/include/qt5/QtGui/qmatrix.h:140:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:142:15: note: QLineF operator*(const QLineF&, const QMatrix&)
+ inline QLineF operator*(const QLineF &l, const QMatrix &m)
+               ^
+/usr/include/qt5/QtGui/qmatrix.h:142:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:144:14: note: QLine operator*(const QLine&, const QMatrix&)
+ inline QLine operator*(const QLine &l, const QMatrix &m)
+              ^
+/usr/include/qt5/QtGui/qmatrix.h:144:14: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:146:17: note: QPolygon operator*(const QPolygon&, const QMatrix&)
+ inline QPolygon operator *(const QPolygon &a, const QMatrix &m)
+                 ^
+/usr/include/qt5/QtGui/qmatrix.h:146:17: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:148:18: note: QPolygonF operator*(const QPolygonF&, const QMatrix&)
+ inline QPolygonF operator *(const QPolygonF &a, const QMatrix &m)
+                  ^
+/usr/include/qt5/QtGui/qmatrix.h:148:18: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:150:16: note: QRegion operator*(const QRegion&, const QMatrix&)
+ inline QRegion operator *(const QRegion &r, const QMatrix &m)
+                ^
+/usr/include/qt5/QtGui/qmatrix.h:150:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:152:27: note: QPainterPath operator*(const QPainterPath&, const QMatrix&)
+ Q_GUI_EXPORT QPainterPath operator *(const QPainterPath &p, const QMatrix &m);
+                           ^
+/usr/include/qt5/QtGui/qmatrix.h:152:27: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qimage.h:45:0,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtGui/qtransform.h:358:15: note: QPoint operator*(const QPoint&, const QTransform&)
+ inline QPoint operator*(const QPoint &p, const QTransform &m)
+               ^
+/usr/include/qt5/QtGui/qtransform.h:358:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:360:16: note: QPointF operator*(const QPointF&, const QTransform&)
+ inline QPointF operator*(const QPointF &p, const QTransform &m)
+                ^
+/usr/include/qt5/QtGui/qtransform.h:360:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:362:15: note: QLineF operator*(const QLineF&, const QTransform&)
+ inline QLineF operator*(const QLineF &l, const QTransform &m)
+               ^
+/usr/include/qt5/QtGui/qtransform.h:362:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:364:14: note: QLine operator*(const QLine&, const QTransform&)
+ inline QLine operator*(const QLine &l, const QTransform &m)
+              ^
+/usr/include/qt5/QtGui/qtransform.h:364:14: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:366:17: note: QPolygon operator*(const QPolygon&, const QTransform&)
+ inline QPolygon operator *(const QPolygon &a, const QTransform &m)
+                 ^
+/usr/include/qt5/QtGui/qtransform.h:366:17: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:368:18: note: QPolygonF operator*(const QPolygonF&, const QTransform&)
+ inline QPolygonF operator *(const QPolygonF &a, const QTransform &m)
+                  ^
+/usr/include/qt5/QtGui/qtransform.h:368:18: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:370:16: note: QRegion operator*(const QRegion&, const QTransform&)
+ inline QRegion operator *(const QRegion &r, const QTransform &m)
+                ^
+/usr/include/qt5/QtGui/qtransform.h:370:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:372:21: note: QPainterPath operator*(const QPainterPath&, const QTransform&)
+ inline QPainterPath operator *(const QPainterPath &p, const QTransform &m)
+                     ^
+/usr/include/qt5/QtGui/qtransform.h:372:21: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:375:19: note: QTransform operator*(const QTransform&, qreal)
+ inline QTransform operator *(const QTransform &a, qreal n)
+                   ^
+/usr/include/qt5/QtGui/qtransform.h:375:19: note:   candidate expects 2 arguments, 1 provided
+In file included from packet.hpp:8:0,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+interval.hpp:67:10: note: Interval operator*(const Interval&, const Interval&)
+ Interval operator*(const Interval& a, const Interval& b);
+          ^
+interval.hpp:67:10: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:69:10: note: Interval operator*(const Interval&, double)
+ Interval operator*(const Interval& a, double val);
+          ^
+interval.hpp:69:10: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:108:18: note: IVector3D operator*(const Interval&, const IVector3D&)
+ inline IVector3D operator *(const Interval& s, const IVector3D& v)
+                  ^
+interval.hpp:108:18: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:113:18: note: IVector3D operator*(const IVector3D&, const Interval&)
+ inline IVector3D operator *(const IVector3D& v, const Interval& s)
+                  ^
+interval.hpp:113:18: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:123:18: note: IVector3D operator*(const IVector3D&, const IVector3D&)
+ inline IVector3D operator *(const IVector3D& a, const IVector3D& b)
+                  ^
+interval.hpp:123:18: note:   candidate expects 2 arguments, 1 provided
+tracer.cpp:175:68: error: no match for ‘operator*’ (operand type is ‘__gnu_cxx::__alloc_traits<std::allocator<Ray> >::value_type {aka Ray}’)
+                 colours.at(i) += transmitRatio * castRefractionRay(*rays->at(i), isect, depth + 1);
+                                                                    ^
+tracer.cpp:175:68: note: candidates are:
+In file included from camera.hpp:4:0,
+                 from tracer.hpp:4,
+                 from tracer.cpp:1:
+algebra.hpp:192:17: note: Vector3D operator*(double, const Vector3D&)
+ inline Vector3D operator *(double s, const Vector3D& v)
+                 ^
+algebra.hpp:192:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:197:17: note: Vector3D operator*(const Vector3D&, double)
+ inline Vector3D operator *(const Vector3D& v, double s)
+                 ^
+algebra.hpp:197:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:212:16: note: Point3D operator*(double, const Point3D&)
+ inline Point3D operator *(double s, const Point3D& p)
+                ^
+algebra.hpp:212:16: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:423:18: note: Matrix4x4 operator*(const Matrix4x4&, const Matrix4x4&)
+ inline Matrix4x4 operator *(const Matrix4x4& a, const Matrix4x4& b)
+                  ^
+algebra.hpp:423:18: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:439:17: note: Vector3D operator*(const Matrix4x4&, const Vector3D&)
+ inline Vector3D operator *(const Matrix4x4& M, const Vector3D& v)
+                 ^
+algebra.hpp:439:17: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:447:16: note: Point3D operator*(const Matrix4x4&, const Point3D&)
+ inline Point3D operator *(const Matrix4x4& M, const Point3D& p)
+                ^
+algebra.hpp:447:16: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:527:15: note: Colour operator*(double, const Colour&)
+ inline Colour operator *(double s, const Colour& a)
+               ^
+algebra.hpp:527:15: note:   candidate expects 2 arguments, 1 provided
+algebra.hpp:532:15: note: Colour operator*(const Colour&, const Colour&)
+ inline Colour operator *(const Colour& a, const Colour& b)
+               ^
+algebra.hpp:532:15: note:   candidate expects 2 arguments, 1 provided
+In file included from camera.hpp:5:0,
+                 from tracer.hpp:4,
+                 from tracer.cpp:1:
+ray.hpp:45:12: note: Ray operator*(const Matrix4x4&, const Ray&)
+ inline Ray operator*(const Matrix4x4& mat, const Ray& ray) {
+            ^
+ray.hpp:45:12: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qpolygon.h:46:0,
+                 from /usr/include/qt5/QtGui/qmatrix.h:45,
+                 from /usr/include/qt5/QtGui/qtransform.h:44,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtCore/qpoint.h:169:38: note: constexpr const QPoint operator*(const QPoint&, float)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, float factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:169:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:178:38: note: constexpr const QPoint operator*(float, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(float factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:178:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:172:38: note: constexpr const QPoint operator*(const QPoint&, double)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, double factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:172:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:181:38: note: constexpr const QPoint operator*(double, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(double factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:181:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:175:38: note: constexpr const QPoint operator*(const QPoint&, int)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(const QPoint &p, int factor)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:175:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:184:38: note: constexpr const QPoint operator*(int, const QPoint&)
+ Q_DECL_CONSTEXPR inline const QPoint operator*(int factor, const QPoint &p)
+                                      ^
+/usr/include/qt5/QtCore/qpoint.h:184:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:362:39: note: constexpr const QPointF operator*(qreal, const QPointF&)
+ Q_DECL_CONSTEXPR inline const QPointF operator*(qreal c, const QPointF &p)
+                                       ^
+/usr/include/qt5/QtCore/qpoint.h:362:39: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qpoint.h:357:39: note: constexpr const QPointF operator*(const QPointF&, qreal)
+ Q_DECL_CONSTEXPR inline const QPointF operator*(const QPointF &p, qreal c)
+                                       ^
+/usr/include/qt5/QtCore/qpoint.h:357:39: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtCore/qrect.h:45:0,
+                 from /usr/include/qt5/QtGui/qpolygon.h:47,
+                 from /usr/include/qt5/QtGui/qmatrix.h:45,
+                 from /usr/include/qt5/QtGui/qtransform.h:44,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtCore/qsize.h:175:37: note: constexpr const QSize operator*(const QSize&, qreal)
+ Q_DECL_CONSTEXPR inline const QSize operator*(const QSize &s, qreal c)
+                                     ^
+/usr/include/qt5/QtCore/qsize.h:175:37: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:178:37: note: constexpr const QSize operator*(qreal, const QSize&)
+ Q_DECL_CONSTEXPR inline const QSize operator*(qreal c, const QSize &s)
+                                     ^
+/usr/include/qt5/QtCore/qsize.h:178:37: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:340:38: note: constexpr const QSizeF operator*(const QSizeF&, qreal)
+ Q_DECL_CONSTEXPR inline const QSizeF operator*(const QSizeF &s, qreal c)
+                                      ^
+/usr/include/qt5/QtCore/qsize.h:340:38: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtCore/qsize.h:343:38: note: constexpr const QSizeF operator*(qreal, const QSizeF&)
+ Q_DECL_CONSTEXPR inline const QSizeF operator*(qreal c, const QSizeF &s)
+                                      ^
+/usr/include/qt5/QtCore/qsize.h:343:38: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qtransform.h:44:0,
+                 from /usr/include/qt5/QtGui/qimage.h:45,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtGui/qmatrix.h:138:15: note: QPoint operator*(const QPoint&, const QMatrix&)
+ inline QPoint operator*(const QPoint &p, const QMatrix &m)
+               ^
+/usr/include/qt5/QtGui/qmatrix.h:138:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:140:16: note: QPointF operator*(const QPointF&, const QMatrix&)
+ inline QPointF operator*(const QPointF &p, const QMatrix &m)
+                ^
+/usr/include/qt5/QtGui/qmatrix.h:140:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:142:15: note: QLineF operator*(const QLineF&, const QMatrix&)
+ inline QLineF operator*(const QLineF &l, const QMatrix &m)
+               ^
+/usr/include/qt5/QtGui/qmatrix.h:142:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:144:14: note: QLine operator*(const QLine&, const QMatrix&)
+ inline QLine operator*(const QLine &l, const QMatrix &m)
+              ^
+/usr/include/qt5/QtGui/qmatrix.h:144:14: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:146:17: note: QPolygon operator*(const QPolygon&, const QMatrix&)
+ inline QPolygon operator *(const QPolygon &a, const QMatrix &m)
+                 ^
+/usr/include/qt5/QtGui/qmatrix.h:146:17: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:148:18: note: QPolygonF operator*(const QPolygonF&, const QMatrix&)
+ inline QPolygonF operator *(const QPolygonF &a, const QMatrix &m)
+                  ^
+/usr/include/qt5/QtGui/qmatrix.h:148:18: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:150:16: note: QRegion operator*(const QRegion&, const QMatrix&)
+ inline QRegion operator *(const QRegion &r, const QMatrix &m)
+                ^
+/usr/include/qt5/QtGui/qmatrix.h:150:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qmatrix.h:152:27: note: QPainterPath operator*(const QPainterPath&, const QMatrix&)
+ Q_GUI_EXPORT QPainterPath operator *(const QPainterPath &p, const QMatrix &m);
+                           ^
+/usr/include/qt5/QtGui/qmatrix.h:152:27: note:   candidate expects 2 arguments, 1 provided
+In file included from /usr/include/qt5/QtGui/qimage.h:45:0,
+                 from /usr/include/qt5/QtGui/QImage:1,
+                 from packet.hpp:5,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+/usr/include/qt5/QtGui/qtransform.h:358:15: note: QPoint operator*(const QPoint&, const QTransform&)
+ inline QPoint operator*(const QPoint &p, const QTransform &m)
+               ^
+/usr/include/qt5/QtGui/qtransform.h:358:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:360:16: note: QPointF operator*(const QPointF&, const QTransform&)
+ inline QPointF operator*(const QPointF &p, const QTransform &m)
+                ^
+/usr/include/qt5/QtGui/qtransform.h:360:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:362:15: note: QLineF operator*(const QLineF&, const QTransform&)
+ inline QLineF operator*(const QLineF &l, const QTransform &m)
+               ^
+/usr/include/qt5/QtGui/qtransform.h:362:15: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:364:14: note: QLine operator*(const QLine&, const QTransform&)
+ inline QLine operator*(const QLine &l, const QTransform &m)
+              ^
+/usr/include/qt5/QtGui/qtransform.h:364:14: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:366:17: note: QPolygon operator*(const QPolygon&, const QTransform&)
+ inline QPolygon operator *(const QPolygon &a, const QTransform &m)
+                 ^
+/usr/include/qt5/QtGui/qtransform.h:366:17: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:368:18: note: QPolygonF operator*(const QPolygonF&, const QTransform&)
+ inline QPolygonF operator *(const QPolygonF &a, const QTransform &m)
+                  ^
+/usr/include/qt5/QtGui/qtransform.h:368:18: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:370:16: note: QRegion operator*(const QRegion&, const QTransform&)
+ inline QRegion operator *(const QRegion &r, const QTransform &m)
+                ^
+/usr/include/qt5/QtGui/qtransform.h:370:16: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:372:21: note: QPainterPath operator*(const QPainterPath&, const QTransform&)
+ inline QPainterPath operator *(const QPainterPath &p, const QTransform &m)
+                     ^
+/usr/include/qt5/QtGui/qtransform.h:372:21: note:   candidate expects 2 arguments, 1 provided
+/usr/include/qt5/QtGui/qtransform.h:375:19: note: QTransform operator*(const QTransform&, qreal)
+ inline QTransform operator *(const QTransform &a, qreal n)
+                   ^
+/usr/include/qt5/QtGui/qtransform.h:375:19: note:   candidate expects 2 arguments, 1 provided
+In file included from packet.hpp:8:0,
+                 from bbox.hpp:6,
+                 from primitive.hpp:7,
+                 from scene.hpp:6,
+                 from tracer.hpp:8,
+                 from tracer.cpp:1:
+interval.hpp:67:10: note: Interval operator*(const Interval&, const Interval&)
+ Interval operator*(const Interval& a, const Interval& b);
+          ^
+interval.hpp:67:10: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:69:10: note: Interval operator*(const Interval&, double)
+ Interval operator*(const Interval& a, double val);
+          ^
+interval.hpp:69:10: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:108:18: note: IVector3D operator*(const Interval&, const IVector3D&)
+ inline IVector3D operator *(const Interval& s, const IVector3D& v)
+                  ^
+interval.hpp:108:18: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:113:18: note: IVector3D operator*(const IVector3D&, const Interval&)
+ inline IVector3D operator *(const IVector3D& v, const Interval& s)
+                  ^
+interval.hpp:113:18: note:   candidate expects 2 arguments, 1 provided
+interval.hpp:123:18: note: IVector3D operator*(const IVector3D&, const IVector3D&)
+ inline IVector3D operator *(const IVector3D& a, const IVector3D& b)
+                  ^
+interval.hpp:123:18: note:   candidate expects 2 arguments, 1 provided
+make: *** [tracer.o] Error 1
