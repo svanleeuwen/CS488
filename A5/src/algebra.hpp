@@ -502,7 +502,8 @@ public:
   }
 
   Colour& operator +=(const Colour& other); 
-     
+  Colour& operator *=(const Colour& other); 
+    
   double R() const 
   { 
     return r_;
@@ -543,5 +544,7 @@ inline std::ostream& operator <<(std::ostream& os, const Colour& c)
 {
   return os << "c<" << c.R() << "," << c.G() << "," << c.B() << ">";
 }
+
+typedef std::vector<Colour> ColourVector;
 
 #endif // CS488_ALGEBRA_HPP

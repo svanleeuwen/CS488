@@ -35,12 +35,11 @@ Camera& Camera::operator=(const Camera& other) {
     return *this;
 }
 
-Ray Camera::getRay(double xPos, double yPos) const{
+Ray* Camera::getRay(double xPos, double yPos) const{
     Point3D pk(xPos, yPos, 0.0);
-
     Point3D pWorld = m_screenToWorld * pk;
 
-    return Ray(m_eye, pWorld - m_eye);
+    return new Ray(m_eye, pWorld - m_eye);
 }
 
 void Camera::updateDimensions(int width, int height) {

@@ -17,7 +17,7 @@ public:
     virtual ~BIHTree();
 
     bool getIntersection(const Ray& ray, Intersection* isect);
-    void getIntersection(Packet& packet, std::vector<bool>& v_hit, std::vector<Intersection>* v_isect = NULL); 
+    void getIntersection(Packet& packet, std::vector<bool>& v_hit, std::vector<Intersection>* v_isect); 
 
 private:
     void initGlobalBBox();

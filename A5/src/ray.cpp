@@ -22,7 +22,7 @@ Ray::Ray(Point3D origin, Point3D endpoint, double epsilon) {
     m_origin = origin;
 
     m_direction = endpoint - origin;
-    m_length = m_direction.length();
+    m_length = m_direction.length() - epsilon;
 
     m_direction.normalize();
 
@@ -56,7 +56,7 @@ Ray& Ray::operator=(const Ray& other) {
 }
 
 bool Ray::checkParam(double t) const {
-    if(t <= 0 || ((*this)(t) - m_origin).length() < m_epsilon) {
+    if(t < m_epsilon) {
         return false;
     } else if(m_hasEndpoint && t < m_length) {
         return true;
@@ -77,7 +77,7 @@ Ray Ray::getTransform(Matrix4x4& trans) const {
     r.m_direction = r.m_endpoint - r.m_origin;
 
     if(m_hasEndpoint) {
-        r.m_length = (r.m_direction).length();
+        r.m_length = (r.m_direction).length() - m_epsilon;
     } else {
         r.m_length = m_length;
     }

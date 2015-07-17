@@ -58,7 +58,7 @@ private:
     int m_index;
     int m_k;
 
-    std::vector<Packet*>* m_packets;
+    std::vector<CameraPacket*>* m_packets;
 
     static const int NUMTHREADS = 8;
     pthread_t m_threads[NUMTHREADS];

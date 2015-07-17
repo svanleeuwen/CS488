@@ -8,8 +8,8 @@ class Ray {
 public:
     Ray() {}
 
-    Ray(Point3D origin, Vector3D direction, double epsilon = 1.0e-10); 
-    Ray(Point3D origin, Point3D endpoint, double epsilon = 1.0e-10); 
+    Ray(Point3D origin, Vector3D direction, double epsilon = 1.0e-9); 
+    Ray(Point3D origin, Point3D endpoint, double epsilon = 1.0e-9); 
     
     ~Ray() {}
     Ray(const Ray& other); 

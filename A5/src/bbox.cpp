@@ -59,36 +59,57 @@ AABB AABB::getTransform(const AABB& bbox, const Matrix4x4& trans) {
 }
 
 bool AABB::allMiss(const Packet& packet) {
-    IVector3D direction = packet.getDirection();
-    IVector3D ratio = packet.getRatio();
+    IVector3D origin = packet.getOrigin();
+    IVector3D dirReciproc = packet.getDirReciproc();
 
     bool is_finite = packet.isFinite();
     Interval ilength = Interval(0, packet.getLength());
 
-    IVector3D T = (m_ibbox * direction.reciprocal()) - ratio;
+    IVector3D T = (m_ibbox - origin) * dirReciproc;
 
     if(is_finite) {
-        return Interval::set_intersection(T.intersectMembers(), ilength).isEmpty();
+        bool miss = Interval::set_intersection(T.intersectMembers(), ilength).isEmpty();
+        
+        return miss;
+/*        if(miss) {
+            bool inside = true;
+
+            for(int i = 0; i < 3; i++) {
+                if(!Interval::set_intersection(m_ibbox[i], origin[i]).isEmpty()) {
+                    inside = false;
+                    break;
+                }
+            }
+
+            return inside;
+        } else {
+            return false;
+        }*/
     } else {
         return T.intersectMembers().isEmpty();
     }
 }
 
 int AABB::packetTest(Packet& packet, int firstActive) {
-    vector<Ray>* rays = &packet.m_rays;
-
-    if(intersect(rays->at(firstActive))) {
-        return firstActive;
+    vector<Ray*>* rays = packet.getRays();
+    int n = rays->size();
+    
+    while(rays->at(firstActive) == NULL) {
+        if(++firstActive == n) {
+            return n;
+        }
     }
 
-    int n = rays->size();
+    if(intersect(*rays->at(firstActive)) || contains(*rays->at(firstActive))) {
+        return firstActive;
+    }
 
     if(allMiss(packet)) {
         return n;
     }
 
     for(int i = firstActive + 1; i < n; i++) {
-        if(intersect(rays->at(i))) {
+        if(rays->at(i) != NULL && (intersect(*rays->at(i)) || contains(*rays->at(i)))) {
             return i;
         }
     }
@@ -105,7 +126,9 @@ bool AABB::intersect(const Ray& ray) const{
 
     Vector3D d = ray.getDirection();
     bool finite_ray = ray.hasEndpoint();
+    
     double ray_length = ray.getLength();
+    double epsilon = ray.getEpsilon();
 
     for(int i = 0; i < 3; i++) {
         if(fabs(d[i]) > 1.0e-15) {
@@ -128,7 +151,7 @@ bool AABB::intersect(const Ray& ray) const{
                 }
             }
 
-            if(t_min > t_max || t_max < ray.getEpsilon()) {
+            if(t_min > t_max || t_max < epsilon) {
                 return false;
             }
 
@@ -141,7 +164,7 @@ bool AABB::intersect(const Ray& ray) const{
         }
     }
 
-    if(finite_ray && t_min < ray.getEpsilon() && t_max > ray_length) {
+    if(finite_ray && t_min < epsilon && t_max > ray_length) {
         return false;
     }
 

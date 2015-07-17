@@ -43,8 +43,7 @@ Interval& Interval::operator=(const Interval& other) {
 
 Interval Interval::reciprocal() {
     if(v_[0] < 1.0e-10 || v_[1] < 1.0e-10) {
-        return Interval(-1000, 1000);
-        //return Interval(-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+        return Interval(-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
     } else {
         return Interval(1.0/v_[1], 1.0/v_[0]);
     }

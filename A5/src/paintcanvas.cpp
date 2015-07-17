@@ -27,7 +27,7 @@ PaintCanvas::PaintCanvas(QWidget *parent, Camera* cam, const list<Light*>* light
     m_tracer = new Tracer(m_primitives, ambient, lights);
     
     m_img = new QImage(width(), height(), QImage::Format_RGB32);
-    m_packets = Packet::genPackets(m_img, m_tracer, *m_cam);
+    m_packets = CameraPacket::genPackets(m_img, m_tracer, *m_cam);
 
     m_newFrame = false;
 
@@ -54,15 +54,15 @@ void PaintCanvas::saveImage() {
 
     QImage img(m_initCam->getWidth(), m_initCam->getHeight(), QImage::Format_RGB32);
     
-    vector<Packet*>* t_packets = m_packets;
-    m_packets = Packet::genPackets(&img, m_tracer, *t_cam);
+    vector<CameraPacket*>* t_packets = m_packets;
+    m_packets = CameraPacket::genPackets(&img, m_tracer, *t_cam);
 
     computeQImage();
     img.save(m_filename);
 
     delete t_cam;
 
-    Packet::deletePackets(m_packets);
+    CameraPacket::deletePackets(m_packets);
     m_packets = t_packets;
 }
 
@@ -72,8 +72,8 @@ void PaintCanvas::resizeAction() {
     delete m_img;
     m_img = new QImage(width(), height(), QImage::Format_RGB32);
 
-    Packet::deletePackets(m_packets);
-    m_packets = Packet::genPackets(m_img, m_tracer, *m_cam);
+    CameraPacket::deletePackets(m_packets);
+    m_packets = CameraPacket::genPackets(m_img, m_tracer, *m_cam);
 
     m_newFrame = true;
     update();
@@ -109,6 +109,8 @@ void PaintCanvas::computeQImage() {
     pthread_attr_t attr;
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
+    cout << "0\% complete" << endl;
 
     for(int a = 0; a < NUMTHREADS; a++) {
         pthread_create(&m_threads[a], &attr, thread_bootstrap, this);

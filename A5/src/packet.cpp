@@ -5,37 +5,35 @@
 using std::vector;
 using std::cout;
 using std::endl;
+using std::max;
 
-#define SAMPLE_WIDTH 4
+#define SAMPLE_WIDTH 2
 #define PACKET_WIDTH 16
 
-Packet::Packet(int width, int height, int i, int j, QImage* img, Tracer* tracer) :
-    m_width(width), m_height(height), m_i(i), m_j(j), m_img(img),
-    m_tracer(tracer)
-{}
+//***************************** Packet *********************************
+Packet::Packet() 
+{
+    m_rays = new std::vector<Ray*>();
+}
 
 Packet::~Packet() {
+    for(auto it = m_rays->begin(); it != m_rays->end(); ++it) {
+        if(*it != NULL) {
+            delete *it;
+        }
+    }
+
+    delete m_rays;
 }
 
 void Packet::copy(const Packet& other) {
     m_origin = other.m_origin;
     m_direction = other.m_direction;
 
-    m_ratio = other.m_ratio;
+    m_dirReciproc = other.m_dirReciproc;
 
     m_finite = other.m_finite;
     m_length = other.m_length;
-
-    m_sampleWidth = other.m_sampleWidth;
-   
-    m_width = other.m_width;
-    m_height = other.m_height;
-
-    m_i = other.m_i;
-    m_j = other.m_j;
-
-    m_img = other.m_img;
-    m_tracer = other.m_tracer;
 
     m_rays = other.m_rays;
 }
@@ -52,7 +50,85 @@ Packet& Packet::operator=(const Packet& other) {
     return *this;
 }
 
-void Packet::genRays(const Camera& cam) {
+void Packet::updateIntervals() {
+    m_origin = IVector3D();
+    m_direction = IVector3D();
+
+    m_finite = true;
+    m_length = 0;
+
+    for(auto it = m_rays->begin(); it != m_rays->end(); ++it) {
+        if(*it != NULL) {
+            Point3D o = (*it)->getOrigin();
+            Vector3D d = (*it)->getDirection();
+
+            m_origin.extend(o);
+            m_direction.extend(d);
+
+            if((*it)->hasEndpoint() && m_finite) {
+                m_length = max(m_length, (*it)->getLength());
+            } else {
+                m_finite = false;
+                m_length = std::numeric_limits<double>::infinity();
+            }
+        }
+    }
+
+    m_dirReciproc = m_direction.reciprocal();
+}
+
+void Packet::setRays(vector<Ray*>* rays) {
+    for(auto it = m_rays->begin(); it != m_rays->end(); ++it) {
+        delete *it;
+    }
+
+    delete m_rays;
+    m_rays = rays;
+
+    updateIntervals();
+}
+
+//************************** CameraPacket ******************************
+
+CameraPacket::CameraPacket() {}
+
+CameraPacket::CameraPacket(int width, int height, int i, int j, QImage* img, Tracer* tracer) :
+    m_width(width), m_height(height), m_i(i), m_j(j), m_img(img),
+    m_tracer(tracer)
+{
+}
+
+CameraPacket::~CameraPacket() {}
+
+void CameraPacket::copy(const CameraPacket& other) {
+    m_sampleWidth = other.m_sampleWidth;
+   
+    m_width = other.m_width;
+    m_height = other.m_height;
+
+    m_i = other.m_i;
+    m_j = other.m_j;
+
+    m_img = other.m_img;
+    m_tracer = other.m_tracer;
+}
+
+CameraPacket::CameraPacket(const CameraPacket& other) : 
+    Packet(other)
+{
+    copy(other);
+}
+
+CameraPacket& CameraPacket::operator=(const CameraPacket& other) {
+    if(this != &other) {
+        copy(other);
+        Packet::operator=(other);
+    }
+
+    return *this;
+}
+
+void CameraPacket::genRays(const Camera& cam) {
     int packetWidth = SAMPLE_WIDTH * m_width;
     int packetHeight = SAMPLE_WIDTH * m_height;
 
@@ -60,12 +136,14 @@ void Packet::genRays(const Camera& cam) {
     
     double starting_i = m_i - 0.5 * (SAMPLE_WIDTH - 1) * pixelFraction;
     double j = m_j - 0.5 * (SAMPLE_WIDTH - 1) * pixelFraction;
+
+    vector<Ray*>* rays = new vector<Ray*>();
     
     for(int y = 0; y < packetHeight; y++) {
         double i = starting_i;
 
         for(int x = 0; x < packetWidth; x++) {
-            m_rays.push_back(cam.getRay(i, j));
+            rays->push_back(cam.getRay(i, j));
             
             i += pixelFraction;
         }
@@ -73,51 +151,11 @@ void Packet::genRays(const Camera& cam) {
         j += pixelFraction;
     }
 
-    updateIntervals();
-}
-
-void Packet::updateIntervals() {
-    m_origin = IVector3D();
-    m_direction = IVector3D();
-    m_ratio = IVector3D();
-
-    m_finite = true;
-    m_length = 0;
-
-    for(auto it = m_rays.begin(); it != m_rays.end(); ++it) {
-        Point3D o = (*it).getOrigin();
-        Vector3D d = (*it).getDirection();
-
-        m_origin.extend(o);
-        m_direction.extend(d);
-
-        updateRatio(o, d);
-
-        if((*it).hasEndpoint() && m_finite) {
-            m_length = fmax(m_length, (*it).getLength());
-        } else {
-            m_finite = false;
-            m_length = std::numeric_limits<double>::infinity();
-        }
-    }
-}
-
-void Packet::updateRatio(const Point3D& o, const Vector3D& d) {
-    Vector3D v;
-
-    for(int i = 0; i < 3; i++) {
-        if(fabs(d[i]) < 1.0e-10) {
-            v[i] = d[i] >= 0 ? std::numeric_limits<double>::infinity() : -std::numeric_limits<double>::infinity();
-        } else {
-            v[i] = o[i]/d[i];
-        }
-    }
-        
-    m_ratio.extend(v);
+    setRays(rays);
 }
 
 #ifndef PACKET 
-void Packet::trace() {
+void CameraPacket::trace() {
     for(int j = 0; j < m_height; j++) {
         for(int i = 0; i < m_width; i++) {
             tracePixel(i, j);
@@ -125,13 +163,13 @@ void Packet::trace() {
     }
 }
 #else
-void Packet::trace() {
-    int n = m_rays.size();
+void CameraPacket::trace() {
+    int n = m_rays->size();
 
-    vector<Colour> colours(n);
+    ColourVector colours(n);
     vector<bool> v_hit(n);
     
-    m_tracer->tracePacket(*this, colours, v_hit);
+    m_tracer->tracePacket(*this, &colours, v_hit);
 
     for(int j = 0; j < m_height; j++) {
         for(int i = 0; i < m_width; i++) {
@@ -141,7 +179,35 @@ void Packet::trace() {
 }
 #endif
 
-void Packet::tracePixel(int i, int j) {
+void CameraPacket::updateIntervals() {
+    int packetWidth = SAMPLE_WIDTH * m_width;
+    int packetHeight = SAMPLE_WIDTH * m_height;
+
+    if(packetWidth * packetHeight <= 1) {
+        Packet::updateIntervals();
+    }
+
+    m_origin = IVector3D(m_rays->at(0)->getOrigin());
+    m_direction = IVector3D();
+
+    m_finite = false;
+    m_length = std::numeric_limits<double>::infinity();
+
+    int indices[4] = {0, packetWidth-1, packetWidth*packetHeight - 1, packetHeight * (packetWidth - 1) + 1};
+
+    for(int i = 0; i < 4; ++i) {
+        Ray* ray = m_rays->at(indices[i]);
+        Point3D o = ray->getOrigin();
+        Vector3D d = ray->getDirection();
+
+        m_origin.extend(o);
+        m_direction.extend(d);
+    }
+
+    m_dirReciproc = m_direction.reciprocal();
+}
+
+void CameraPacket::tracePixel(int i, int j) {
     int width = m_img->width();
     int height = m_img->height();
 
@@ -164,7 +230,7 @@ void Packet::tracePixel(int i, int j) {
             int index = packetWidth * ((SAMPLE_WIDTH * j) + y) + SAMPLE_WIDTH * i + x;
             
             Colour colour(0.0, 0.0, 0.0);
-            bool hit = m_tracer->traceRay((m_rays.at(index)), colour);
+            bool hit = m_tracer->traceRay(*m_rays->at(index), colour);
 
             if(hit) {
                 averageColour += colour;
@@ -180,7 +246,7 @@ void Packet::tracePixel(int i, int j) {
     m_img->setPixel(img_i, img_j, averageColour.toInt());
 }
 
-void Packet::tracePixel(int i, int j, vector<Colour>& colours, vector<bool>& v_hit) {
+void CameraPacket::tracePixel(int i, int j, ColourVector& colours, vector<bool>& v_hit) {
     int width = m_img->width();
     int height = m_img->height();
 
@@ -218,13 +284,13 @@ void Packet::tracePixel(int i, int j, vector<Colour>& colours, vector<bool>& v_h
 }
 
 // Static functions to help manage vectors of packets
-vector<Packet*>* Packet::genPackets(QImage* img, Tracer* tracer, const Camera& cam) {
+vector<CameraPacket*>* CameraPacket::genPackets(QImage* img, Tracer* tracer, const Camera& cam) {
     int width = img->width();
     int height = img->height();
 
     int std_pixelWidth = PACKET_WIDTH / SAMPLE_WIDTH;
 
-    vector<Packet*>* packets = new vector<Packet*>();
+    vector<CameraPacket*>* packets = new vector<CameraPacket*>();
 
     for(int j = 0; j < height; j += std_pixelWidth) {
         int pixelHeight;
@@ -244,7 +310,7 @@ vector<Packet*>* Packet::genPackets(QImage* img, Tracer* tracer, const Camera& c
                 pixelWidth = std_pixelWidth;
             }
 
-            Packet* newPacket = new Packet(pixelWidth, pixelHeight, i, j, img, tracer);
+            CameraPacket* newPacket = new CameraPacket(pixelWidth, pixelHeight, i, j, img, tracer);
             newPacket->genRays(cam);
 
             packets->push_back(newPacket);
@@ -254,7 +320,7 @@ vector<Packet*>* Packet::genPackets(QImage* img, Tracer* tracer, const Camera& c
     return packets;
 }
 
-void Packet::deletePackets(vector<Packet*>* packets) {
+void CameraPacket::deletePackets(vector<CameraPacket*>* packets) {
     for(auto it = packets->begin(); it != packets->end(); it++) {
         delete (*it);
     }

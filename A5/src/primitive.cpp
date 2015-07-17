@@ -55,24 +55,32 @@ bool Primitive::allMiss(const Packet& packet) {
 }
 
 void Primitive::getIntersection(Packet& packet, int firstActive, vector<bool>& v_hit, vector<Intersection>* v_isect) {
-    if(allMiss(packet)) {
+/*    if(allMiss(packet)) {
         return;
-    }
+    }*/
 
-    vector<Ray>* rays = &packet.m_rays;
+    vector<Ray*>* rays = packet.getRays();
     int n = rays->size();
 
     for(int i = firstActive; i < n; ++i) {
-        Ray* ray = &rays->at(i);
+        Ray* ray = rays->at(i);
 
-        Intersection* isect = v_isect == NULL ? NULL : &v_isect->at(i);
-        bool hit = getIntersection(*ray, isect);
+        if(ray != NULL) {
+            Intersection* isect = v_isect == NULL ? NULL : &v_isect->at(i);
 
-        if(hit) {
-            v_hit.at(i) = true;
+            if(isect != NULL || !v_hit.at(i)) {
+                bool hit = getIntersection(*ray, isect);
 
-            if(isect != NULL) {
-                rays->at(i) = Ray(ray->getOrigin(), isect->getPoint());
+                if(hit) {
+                    v_hit.at(i) = true;
+
+                    if(isect != NULL) {
+                        Ray* oldRay = rays->at(i);
+                        rays->at(i) = new Ray(ray->getOrigin(), isect->getPoint());
+
+                        delete oldRay;
+                    }
+                }
             }
         }
     }
@@ -179,7 +187,9 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
 
     Vector3D d = modelRay.getDirection();
     bool finite_ray = modelRay.hasEndpoint();
+    
     double ray_length = modelRay.getLength();
+    double epsilon = modelRay.getEpsilon();
     
     for(int i = 0; i < 3; i++) {
         if(fabs(d[i]) > 1.0e-15) {
@@ -209,7 +219,7 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
                 }
             }
 
-            if(t_min > t_max || t_max < modelRay.getEpsilon()) {
+            if(t_min > t_max || t_max < epsilon) {
                 return false;
             }
 
@@ -222,12 +232,12 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
         }
     } 
 
-    if(finite_ray && t_min <= modelRay.getEpsilon() && t_max > ray_length) {
+    if(finite_ray && t_min <= epsilon && t_max > ray_length) {
         return false;
     }
 
     if(isect != NULL) {
-        if(t_min > modelRay.getEpsilon()) {
+        if(t_min > epsilon) {
             Point3D point = m_trans * modelRay(t_min);
             Vector3D normal = transNorm(m_inv, normal_min);
             normal.normalize();
@@ -355,8 +365,6 @@ NonhierBox& NonhierBox::operator=(const NonhierBox& other) {
     return *this;
 }
 
-
-
 bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {
     Ray modelRay = ray.getTransform(m_inv);
 
@@ -371,7 +379,9 @@ bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {
 
     Vector3D d = modelRay.getDirection();
     bool finite_ray = modelRay.hasEndpoint();
+
     double ray_length = modelRay.getLength();
+    double epsilon = modelRay.getEpsilon();
     
     for(int i = 0; i < 3; i++) {
         if(fabs(d[i]) > 1.0e-15) {
@@ -401,7 +411,7 @@ bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {
                 }
             }
 
-            if(t_min > t_max || t_max < modelRay.getEpsilon()) {
+            if(t_min > t_max || t_max < epsilon) {
                 return false;
             }
 
@@ -414,12 +424,12 @@ bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {
         }
     }
 
-    if(finite_ray && t_min <= modelRay.getEpsilon() && t_max > ray_length) {
+    if(finite_ray && t_min <= epsilon && t_max > ray_length) {
         return false;
     }  
 
     if(isect != NULL) { 
-        if(t_min > modelRay.getEpsilon()) {
+        if(t_min > epsilon) {
             Point3D point = m_trans * modelRay(t_min);
             Vector3D normal = transNorm(m_inv, normal_min);
             normal.normalize();

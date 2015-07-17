@@ -63,7 +63,7 @@ void BIHTree::getIntersection(Packet& packet, vector<bool>& v_hit, vector<Inters
     BIHNode* node = m_root;
     int firstActive = 0;
    
-    vector<Ray>* rays = &packet.m_rays;
+    vector<Ray*>* rays = packet.getRays();
     int n = rays->size();
 
     stack<Node> hitNodes;
@@ -77,7 +77,9 @@ void BIHTree::getIntersection(Packet& packet, vector<bool>& v_hit, vector<Inters
 
         if(firstActive < n) {
             if(node->m_type != BIHNode::Type::leaf) {
-                int first = node->traversalOrder(rays->at(firstActive));
+                Ray* nextRay = rays->at(firstActive);
+                
+                int first = node->traversalOrder(*nextRay);
                 hitNodes.push(Node(node->m_children + (1 - first), firstActive));
 
                 node = node->m_children + first;
@@ -85,9 +87,7 @@ void BIHTree::getIntersection(Packet& packet, vector<bool>& v_hit, vector<Inters
 
             } else {
                 for(int i = 0; i < node->m_numPrimitives; i++) {
-                    if(!(v_isect == NULL && v_hit.at(i))) {
-                        node->m_primitives[i]->getIntersection(packet, firstActive, v_hit, v_isect);
-                    }
+                    node->m_primitives[i]->getIntersection(packet, firstActive, v_hit, v_isect);
                 }
             }
         }

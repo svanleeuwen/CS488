@@ -16,15 +16,28 @@ class Tracer {
 public:
     Tracer(std::vector<Primitive*>* primitives, const Colour& ambient, const std::list<Light*>* lights);
 
-#ifdef BIH
-    void tracePacket(Packet& packet, std::vector<Colour>& colours, std::vector<bool>& v_hit, int depth = 0);
-#endif
     bool traceRay(Ray& ray, Colour& colour, int depth = 0);
+
+#ifdef BIH
+    void tracePacket(Packet& packet, ColourVector* colours, std::vector<bool>& v_hit, int depth = 0);
+#endif
 
 private:
     Colour castShadowRays(const Ray& ray, Intersection* isect);
     Colour castReflectionRay(const Ray& ray, Intersection* isect, int depth);
     Colour castRefractionRay(const Ray& ray, Intersection* isect, int depth);
+
+#ifdef BIH
+void castShadowRays(const std::vector<Ray*>* rays, ColourVector* colours, 
+        const std::vector<bool>& v_hit, std::vector<Intersection>* v_isect);
+
+void castReflectionRays(const std::vector<Ray*>* rays, ColourVector* colours, 
+        const std::vector<bool>& v_hit, std::vector<Intersection>* v_isect, int depth);
+
+void castRefractionRays(const std::vector<Ray*>* rays, ColourVector* colours, 
+        const std::vector<bool>& v_hit, std::vector<Intersection>* v_isect, int depth);
+
+#endif
 
     bool getIntersection(const Ray& ray, Intersection* isect);
 
