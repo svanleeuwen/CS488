@@ -7,7 +7,7 @@ using std::cout;
 using std::endl;
 using std::max;
 
-#define SAMPLE_WIDTH 2
+#define SAMPLE_WIDTH 4
 #define PACKET_WIDTH 16
 
 //***************************** Packet *********************************

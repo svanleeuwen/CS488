@@ -64,7 +64,9 @@ SOURCES       = a4.cpp \
 		scene.cpp \
 		scene_lua.cpp \
 		tracer.cpp \
-		interval.cpp moc_paintcanvas.cpp \
+		interval.cpp \
+		game.cpp \
+		tetris.cpp moc_paintcanvas.cpp \
 		moc_paintwindow.cpp
 OBJECTS       = a4.o \
 		algebra.o \
@@ -86,6 +88,8 @@ OBJECTS       = a4.o \
 		scene_lua.o \
 		tracer.o \
 		interval.o \
+		game.o \
+		tetris.o \
 		moc_paintcanvas.o \
 		moc_paintwindow.o
 DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -306,7 +310,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/rt1.0.0 || mkdir -p .tmp/rt1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/rt1.0.0/ && $(COPY_FILE) --parents a4.hpp algebra.hpp bbox.hpp bih.hpp camera.hpp intersection.hpp light.hpp lua488.hpp material.hpp mesh.hpp packet.hpp paintcanvas.hpp paintwindow.hpp polyroots.hpp primitive.hpp ray.hpp sample.hpp scene.hpp scene_lua.hpp tracer.hpp interval.hpp .tmp/rt1.0.0/ && $(COPY_FILE) --parents a4.cpp algebra.cpp bbox.cpp bih.cpp camera.cpp intersection.cpp light.cpp main.cpp material.cpp mesh.cpp packet.cpp paintcanvas.cpp paintwindow.cpp polyroots.cpp primitive.cpp ray.cpp scene.cpp scene_lua.cpp tracer.cpp interval.cpp .tmp/rt1.0.0/ && (cd `dirname .tmp/rt1.0.0` && $(TAR) rt1.0.0.tar rt1.0.0 && $(COMPRESS) rt1.0.0.tar) && $(MOVE) `dirname .tmp/rt1.0.0`/rt1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/rt1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/rt1.0.0/ && $(COPY_FILE) --parents a4.hpp algebra.hpp bbox.hpp bih.hpp camera.hpp intersection.hpp light.hpp lua488.hpp material.hpp mesh.hpp packet.hpp paintcanvas.hpp paintwindow.hpp polyroots.hpp primitive.hpp ray.hpp sample.hpp scene.hpp scene_lua.hpp tracer.hpp interval.hpp game.hpp tetris.hpp .tmp/rt1.0.0/ && $(COPY_FILE) --parents a4.cpp algebra.cpp bbox.cpp bih.cpp camera.cpp intersection.cpp light.cpp main.cpp material.cpp mesh.cpp packet.cpp paintcanvas.cpp paintwindow.cpp polyroots.cpp primitive.cpp ray.cpp scene.cpp scene_lua.cpp tracer.cpp interval.cpp game.cpp tetris.cpp .tmp/rt1.0.0/ && (cd `dirname .tmp/rt1.0.0` && $(TAR) rt1.0.0.tar rt1.0.0 && $(COMPRESS) rt1.0.0.tar) && $(MOVE) `dirname .tmp/rt1.0.0`/rt1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/rt1.0.0
 
 
 clean:compiler_clean 
@@ -3023,7 +3027,8 @@ scene_lua.o: scene_lua.cpp scene_lua.hpp \
 		/usr/include/lua5.1/lualib.h \
 		/usr/include/lua5.1/lauxlib.h \
 		a4.hpp \
-		mesh.hpp
+		mesh.hpp \
+		tetris.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scene_lua.o scene_lua.cpp
 
 tracer.o: tracer.cpp tracer.hpp \
@@ -3122,6 +3127,12 @@ tracer.o: tracer.cpp tracer.hpp \
 interval.o: interval.cpp interval.hpp \
 		algebra.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interval.o interval.cpp
+
+game.o: game.cpp game.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o game.cpp
+
+tetris.o: tetris.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tetris.o tetris.cpp
 
 moc_paintcanvas.o: moc_paintcanvas.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_paintcanvas.o moc_paintcanvas.cpp

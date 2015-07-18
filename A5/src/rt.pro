@@ -11,5 +11,5 @@ INCLUDEPATH += . "/usr/include/lua5.1"
 LIBS += -llua5.1
 
 # Input
-HEADERS += a4.hpp algebra.hpp bbox.hpp bih.hpp camera.hpp intersection.hpp light.hpp lua488.hpp material.hpp mesh.hpp packet.hpp paintcanvas.hpp paintwindow.hpp polyroots.hpp primitive.hpp ray.hpp sample.hpp scene.hpp scene_lua.hpp tracer.hpp interval.hpp
-SOURCES += a4.cpp algebra.cpp bbox.cpp bih.cpp camera.cpp intersection.cpp light.cpp main.cpp material.cpp mesh.cpp packet.cpp paintcanvas.cpp paintwindow.cpp polyroots.cpp primitive.cpp ray.cpp scene.cpp scene_lua.cpp tracer.cpp interval.cpp
+HEADERS += a4.hpp algebra.hpp bbox.hpp bih.hpp camera.hpp intersection.hpp light.hpp lua488.hpp material.hpp mesh.hpp packet.hpp paintcanvas.hpp paintwindow.hpp polyroots.hpp primitive.hpp ray.hpp sample.hpp scene.hpp scene_lua.hpp tracer.hpp interval.hpp game.hpp tetris.hpp
+SOURCES += a4.cpp algebra.cpp bbox.cpp bih.cpp camera.cpp intersection.cpp light.cpp main.cpp material.cpp mesh.cpp packet.cpp paintcanvas.cpp paintwindow.cpp polyroots.cpp primitive.cpp ray.cpp scene.cpp scene_lua.cpp tracer.cpp interval.cpp game.cpp tetris.cpp

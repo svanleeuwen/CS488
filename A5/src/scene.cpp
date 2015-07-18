@@ -37,6 +37,16 @@ void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& t
     }
 }
 
+bool SceneNode::hasTetrisNode(Game*& game) {
+    bool found = false;
+
+    for(auto it = m_children.begin(); it != m_children.end(); it++) {
+        found = found || (*it)->hasTetrisNode(game);
+    }
+
+    return found;
+}
+
 void SceneNode::rotate(char axis, double angle)
 {
     Matrix4x4 rotMat = Matrix4x4::getRotMat(axis, angle);
@@ -152,4 +162,140 @@ Material* GeometryNode::get_material() {
 
 Primitive* GeometryNode::get_primitive() {
     return m_primitive;
+}
+
+TetrisNode::TetrisNode(const string& name) : 
+    SceneNode(name), m_game(NULL)
+{}
+
+TetrisNode::~TetrisNode() 
+{}
+
+void TetrisNode::buildBorder(const Matrix4x4& trans, const Matrix4x4& inv) {
+    Primitive* prim = dynamic_cast<GeometryNode*>(m_children.at(0))->get_primitive();
+    Material* material = dynamic_cast<GeometryNode*>(m_children.at(0))->get_material();
+
+    Vector3D transFactors[3] = 
+    {
+        Vector3D(-6, -11, 0),
+        Vector3D(5, -11, 0),
+        Vector3D(-6, -11, 0)
+    };
+
+    Vector3D scaleFactors[3]
+    {
+        Vector3D(1, 21, 1),
+        Vector3D(1, 21, 1),
+        Vector3D(12, 1, 1)
+    };
+
+    for(int i = 0; i < 3; ++i) {
+        Matrix4x4 transMat = Matrix4x4::getTransMat(transFactors[i]);
+        Matrix4x4 i_transMat = Matrix4x4::getTransMat(-transFactors[i]);
+
+        Matrix4x4 scaleMat = Matrix4x4::getScaleMat(scaleFactors[i]);
+        Matrix4x4 i_scaleMat = Matrix4x4::getScaleMat(Vector3D(1.0/scaleFactors[i][0], 1.0/scaleFactors[i][1], 1.0/scaleFactors[i][2]));
+
+        Matrix4x4 t_trans = trans * transMat * scaleMat;
+        Matrix4x4 t_inv = i_scaleMat * i_transMat * inv;
+
+        Primitive* t_prim = prim->clone();
+        t_prim->setMaterial((PhongMaterial*)material);
+        t_prim->setTransform(t_trans, t_inv);
+
+        m_border.push_back(t_prim);
+    }
+
+    delete prim;
+}
+
+void TetrisNode::initPieceTypes() {
+    for(int i = 1; i < 8; ++i) {
+        GeometryNode* node = dynamic_cast<GeometryNode*>(m_children.at(i));
+
+        Primitive* prim =node ->get_primitive();
+        prim->setMaterial((PhongMaterial*)node->get_material());
+
+        m_pieceTypes.push_back(prim);
+    }
+}
+
+void TetrisNode::buildPieces(const Matrix4x4& trans, const Matrix4x4& inv) {
+    if(m_pieces.size() > 0) {
+        deletePieces();
+    }
+
+    for(int i = 0; i < m_game->getHeight(); i++)
+    {
+        for(int j = 0; j < m_game->getWidth(); j++)
+        {
+            int primIndex = m_game->get(i, j); 
+            if(primIndex > -1) {
+                Vector3D transFactor = Vector3D(-5 + j, -10 + i, 0);
+
+                Matrix4x4 transMat = trans * Matrix4x4::getTransMat(transFactor);
+                Matrix4x4 invMat = Matrix4x4::getTransMat(-transFactor) * inv;
+                
+                Primitive* prim = m_pieceTypes.at(primIndex)->clone();
+                prim->setTransform(transMat, invMat);
+
+                m_pieces.push_back(prim);
+            }
+        }
+    }
+}
+
+void TetrisNode::deletePieces() {
+    for(int i = m_pieces.size() - 1; i >= 0; --i) {
+        delete m_pieces.at(i);
+        m_pieces.pop_back();
+    }
+}
+
+void TetrisNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {
+    Matrix4x4 t_trans = trans * m_trans;
+    Matrix4x4 t_inv = m_inv * inv;
+
+    if(m_children.size() != 8) {
+        return;
+    }
+
+    // Add Border
+    if(m_border.size() == 0) {
+        buildBorder(t_trans, t_inv);
+    }
+
+    for(auto it = m_border.begin(); it != m_border.end(); ++it) {
+        primitives->push_back(*it);
+    }
+
+    // Initialize piece type primitives
+    if(m_pieceTypes.size() == 0) {
+        initPieceTypes();
+    }
+
+    if(m_game == NULL) {
+        m_game = new Game();
+        for(int i = 0; i < 200; ++i) { 
+            m_game->tick();
+        }
+    }
+  
+    // Add pieces
+    buildPieces(t_trans, t_inv);
+    for(auto it = m_pieces.begin(); it != m_pieces.end(); ++it) {
+        primitives->push_back(*it);
+    }
+}
+
+bool TetrisNode::hasTetrisNode(Game*& game) {
+    if(m_game == NULL) {
+        m_game = new Game();
+        for(int i = 0; i < 200; ++i) { 
+            m_game->tick();
+        }
+    }
+
+    game = m_game;
+    return true;
 }

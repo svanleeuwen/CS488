@@ -45,6 +45,7 @@
 #include "light.hpp"
 #include "a4.hpp"
 #include "mesh.hpp"
+#include "tetris.hpp"
 
 // Uncomment the following line to enable debugging messages
 // #define GRLUA_ENABLE_DEBUG
@@ -283,6 +284,26 @@ int gr_mesh_cmd(lua_State* L)
   Mesh* mesh = new Mesh(verts, faces);
   GRLUA_DEBUG(*mesh);
   data->node = new GeometryNode(name, mesh);
+
+  luaL_getmetatable(L, "gr.node");
+  lua_setmetatable(L, -2);
+
+  return 1;
+}
+
+// Create a tetris node
+extern "C"
+int gr_tetris_cmd(lua_State* L)
+{
+  GRLUA_DEBUG_CALL;
+  
+  gr_node_ud* data = (gr_node_ud*)lua_newuserdata(L, sizeof(gr_node_ud));
+  data->node = 0;
+
+  const char* name = luaL_checkstring(L, 1);
+  TetrisNode* node = new TetrisNode(name);
+
+  data->node = node;
 
   luaL_getmetatable(L, "gr.node");
   lua_setmetatable(L, -2);
@@ -533,6 +554,7 @@ int gr_node_gc_cmd(lua_State* L)
   return 0;
 }
 
+
 // This is where all the "global" functions in our library are
 // declared.
 // If you want to add a new non-member function, add it here.
@@ -545,9 +567,10 @@ static const luaL_reg grlib_functions[] = {
   {"cube", gr_cube_cmd},
   {"nh_sphere", gr_nh_sphere_cmd},
   {"nh_box", gr_nh_box_cmd},
-  {"mesh", gr_mesh_cmd},
+  {"tetris", gr_tetris_cmd},
   {"light", gr_light_cmd},
   {"render", gr_render_cmd},
+  {"mesh", gr_mesh_cmd},
   {0, 0}
 };
 

@@ -2,12 +2,14 @@
 #define SCENE_HPP
 
 #include <list>
+#include <stack>
+#include <vector>
+
 #include "algebra.hpp"
 #include "primitive.hpp"
 #include "material.hpp"
 #include "intersection.hpp"
-#include <stack>
-#include <vector>
+#include "game.hpp"
 
 class SceneNode {
 public:
@@ -22,20 +24,11 @@ public:
         m_children.push_back(child);
     }
 
-    void remove_child(SceneNode* child)
-    {
-        m_children.remove(child);
-    }
-
     void getPrimitives(std::vector<Primitive*>* primitives);
     virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv);
-
-/*    virtual bool exists_intersection(const Ray& ray);
-    virtual bool exists_intersection(const Ray& ray, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
-   
-    virtual bool get_intersection(const Ray& ray, Intersection* isect);
-    virtual bool get_intersection(const Ray& ray, Intersection* isect, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
-*/
+    
+    virtual bool hasTetrisNode(Game*& game);
+    
     // Callbacks to be implemented.
     // These will be called from Lua.
     void rotate(char axis, double angle);
@@ -57,7 +50,7 @@ protected:
     Matrix4x4 m_inv;
 
     // Hierarchy
-    typedef std::list<SceneNode*> ChildList;
+    typedef std::vector<SceneNode*> ChildList;
     ChildList m_children;
 };
 
@@ -107,6 +100,29 @@ protected:
     Primitive* m_primitive;
 
     bool m_primitive_pushed;
+};
+
+class TetrisNode : public SceneNode {
+public:
+    TetrisNode(const std::string& name);
+    virtual ~TetrisNode();
+
+    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv);
+
+    virtual bool hasTetrisNode(Game*& game);
+
+private:
+    void buildBorder(const Matrix4x4& trans, const Matrix4x4& inv);
+    void buildPieces(const Matrix4x4& trans, const Matrix4x4& inv);
+    
+    void initPieceTypes();
+    void deletePieces();
+
+    std::vector<Primitive*> m_border;    
+    std::vector<Primitive*> m_pieceTypes;
+    std::vector<Primitive*> m_pieces;
+
+    Game* m_game;
 };
 
 #endif
