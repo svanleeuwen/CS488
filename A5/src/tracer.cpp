@@ -24,14 +24,33 @@ static Primitive** unpackPrimitives(vector<Primitive*>* primitives) {
 Tracer::Tracer(std::vector<Primitive*>* primitives, const Colour& ambient, const std::list<Light*>* lights) :
     m_primitives(primitives), m_ambient(ambient), m_lights(lights) 
 {
-#ifdef BIH
-    Primitive** primArray = unpackPrimitives(primitives);
-    m_bih = new BIHTree(primArray, primitives->size());
-#endif
+    if(BIH) { 
+        Primitive** primArray = unpackPrimitives(primitives);
+        m_bih = new BIHTree(primArray, primitives->size());
+    } else {
+        m_bih = NULL;
+    }
+
 }
 
-#ifndef BIH
+void Tracer::updatePrimitives(vector<Primitive*>* primitives) {
+    m_primitives = primitives;
+    
+    if(BIH) {
+        if(m_bih != NULL) {
+            delete m_bih;
+        }
+
+        Primitive** primArray = unpackPrimitives(primitives);
+        m_bih = new BIHTree(primArray, primitives->size());
+    }
+}
+
 bool Tracer::getIntersection(const Ray& ray, Intersection* isect) {
+    if(BIH) {
+        return m_bih->getIntersection(ray, isect);
+    }
+
     Ray testRay = ray;
 
     Intersection* best = (isect == NULL) ? NULL : new Intersection();
@@ -58,11 +77,6 @@ bool Tracer::getIntersection(const Ray& ray, Intersection* isect) {
 
     return hitAny;
 }
-#else
-bool Tracer::getIntersection(const Ray& ray, Intersection* isect) {
-    return m_bih->getIntersection(ray, isect);
-}
-#endif
 
 Colour Tracer::castShadowRays(const Ray& ray, Intersection* isect) {
     Colour colour = Colour(0.0, 0.0, 0.0);
@@ -180,7 +194,6 @@ bool Tracer::traceRay(Ray& ray, Colour& colour, int depth) {
     return true;
 }
 
-#ifdef BIH
 void Tracer::castShadowRays(const vector<Ray*>* rays, ColourVector* colours, 
         const vector<bool>& v_hit, vector<Intersection>* v_isect)
 {
@@ -417,4 +430,3 @@ void Tracer::tracePacket(Packet& packet, ColourVector* colours, vector<bool>& v_
     delete reflectColours;
     delete refractColours;
 }
-#endif

@@ -1,4 +1,3 @@
-#ifdef BIH
 #include "bih.hpp"
 #include "algebra.hpp"
 
@@ -42,6 +41,7 @@ BIHTree::BIHTree(Primitive** primitives, int size) :
 
 BIHTree::~BIHTree() {
     delete m_root;
+    delete m_primitives;
 }
 
 bool BIHTree::getIntersection(const Ray& ray, Intersection* isect) {
@@ -326,4 +326,3 @@ AABB BIHNode::getRightBBox(const AABB& bbox, double plane) {
     min[axis] = plane;
     return AABB(min, bbox.m_max);
 }
-#endif

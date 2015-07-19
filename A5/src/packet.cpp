@@ -1,13 +1,14 @@
 #include <iostream>
 #include "packet.hpp"
 #include "tracer.hpp"
+#include "a4.hpp"
 
 using std::vector;
 using std::cout;
 using std::endl;
 using std::max;
 
-#define SAMPLE_WIDTH 4
+int Packet::SAMPLE_WIDTH = 1;
 #define PACKET_WIDTH 16
 
 //***************************** Packet *********************************
@@ -26,6 +27,15 @@ Packet::~Packet() {
     delete m_rays;
 }
 
+vector<Ray*>* copyRays(vector<Ray*>* rays) {
+    vector<Ray*>* newRays = new vector<Ray*>();
+    for(auto it = rays->begin(); it != rays->end(); ++it) {
+        newRays->push_back(new Ray(**it));
+    }
+
+    return newRays;
+}
+
 void Packet::copy(const Packet& other) {
     m_origin = other.m_origin;
     m_direction = other.m_direction;
@@ -35,7 +45,7 @@ void Packet::copy(const Packet& other) {
     m_finite = other.m_finite;
     m_length = other.m_length;
 
-    m_rays = other.m_rays;
+    m_rays = copyRays(other.m_rays);
 }
 
 Packet::Packet(const Packet& other) {
@@ -154,30 +164,30 @@ void CameraPacket::genRays(const Camera& cam) {
     setRays(rays);
 }
 
-#ifndef PACKET 
 void CameraPacket::trace() {
-    for(int j = 0; j < m_height; j++) {
-        for(int i = 0; i < m_width; i++) {
-            tracePixel(i, j);
+    if(PACKETS) {
+        int n = m_rays->size();
+
+        ColourVector colours(n);
+        vector<bool> v_hit(n);
+
+        Packet packet(*this);
+        m_tracer->tracePacket(packet, &colours, v_hit);
+
+        for(int j = 0; j < m_height; j++) {
+            for(int i = 0; i < m_width; i++) {
+                tracePixel(i, j, colours, v_hit);
+            }
+        }
+
+    } else {
+        for(int j = 0; j < m_height; j++) {
+            for(int i = 0; i < m_width; i++) {
+                tracePixel(i, j);
+            }
         }
     }
 }
-#else
-void CameraPacket::trace() {
-    int n = m_rays->size();
-
-    ColourVector colours(n);
-    vector<bool> v_hit(n);
-    
-    m_tracer->tracePacket(*this, &colours, v_hit);
-
-    for(int j = 0; j < m_height; j++) {
-        for(int i = 0; i < m_width; i++) {
-            tracePixel(i, j, colours, v_hit);
-        }
-    }
-}
-#endif
 
 void CameraPacket::updateIntervals() {
     int packetWidth = SAMPLE_WIDTH * m_width;
@@ -284,7 +294,10 @@ void CameraPacket::tracePixel(int i, int j, ColourVector& colours, vector<bool>&
 }
 
 // Static functions to help manage vectors of packets
-vector<CameraPacket*>* CameraPacket::genPackets(QImage* img, Tracer* tracer, const Camera& cam) {
+vector<CameraPacket*>* CameraPacket::genPackets(QImage* img, Tracer* tracer, const Camera& cam, int sampleWidth) {
+    CameraPacket::SAMPLE_WIDTH = sampleWidth;
+    cout << sampleWidth << endl;
+
     int width = img->width();
     int height = img->height();
 

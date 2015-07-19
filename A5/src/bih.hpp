@@ -1,4 +1,3 @@
-#ifdef BIH
 #ifndef CS488_BIH_HPP
 #define CS488_BIH_HPP
 
@@ -70,5 +69,4 @@ private:
     int m_depth;
 };
 
-#endif
 #endif

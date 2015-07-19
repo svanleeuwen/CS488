@@ -52,6 +52,6 @@ piece7:set_material(mat8)
 
 white_light = gr.light({-100.0, 300.0, 600.0}, {0.9, 0.9, 0.9}, {1, 0, 0})
 
-gr.render(scene_root, 'nonhier.png', 500, 500,
+gr.render(scene_root, 'tetris.png', 300, 600,
 	  {0, 0, 800}, {0, 0, -1}, {0, 1, 0}, 50,
 	  {0.3, 0.3, 0.3}, {white_light, orange_light})

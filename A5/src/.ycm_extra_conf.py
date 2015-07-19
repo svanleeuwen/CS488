@@ -39,7 +39,6 @@ flags = [
     '-g',
     '-std=c++11',
     '-pthread',
-    '-D BIH',
     '-DQT_CORE_LIB',
     '-DQT_GUI_LIB',
     '-DQT_NETWORK_LIB',

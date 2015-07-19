@@ -14,7 +14,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-CXXFLAGS      = -pipe -W -Wall -g -pthread -D BIH -D PACKET -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIE $(DEFINES)
+CXXFLAGS      = -pipe -W -Wall -g -pthread -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 INCPATH       = -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I. -I. -I/usr/include/lua5.1 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I.
 LINK          = g++
 LFLAGS        = -Wl,-O1
@@ -462,6 +462,7 @@ moc_paintcanvas.cpp: /usr/include/qt5/QtWidgets/QWidget \
 		/usr/include/qt5/QtGui/QImage \
 		interval.hpp \
 		material.hpp \
+		game.hpp \
 		bih.hpp \
 		paintcanvas.hpp
 	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/i386-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/i686-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.8/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include paintcanvas.hpp -o moc_paintcanvas.cpp
@@ -922,6 +923,7 @@ moc_paintwindow.cpp: /usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtGui/QImage \
 		interval.hpp \
 		material.hpp \
+		game.hpp \
 		bih.hpp \
 		paintwindow.hpp
 	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/i386-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/i686-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.8/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include paintwindow.hpp -o moc_paintwindow.cpp
@@ -1030,6 +1032,7 @@ a4.o: a4.cpp a4.hpp \
 		camera.hpp \
 		material.hpp \
 		light.hpp \
+		game.hpp \
 		tracer.hpp \
 		bih.hpp \
 		paintwindow.hpp \
@@ -1672,7 +1675,8 @@ intersection.o: intersection.cpp intersection.hpp \
 		interval.hpp \
 		camera.hpp \
 		material.hpp \
-		light.hpp
+		light.hpp \
+		game.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o intersection.o intersection.cpp
 
 light.o: light.cpp light.hpp \
@@ -1768,7 +1772,8 @@ main.o: main.cpp scene_lua.hpp \
 		interval.hpp \
 		camera.hpp \
 		material.hpp \
-		light.hpp
+		light.hpp \
+		game.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 material.o: material.cpp material.hpp \
@@ -1957,6 +1962,7 @@ packet.o: packet.cpp packet.hpp \
 		intersection.hpp \
 		bbox.hpp \
 		material.hpp \
+		game.hpp \
 		bih.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o packet.o packet.cpp
 
@@ -2280,6 +2286,7 @@ paintcanvas.o: paintcanvas.cpp /usr/include/qt5/QtGui/QtGui \
 		/usr/include/qt5/QtGui/QImage \
 		interval.hpp \
 		material.hpp \
+		game.hpp \
 		bih.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o paintcanvas.o paintcanvas.cpp
 
@@ -2740,6 +2747,7 @@ paintwindow.o: paintwindow.cpp paintwindow.hpp \
 		/usr/include/qt5/QtGui/QImage \
 		interval.hpp \
 		material.hpp \
+		game.hpp \
 		bih.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o paintwindow.o paintwindow.cpp
 
@@ -2928,6 +2936,7 @@ scene.o: scene.cpp scene.hpp \
 		camera.hpp \
 		material.hpp \
 		light.hpp \
+		game.hpp \
 		mesh.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scene.o scene.cpp
 
@@ -3021,6 +3030,7 @@ scene_lua.o: scene_lua.cpp scene_lua.hpp \
 		camera.hpp \
 		material.hpp \
 		light.hpp \
+		game.hpp \
 		lua488.hpp \
 		/usr/include/lua5.1/lua.h \
 		/usr/include/lua5.1/luaconf.h \
@@ -3121,6 +3131,7 @@ tracer.o: tracer.cpp tracer.hpp \
 		/usr/include/qt5/QtCore/qstringmatcher.h \
 		interval.hpp \
 		material.hpp \
+		game.hpp \
 		bih.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tracer.o tracer.cpp
 
