@@ -8,7 +8,7 @@
 using namespace std;
 
 SceneNode::SceneNode(const std::string& name)
-  : m_num_parents(0), m_name(name)
+  : m_num_parents(0), m_name(name), m_firstRun(true)
 {
 }
 
@@ -23,25 +23,25 @@ SceneNode::~SceneNode()
     }
 }
 
-void SceneNode::getPrimitives(vector<Primitive*>* primitives) {
+void SceneNode::getPrimitives(vector<Primitive*>* primitives, Game* game) {
     Matrix4x4 eye;
-    getPrimitives(primitives, eye, eye);
+    getPrimitives(primitives, eye, eye, game);
 }
 
-void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {
+void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game) {
     Matrix4x4 t_trans = trans * m_trans;
     Matrix4x4 t_inv = m_inv * inv;
    
     for(auto it = m_children.begin(); it != m_children.end(); it++) {
-        (*it)->getPrimitives(primitives, t_trans, t_inv);
+        (*it)->getPrimitives(primitives, t_trans, t_inv, game);
     }
 }
 
-bool SceneNode::hasTetrisNode(Game*& game) {
+bool SceneNode::initGame(Game*& game) {
     bool found = false;
 
     for(auto it = m_children.begin(); it != m_children.end(); it++) {
-        found = found || (*it)->hasTetrisNode(game);
+        found = found || (*it)->initGame(game);
     }
 
     return found;
@@ -121,38 +121,28 @@ GeometryNode::~GeometryNode()
 {
 }
 
-void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {
+void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game) {
     Matrix4x4 t_trans = trans * m_trans;
     Matrix4x4 t_inv = m_inv * inv;
 
     if(!m_primitive_pushed) {
-        m_primitive->setTransform(t_trans, t_inv);
         m_primitive->setMaterial((PhongMaterial*)m_material);
-
-        if(!m_primitive->isMesh()) {
-            primitives->push_back(m_primitive);
-        
-        } else {
-            ((Mesh*)m_primitive)->addMeshPolygons(primitives);
-        }
-
         m_primitive_pushed = true;
+    }
 
+    Primitive* prim = m_primitive->clone();
+    prim->setTransform(t_trans, t_inv);
+
+    if(!prim->isMesh()) {
+        primitives->push_back(prim);
+    
     } else {
-        Primitive* prim = m_primitive->clone();
-        prim->setTransform(t_trans, t_inv);
- 
-        if(!prim->isMesh()) {
-            primitives->push_back(prim);
-        
-        } else {
-            ((Mesh*)prim)->addMeshPolygons(primitives);
-            delete prim;
-        }
+        ((Mesh*)prim)->addMeshPolygons(primitives);
+        delete prim;
     }
 
     for(auto it = m_children.begin(); it != m_children.end(); it++) {
-        (*it)->getPrimitives(primitives, t_trans, t_inv);
+        (*it)->getPrimitives(primitives, t_trans, t_inv, game);
     }
 }
 
@@ -165,7 +155,7 @@ Primitive* GeometryNode::get_primitive() {
 }
 
 TetrisNode::TetrisNode(const string& name) : 
-    SceneNode(name), m_game(NULL)
+    SceneNode(name)
 {}
 
 TetrisNode::~TetrisNode() 
@@ -213,23 +203,21 @@ void TetrisNode::initPieceTypes() {
     for(int i = 1; i < 8; ++i) {
         GeometryNode* node = dynamic_cast<GeometryNode*>(m_children.at(i));
 
-        Primitive* prim =node ->get_primitive();
+        Primitive* prim = node->get_primitive();
         prim->setMaterial((PhongMaterial*)node->get_material());
 
         m_pieceTypes.push_back(prim);
     }
 }
 
-void TetrisNode::buildPieces(const Matrix4x4& trans, const Matrix4x4& inv) {
-    if(m_pieces.size() > 0) {
-        deletePieces();
-    }
+void TetrisNode::buildPieces(const Matrix4x4& trans, const Matrix4x4& inv, Game* game) {
+    deletePieces();
 
-    for(int i = 0; i < m_game->getHeight(); i++)
+    for(int i = 0; i < game->getHeight(); i++)
     {
-        for(int j = 0; j < m_game->getWidth(); j++)
+        for(int j = 0; j < game->getWidth(); j++)
         {
-            int primIndex = m_game->get(i, j); 
+            int primIndex = game->get(i, j); 
             if(primIndex > -1) {
                 Vector3D transFactor = Vector3D(-5 + j, -10 + i, 0);
 
@@ -246,13 +234,18 @@ void TetrisNode::buildPieces(const Matrix4x4& trans, const Matrix4x4& inv) {
 }
 
 void TetrisNode::deletePieces() {
-    for(int i = m_pieces.size() - 1; i >= 0; --i) {
-        delete m_pieces.at(i);
-        m_pieces.pop_back();
-    }
+/*    for(auto it = m_pieces.begin(); it != m_pieces.end(); ++it) {
+        delete *it;
+    }*/
+    
+    m_pieces.clear();
 }
 
-void TetrisNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv) {
+void TetrisNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game) {
+    if(game == NULL) {
+        return;
+    }
+
     Matrix4x4 t_trans = trans * m_trans;
     Matrix4x4 t_inv = m_inv * inv;
 
@@ -266,7 +259,7 @@ void TetrisNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& 
     }
 
     for(auto it = m_border.begin(); it != m_border.end(); ++it) {
-        primitives->push_back(*it);
+        primitives->push_back((*it)->clone());
     }
 
     // Initialize piece type primitives
@@ -274,28 +267,14 @@ void TetrisNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& 
         initPieceTypes();
     }
 
-    if(m_game == NULL) {
-        m_game = new Game();
-        for(int i = 0; i < 200; ++i) { 
-            m_game->tick();
-        }
-    }
-  
     // Add pieces
-    buildPieces(t_trans, t_inv);
+    buildPieces(t_trans, t_inv, game);
     for(auto it = m_pieces.begin(); it != m_pieces.end(); ++it) {
         primitives->push_back(*it);
     }
 }
 
-bool TetrisNode::hasTetrisNode(Game*& game) {
-    if(m_game == NULL) {
-        m_game = new Game();
-        for(int i = 0; i < 200; ++i) { 
-            m_game->tick();
-        }
-    }
-
-    game = m_game;
+bool TetrisNode::initGame(Game*& game) {
+    game = new Game();
     return true;
 }

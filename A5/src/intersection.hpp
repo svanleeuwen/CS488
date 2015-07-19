@@ -7,7 +7,7 @@ class PhongMaterial;
 
 class Intersection {
 public:
-    Intersection() {};
+    Intersection() {}
     Intersection(const Point3D& point, double t, PhongMaterial* material, const Vector3D& normal);
 
     ~Intersection();

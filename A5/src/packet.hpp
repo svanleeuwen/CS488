@@ -41,6 +41,8 @@ protected:
     bool m_finite;
     double m_length;
 
+    static int SAMPLE_WIDTH;
+
 private:
     void copy(const Packet& other);
 };
@@ -59,7 +61,7 @@ public:
     void trace();
     
     // Static functions to help manage vectors of packets
-    static std::vector<CameraPacket*>* genPackets(QImage* img, Tracer* tracer, const Camera& cam);
+    static std::vector<CameraPacket*>* genPackets(QImage* img, Tracer* tracer, const Camera& cam, int sampleWidth);
     static void deletePackets(std::vector<CameraPacket*>* packets);
 
 protected:

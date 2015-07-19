@@ -24,10 +24,10 @@ public:
         m_children.push_back(child);
     }
 
-    void getPrimitives(std::vector<Primitive*>* primitives);
-    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv);
+    void getPrimitives(std::vector<Primitive*>* primitives, Game* game = NULL);
+    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
     
-    virtual bool hasTetrisNode(Game*& game);
+    virtual bool initGame(Game*& game);
     
     // Callbacks to be implemented.
     // These will be called from Lua.
@@ -52,6 +52,8 @@ protected:
     // Hierarchy
     typedef std::vector<SceneNode*> ChildList;
     ChildList m_children;
+
+    bool m_firstRun;
 };
 
 class JointNode : public SceneNode {
@@ -79,7 +81,7 @@ public:
                Primitive* primitive);
     virtual ~GeometryNode();
 
-    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv);
+    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
 
 //    virtual bool exists_intersection(const Ray& ray, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
 //    virtual bool get_intersection(const Ray& ray, Intersection* isect, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
@@ -107,13 +109,13 @@ public:
     TetrisNode(const std::string& name);
     virtual ~TetrisNode();
 
-    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv);
+    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
 
-    virtual bool hasTetrisNode(Game*& game);
+    virtual bool initGame(Game*& game);
 
 private:
     void buildBorder(const Matrix4x4& trans, const Matrix4x4& inv);
-    void buildPieces(const Matrix4x4& trans, const Matrix4x4& inv);
+    void buildPieces(const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
     
     void initPieceTypes();
     void deletePieces();
@@ -121,8 +123,6 @@ private:
     std::vector<Primitive*> m_border;    
     std::vector<Primitive*> m_pieceTypes;
     std::vector<Primitive*> m_pieces;
-
-    Game* m_game;
 };
 
 #endif

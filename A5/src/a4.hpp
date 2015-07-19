@@ -6,6 +6,9 @@
 #include "scene.hpp"
 #include "light.hpp"
 
+extern bool BIH;
+extern bool PACKETS;
+
 bool launch_qt(// What to render
                SceneNode* root,
                // Where to output the image

@@ -14,6 +14,9 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+bool BIH = true;
+bool PACKETS = true;
+
 bool launch_qt(// What to render
                SceneNode* root,
                // Where to output the image
@@ -34,11 +37,7 @@ bool launch_qt(// What to render
 
     Camera cam(width, height, eye, view, up, fov);
 
-    vector<Primitive*>* primitives = new vector<Primitive*>();
-    root->getPrimitives(primitives);
-    delete root;
-    
-    PaintWindow window(&cam, &lights, ambient, primitives, filename);
+    PaintWindow window(&cam, &lights, ambient, root, filename);
     
     window.resize(window.sizeHint());
     int desktopArea = QApplication::desktop()->width() * 

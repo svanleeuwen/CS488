@@ -107,6 +107,8 @@ public:
   int get(int r, int c) const;
   int& get(int r, int c);
 
+  bool isGameOver() { return stopped_; }
+
 private:
   bool doesPieceFit(const Piece& p, int x, int y) const;
 

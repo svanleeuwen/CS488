@@ -15,6 +15,8 @@
 #include "camera.hpp"
 #include "tracer.hpp"
 #include "packet.hpp"
+#include "game.hpp"
+#include "scene.hpp"
 
 class PaintCanvas : public QWidget {
 
@@ -22,16 +24,38 @@ class PaintCanvas : public QWidget {
 
 public:
     PaintCanvas(QWidget *parent, Camera* cam, const std::list<Light*>* lights, Colour ambient, 
-        std::vector<Primitive*>* primitives, std::string& filename);
+        SceneNode* root, std::string& filename);
     virtual ~PaintCanvas();
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
+
+    enum Speed { slow, medium, fast };
+
     void saveImage();
+    void setTickSpeed(Speed speed);
+    void setSampleWidth(int width);
+
+    void newGame();
+    void pause();
+    
+    void setSlowSpeed();
+    void setMediumSpeed();
+    void setFastSpeed();
+
+    void moveLeft();
+    void moveRight();
+    void rotateCW();
+    void rotateCCW();
+    void drop();
+
+    Game* m_game;
+    bool m_printStatus;
 
 public slots:
     void resizeAction();
+    void refresh();
 
 protected:
     virtual void paintEvent(QPaintEvent* event);
@@ -49,12 +73,14 @@ protected:
     std::vector<Primitive*>* m_primitives;
     QString m_filename;
 
+    SceneNode* m_root;
+
 private:
     void computeQImage();
 
     static void* thread_bootstrap(void* canvas);
     void computePixels();
-    
+
     int m_index;
     int m_k;
 
@@ -65,8 +91,17 @@ private:
     pthread_mutex_t m_mutex;
 
     QTimer* m_resizeTimer;
+    QTimer* m_gameTimer;
+    QTimer* m_updateTimer;
 
-    bool m_newFrame;
+    bool m_refreshScreen;
+    bool m_paused;
+    bool m_piecesMoved;
+
+    int m_tickCount;
+    int m_sampleWidth;
+
+private slots:
+    void tick();
 };
-
 #endif
