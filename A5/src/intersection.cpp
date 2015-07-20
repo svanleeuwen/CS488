@@ -5,8 +5,8 @@
 using std::cout;
 using std::endl;
 
-Intersection::Intersection(const Point3D& point, double t, PhongMaterial* material, const Vector3D& normal):
-    m_point(point), m_param(t), m_material(material), m_normal(normal)
+Intersection::Intersection(const Point3D& point, double t, Primitive* primitive, const Vector3D& normal):
+    m_point(point), m_param(t), m_primitive(primitive), m_normal(normal)
 {
 }
 
@@ -16,7 +16,7 @@ Intersection::Intersection(const Intersection& other) {
     m_point = other.m_point;
     m_param = other.m_param;
 
-    m_material = other.m_material;
+    m_primitive = other.m_primitive;
     m_normal = other.m_normal;
 }
 
@@ -25,10 +25,25 @@ Intersection& Intersection::operator=(const Intersection& other) {
         m_point = other.m_point;
         m_param = other.m_param;
 
-        m_material = other.m_material;
+        m_primitive = other.m_primitive;
         m_normal = other.m_normal;
     }
     return *this;
+}
+
+
+Colour Intersection::getDiffuse() const {
+    return m_primitive->getColour(m_point);    
+}
+
+Colour Intersection::getSpecular() const {
+    PhongMaterial* material = m_primitive->getMaterial();
+    return material->getKS();
+}
+
+Colour Intersection::getShininess() const {
+    PhongMaterial* material = m_primitive->getMaterial();
+    return material->getShininess();
 }
 
 std::ostream& operator<<(std::ostream& out, const Intersection& isect)

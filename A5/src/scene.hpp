@@ -10,6 +10,7 @@
 #include "material.hpp"
 #include "intersection.hpp"
 #include "game.hpp"
+#include "map.hpp"
 
 class SceneNode {
 public:
@@ -82,25 +83,37 @@ public:
     virtual ~GeometryNode();
 
     virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
-
-//    virtual bool exists_intersection(const Ray& ray, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
-//    virtual bool get_intersection(const Ray& ray, Intersection* isect, std::stack<Matrix4x4>* transStack, std::stack<Matrix4x4>* invStack);
     
-    const Material* get_material() const;
-    Material* get_material();
-
-    const Primitive* get_primitive() const;
     Primitive* get_primitive();
 
-    void set_material(Material* material)
-    {
+    const Material* get_material() const;
+    Material* get_material();
+   
+    void set_material(Material* material) {
         m_material = material;
     }
 
+    const Texture* get_texture() const;
+    Texture* get_texture();
+   
+    void set_texture(Texture* texture) {
+        m_texture = texture;
+    }
+
+    const Bump* get_bump() const;
+    Bump* get_bump();
+   
+    void set_bump(Bump* bump) {
+        m_bump = bump;
+    }
+
 protected:
-    Material* m_material;
     Primitive* m_primitive;
 
+    Material* m_material;
+    Texture* m_texture;
+    Bump* m_bump;
+   
     bool m_primitive_pushed;
 };
 

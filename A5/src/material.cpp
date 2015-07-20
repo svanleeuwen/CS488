@@ -53,7 +53,9 @@ Colour PhongMaterial::getColour(const Vector3D& l, const Vector3D& v, const Inte
     Point3D point = isect->getPoint();
     Colour intensity = light.getIntensity(point);
 
-    colour += m_kd * intensity * clamp(l_norm.dot(normal), 0.0, 1.0);
+    Colour kd = isect->getDiffuse();
+
+    colour += kd * intensity * clamp(l_norm.dot(normal), 0.0, 1.0);
 
     Vector3D r = - l_norm + 2 * normal * l_norm.dot(normal);
     colour += m_ks * pow(clamp(r.dot(v_norm), 0.0, 1.0), m_shininess) * intensity;

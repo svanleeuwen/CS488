@@ -22,6 +22,8 @@ Primitive::Primitive(const Primitive& other) {
     m_worldBBox = other.m_worldBBox;
 
     m_material = other.m_material;
+    m_texture = other.m_texture;
+    m_bump = other.m_bump;
 }
 
 Primitive& Primitive::operator=(const Primitive& other) {
@@ -84,6 +86,12 @@ void Primitive::getIntersection(Packet& packet, int firstActive, vector<bool>& v
             }
         }
     }
+}
+
+Colour Primitive::getColour(const Point3D& point) {
+    (void)point;
+
+    return m_material->getKD();
 }
 
 Sphere::Sphere() {
@@ -149,7 +157,7 @@ bool Sphere::getIntersection(const Ray& ray, Intersection* isect) {
         normal.normalize();
 
         point = m_trans * point;
-        *isect = Intersection(point, t, m_material, normal);
+        *isect = Intersection(point, t, this, normal);
     }
 
     return hit;
@@ -242,18 +250,44 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
             Vector3D normal = transNorm(m_inv, normal_min);
             normal.normalize();
 
-            *isect = Intersection(point, t_min, m_material, normal);
+            *isect = Intersection(point, t_min, this, normal);
 
         } else {
             Point3D point = m_trans * modelRay(t_max);
             Vector3D normal = transNorm(m_inv, normal_max);
             normal.normalize();
 
-            *isect = Intersection(point, t_max, m_material, normal);
+            *isect = Intersection(point, t_max, this, normal);
         }
     }
 
     return true;
+}
+
+Colour Cube::getColour(const Point3D& point) {
+    if(m_texture == NULL) {
+        return m_material->getKD();
+    }
+    
+    Point3D modelPoint = m_inv * point;
+
+    int index = 0;
+    double min = fabs(modelPoint[0]);
+
+    for(int i = 1; i < 3; ++i) {
+        double val = fabs(modelPoint[i]);
+
+        if(val < min) {
+            index = i;
+            min = val;
+        }
+        if(1.0 - val < min) {
+            index = i;
+            min = 1.0 - val;
+        }
+    }
+
+    return m_texture->getColour(modelPoint.dropDim(index));
 }
 
 NonhierSphere::NonhierSphere(const Point3D& pos, double radius) :
@@ -331,7 +365,7 @@ bool NonhierSphere::getIntersection(const Ray& ray, Intersection* isect) {
         normal.normalize();
 
         point = m_trans * point;
-        *isect = Intersection(point, t, m_material, normal);
+        *isect = Intersection(point, t, this, normal);
     }
 
     return hit;
@@ -434,14 +468,14 @@ bool NonhierBox::getIntersection(const Ray& ray, Intersection* isect) {
             Vector3D normal = transNorm(m_inv, normal_min);
             normal.normalize();
 
-            *isect = Intersection(point, t_min, m_material, normal);
+            *isect = Intersection(point, t_min, this, normal);
 
         } else {
             Point3D point = m_trans * modelRay(t_max);
             Vector3D normal = transNorm(m_inv, normal_max);
             normal.normalize();
 
-            *isect = Intersection(point, t_max, m_material, normal);
+            *isect = Intersection(point, t_max, this, normal);
         }
     }
 

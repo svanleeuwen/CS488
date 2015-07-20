@@ -247,10 +247,10 @@ void PaintCanvas::setTickSpeed(Speed speed)
                 m_gameTimer->setInterval(500);
                 break;
             case Speed::medium:
-                m_gameTimer->setInterval(400);
+                m_gameTimer->setInterval(350);
                 break;
             case Speed::fast:
-                m_gameTimer->setInterval(300);
+                m_gameTimer->setInterval(200);
         }
 
         if(!m_paused) {

@@ -113,7 +113,7 @@ void JointNode::set_joint_y(double min, double init, double max)
 
 GeometryNode::GeometryNode(const std::string& name, Primitive* primitive)
   : SceneNode(name),
-    m_primitive(primitive), m_primitive_pushed(false)
+    m_primitive(primitive), m_texture(NULL), m_bump(NULL), m_primitive_pushed(false)
 {
 }
 
@@ -127,6 +127,8 @@ void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4
 
     if(!m_primitive_pushed) {
         m_primitive->setMaterial((PhongMaterial*)m_material);
+        m_primitive->setTexture(m_texture);
+        m_primitive->setBump(m_bump);
         m_primitive_pushed = true;
     }
 
@@ -146,12 +148,20 @@ void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4
     }
 }
 
+Primitive* GeometryNode::get_primitive() {
+    return m_primitive;
+}
+
 Material* GeometryNode::get_material() {
     return m_material;
 }
 
-Primitive* GeometryNode::get_primitive() {
-    return m_primitive;
+Texture* GeometryNode::get_texture() {
+    return m_texture;
+}
+
+Bump* GeometryNode::get_bump() {
+    return m_bump;
 }
 
 TetrisNode::TetrisNode(const string& name) : 
@@ -162,8 +172,11 @@ TetrisNode::~TetrisNode()
 {}
 
 void TetrisNode::buildBorder(const Matrix4x4& trans, const Matrix4x4& inv) {
-    Primitive* prim = dynamic_cast<GeometryNode*>(m_children.at(0))->get_primitive();
-    Material* material = dynamic_cast<GeometryNode*>(m_children.at(0))->get_material();
+    GeometryNode* node = dynamic_cast<GeometryNode*>(m_children.at(0));
+    Primitive* prim = node->get_primitive();
+    Material* material = node->get_material();
+    Texture* texture = node->get_texture();
+    Bump* bump = node->get_bump();
 
     Vector3D transFactors[3] = 
     {
@@ -191,6 +204,8 @@ void TetrisNode::buildBorder(const Matrix4x4& trans, const Matrix4x4& inv) {
 
         Primitive* t_prim = prim->clone();
         t_prim->setMaterial((PhongMaterial*)material);
+        t_prim->setTexture(texture);
+        t_prim->setBump(bump);
         t_prim->setTransform(t_trans, t_inv);
 
         m_border.push_back(t_prim);
@@ -205,6 +220,8 @@ void TetrisNode::initPieceTypes() {
 
         Primitive* prim = node->get_primitive();
         prim->setMaterial((PhongMaterial*)node->get_material());
+        prim->setTexture(node->get_texture());
+        prim->setBump(node->get_bump());
 
         m_pieceTypes.push_back(prim);
     }

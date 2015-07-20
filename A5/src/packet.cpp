@@ -296,7 +296,6 @@ void CameraPacket::tracePixel(int i, int j, ColourVector& colours, vector<bool>&
 // Static functions to help manage vectors of packets
 vector<CameraPacket*>* CameraPacket::genPackets(QImage* img, Tracer* tracer, const Camera& cam, int sampleWidth) {
     CameraPacket::SAMPLE_WIDTH = sampleWidth;
-    cout << sampleWidth << endl;
 
     int width = img->width();
     int height = img->height();

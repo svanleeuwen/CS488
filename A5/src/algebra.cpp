@@ -137,6 +137,23 @@ Point3D Point3D::max(const Point3D& p1, const Point3D& p2) {
     return maxPoint;
 }
 
+Point2D Point3D::dropDim(int dim) const {
+    Point2D point;
+
+    int i = 0;
+    int j = 0;
+
+    while(j < 3) {
+        if(dim != j) {
+            point[i++] = (*this)[j++];
+        } else {
+            ++j;
+        }
+    }
+
+    return point;
+}
+
 /*
  * Define some helper functions for matrix inversion.
  */

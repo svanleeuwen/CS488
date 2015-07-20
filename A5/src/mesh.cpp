@@ -120,7 +120,7 @@ bool Mesh::getIntersection(const Ray& ray, Intersection* isect) {
         Vector3D normal = transNorm(m_inv, best->getNormal());
         normal.normalize();
 
-        *isect = Intersection(point, best->getParam(), m_material, normal);
+        *isect = Intersection(point, best->getParam(), this, normal);
         delete best;
         return true;
     }
@@ -162,7 +162,7 @@ bool Mesh::getPlaneIntersection(const Face& poly, const Ray& ray, Intersection* 
     }
 
     double t = (normal.dot(Vector3D(p)) - normal.dot(Vector3D(o))) / (normal.dot(d));
-    *isect = Intersection(ray(t), t, m_material, normal);
+    *isect = Intersection(ray(t), t, this, normal);
 
     return true;
 }
@@ -187,14 +187,30 @@ void Mesh::addMeshPolygons(vector<Primitive*>* primitives) {
     if(m_faces.at(0).size() == 3) {
        for(auto it = m_faces.begin(); it != m_faces.end(); ++it) {
             Triangle* poly = new Triangle(m_verts, (*it), m_trans);
+
             poly->setMaterial(m_material);
+            poly->setTexture(m_texture);
+            poly->setBump(m_bump);
 
             primitives->push_back(poly);
         }
+    } else if(m_faces.at(0).size() == 4) {
+        for(auto it = m_faces.begin(); it != m_faces.end(); ++it) {
+            Quad* poly = new Quad(m_verts, (*it), m_trans);
+
+            poly->setMaterial(m_material);
+            poly->setTexture(m_texture);
+            poly->setBump(m_bump);
+
+            primitives->push_back(poly);
+        } 
     } else {
        for(auto it = m_faces.begin(); it != m_faces.end(); ++it) {
             Polygon* poly = new Polygon(m_verts, (*it), m_trans);
+
             poly->setMaterial(m_material);
+            poly->setTexture(m_texture);
+            poly->setBump(m_bump);
 
             primitives->push_back(poly);
         }
@@ -318,10 +334,12 @@ bool Polygon::getPlaneIntersection(const Ray& ray, Intersection* isect) {
     }
 
     double t = (m_normal.dot(Vector3D(p)) - m_normal.dot(Vector3D(o))) / (m_normal.dot(d));
-    *isect = Intersection(ray(t), t, m_material, m_normal);
+    *isect = Intersection(ray(t), t, this, m_normal);
 
     return true;
 }
+
+// ************************************ Triangle ****************************************
 
 Triangle::Triangle(const std::vector<Point3D>& verts, const std::vector<int>& indices, const Matrix4x4& trans) :
     Polygon(verts, indices, trans)
@@ -334,4 +352,39 @@ Triangle& Triangle::operator=(const Triangle& other) {
     Polygon::operator=(other);
 
     return *this;
+}
+
+// *********************************** Quad ***************************************
+
+Quad::Quad(const std::vector<Point3D>& verts, const std::vector<int>& indices, const Matrix4x4& trans) :
+    Polygon(verts, indices, trans)
+{
+    m_rotate[0][1] = m_normal[0];
+    m_rotate[1][1] = m_normal[1];
+    m_rotate[2][1] = m_normal[2];
+
+    for(auto it = m_verts.begin(); it != m_verts.end(); ++it) {
+        Point3D rotPoint = m_rotate * (*it);
+
+        m_ix.extend(rotPoint[0]);
+        m_iz.extend(rotPoint[2]);
+    }
+}
+    
+Quad::Quad(const Quad& other) : Polygon(other)
+{}
+
+Quad& Quad::operator=(const Quad& other) {
+    Polygon::operator=(other);
+
+    return *this;
+}
+
+Colour Quad::getColour(const Point3D& point) {
+    Point3D rotPoint = m_rotate * point;
+
+    double x = (rotPoint[0] - m_ix[0]) / (m_ix[1] - m_ix[0]);
+    double z = (rotPoint[2] - m_iz[0]) / (m_iz[1] - m_iz[0]);
+
+    return m_texture->getColour(Point2D(x, z));
 }

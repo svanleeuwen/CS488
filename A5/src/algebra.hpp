@@ -99,6 +99,8 @@ public:
   static Point3D min(const Point3D& p1, const Point3D& p2);
   static Point3D max(const Point3D& p1, const Point3D& p2);
 
+  Point2D dropDim(int dim) const;
+
   double& operator[](size_t idx) 
   {
     return v_[ idx ];

@@ -80,7 +80,7 @@ bool Tracer::getIntersection(const Ray& ray, Intersection* isect) {
 
 Colour Tracer::castShadowRays(const Ray& ray, Intersection* isect) {
     Colour colour = Colour(0.0, 0.0, 0.0);
-    Material* material = isect->getMaterial();
+    Material* material = isect->getPrimitive()->getMaterial();
 
     for(auto it = m_lights->begin(); it != m_lights->end(); it++) {
         Point3D origin = isect->getPoint();
@@ -113,9 +113,7 @@ Colour Tracer::castReflectionRay(const Ray& ray, Intersection* isect, int depth)
     
     traceRay(reflected, colour, depth);
 
-    PhongMaterial* material = isect->getMaterial();
-    Colour ks = material->getKS();
-
+    Colour ks = isect->getSpecular();
     return REFLECTION_ATTENUATION * ks * colour;
 }
 
@@ -132,7 +130,7 @@ Ray getRefracted(const Ray& ray, Intersection* isect) {
         cos_theta1 = -cos_theta1;
     }
 
-    PhongMaterial* material = isect->getMaterial();
+    PhongMaterial* material = isect->getPrimitive()->getMaterial();
     double materialMedium = material->getMedium();
 
     double mediumRatio;
@@ -170,13 +168,13 @@ bool Tracer::traceRay(Ray& ray, Colour& colour, int depth) {
         return false;
     }
 
-    PhongMaterial* material = isect->getMaterial();
+    PhongMaterial* material = isect->getPrimitive()->getMaterial();
     double transmitRatio = material->getTransmitRatio();
     double reflectRatio = 1.0 - transmitRatio;
 
     if(reflectRatio > 1.0e-10) {    
         if(material->isDiffuse()) {
-            colour = reflectRatio * material->getKD() * m_ambient;
+            colour = reflectRatio * isect->getDiffuse() * m_ambient;
         }
 
         colour += reflectRatio * castShadowRays(ray, isect);
@@ -222,7 +220,7 @@ void Tracer::castShadowRays(const vector<Ray*>* rays, ColourVector* colours,
             for(int i = 0; i < n; ++i) {
                 if(v_hit.at(i) && !l_hits->at(i)) {
                     Intersection* isect = &v_isect->at(i);
-                    Material* material = isect->getMaterial();
+                    Material* material = isect->getPrimitive()->getMaterial();
 
                     Colour shadowColour = 
                         material->getColour(
@@ -259,7 +257,7 @@ void Tracer::castReflectionRays(const vector<Ray*>* rays, ColourVector* colours,
     for(int i = 0; i < n; ++i) {
         if(v_hit.at(i)) {
             Intersection* isect = &v_isect->at(i);
-            PhongMaterial* material = v_isect->at(i).getMaterial();
+            PhongMaterial* material = v_isect->at(i).getPrimitive()->getMaterial();
 
             if(material->isSpecular() && 1 - material->getTransmitRatio() > 1.0e-10) {
                 Vector3D dir = -rays->at(i)->getDirection();
@@ -288,9 +286,7 @@ void Tracer::castReflectionRays(const vector<Ray*>* rays, ColourVector* colours,
                 bool hit = traceRay(*ray, colours->at(i), depth+1);
 
                 if(hit) { 
-                    PhongMaterial* material = v_isect->at(i).getMaterial();
-                    Colour ks = material->getKS();
-
+                    Colour ks = v_isect->at(i).getSpecular();
                     colours->at(i) *= REFLECTION_ATTENUATION * ks;
                 }
 
@@ -308,9 +304,7 @@ void Tracer::castReflectionRays(const vector<Ray*>* rays, ColourVector* colours,
 
         for(int i = 0; i < n; ++i) {
             if(v_hit.at(i) && l_hits->at(i)) {
-                PhongMaterial* material = v_isect->at(i).getMaterial();
-                Colour ks = material->getKS();
-
+                Colour ks = v_isect->at(i).getSpecular();
                 colours->at(i) *= REFLECTION_ATTENUATION * ks;
             }
         }
@@ -338,7 +332,7 @@ void Tracer::castRefractionRays(const vector<Ray*>* rays, ColourVector* colours,
     for(int i = 0; i < n; ++i) {
         if(v_hit.at(i)) {
             Intersection* isect = &v_isect->at(i);
-            PhongMaterial * material = isect->getMaterial();
+            PhongMaterial * material = isect->getPrimitive()->getMaterial();
 
             if(material->getTransmitRatio() > 1.0e-10) {
                 refractionRays->at(i) = new Ray(getRefracted(*rays->at(i), isect));
@@ -395,13 +389,13 @@ void Tracer::tracePacket(Packet& packet, ColourVector* colours, vector<bool>& v_
         if(v_hit.at(i)) {
             Intersection* isect = &v_isect->at(i);
 
-            PhongMaterial* material = isect->getMaterial();
+            PhongMaterial* material = isect->getPrimitive()->getMaterial();
             double transmitRatio = material->getTransmitRatio();
             double reflectRatio = 1.0 - transmitRatio;
 
             if(reflectRatio > 1.0e-10) {    
                 if(material->isDiffuse()) {
-                    colours->at(i) = reflectRatio * material->getKD() * m_ambient;
+                    colours->at(i) = reflectRatio * isect->getDiffuse() * m_ambient;
                 }
 
                 colours->at(i) += reflectRatio * shadowColours->at(i);

@@ -9,18 +9,53 @@ mat6 = gr.material({0.0, 0.7, 0.7}, {0.1, 0.1, 0.1}, 25)
 mat7 = gr.material({0.7, 0.7, 0.7}, {0.1, 0.1, 0.1}, 25)
 mat8 = gr.material({0.7, 0.35, 0.0}, {0.1, 0.1, 0.1}, 25)
 
+m_ground = gr.material({0.0, 0.0, 0.3}, {0.5, 0.7, 0.5}, 25)
+m_sky = gr.material({0, 0, 0}, {0, 0, 0}, 0)
+
+tex1 = gr.texture("blue.jpg")
+tex2 = gr.texture("grass.jpg")
+tex3 = gr.texture("sunset.jpg")
 
 scene_root = gr.node('root')
+scene_root:rotate('x', 10)
+scene_root:rotate('y', -20)
+
+ground = gr.mesh('ground', {
+		   { -1, 0, -1 }, 
+		   {  1, 0, -1 }, 
+		   {  1,  0, 1 }, 
+		   { -1, 0, 1  }
+		}, {
+		   {3, 2, 1, 0}
+		})
+scene_root:add_child(ground)
+ground:set_material(m_ground)
+ground:set_texture(tex2)
+ground:scale(1000, 1000, 1000)
+
+sky = gr.mesh('sky', {
+		   { -1, -1, 0 }, 
+		   {  1, -1, 0 }, 
+		   {  1,  1, 0 }, 
+		   { -1, 1, 0  }
+		}, {
+		   {3, 2, 1, 0}
+		})
+scene_root:add_child(sky)
+sky:set_material(m_sky)
+sky:set_texture(tex3)
+sky:translate(0, 1000, -1000)
+sky:scale(1000, 1000, 1000)
 
 game = gr.tetris('tetris')
 scene_root:add_child(game)
+game:translate(0, 220, 0)
 game:scale(20, 20, 20)
-game:rotate('x', 10)
-game:rotate('y', -20)
 
 border = gr.cube('border')
 game:add_child(border)
 border:set_material(mat1)
+border:set_texture(tex1)
 
 piece1 = gr.cube('piece1')
 game:add_child(piece1)
@@ -53,5 +88,5 @@ piece7:set_material(mat8)
 white_light = gr.light({-100.0, 300.0, 600.0}, {0.9, 0.9, 0.9}, {1, 0, 0})
 
 gr.render(scene_root, 'tetris.png', 300, 600,
-	  {0, 0, 800}, {0, 0, -1}, {0, 1, 0}, 50,
+	  {0, 100, 800}, {0, 0, -1}, {0, 1, 0}, 50,
 	  {0.3, 0.3, 0.3}, {white_light, orange_light})

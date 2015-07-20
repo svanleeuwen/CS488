@@ -66,7 +66,8 @@ SOURCES       = a4.cpp \
 		tracer.cpp \
 		interval.cpp \
 		game.cpp \
-		tetris.cpp moc_paintcanvas.cpp \
+		tetris.cpp \
+		map.cpp moc_paintcanvas.cpp \
 		moc_paintwindow.cpp
 OBJECTS       = a4.o \
 		algebra.o \
@@ -90,6 +91,7 @@ OBJECTS       = a4.o \
 		interval.o \
 		game.o \
 		tetris.o \
+		map.o \
 		moc_paintcanvas.o \
 		moc_paintwindow.o
 DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -310,7 +312,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/rt1.0.0 || mkdir -p .tmp/rt1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/rt1.0.0/ && $(COPY_FILE) --parents a4.hpp algebra.hpp bbox.hpp bih.hpp camera.hpp intersection.hpp light.hpp lua488.hpp material.hpp mesh.hpp packet.hpp paintcanvas.hpp paintwindow.hpp polyroots.hpp primitive.hpp ray.hpp sample.hpp scene.hpp scene_lua.hpp tracer.hpp interval.hpp game.hpp tetris.hpp .tmp/rt1.0.0/ && $(COPY_FILE) --parents a4.cpp algebra.cpp bbox.cpp bih.cpp camera.cpp intersection.cpp light.cpp main.cpp material.cpp mesh.cpp packet.cpp paintcanvas.cpp paintwindow.cpp polyroots.cpp primitive.cpp ray.cpp scene.cpp scene_lua.cpp tracer.cpp interval.cpp game.cpp tetris.cpp .tmp/rt1.0.0/ && (cd `dirname .tmp/rt1.0.0` && $(TAR) rt1.0.0.tar rt1.0.0 && $(COMPRESS) rt1.0.0.tar) && $(MOVE) `dirname .tmp/rt1.0.0`/rt1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/rt1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/rt1.0.0/ && $(COPY_FILE) --parents a4.hpp algebra.hpp bbox.hpp bih.hpp camera.hpp intersection.hpp light.hpp lua488.hpp material.hpp mesh.hpp packet.hpp paintcanvas.hpp paintwindow.hpp polyroots.hpp primitive.hpp ray.hpp sample.hpp scene.hpp scene_lua.hpp tracer.hpp interval.hpp game.hpp tetris.hpp map.hpp .tmp/rt1.0.0/ && $(COPY_FILE) --parents a4.cpp algebra.cpp bbox.cpp bih.cpp camera.cpp intersection.cpp light.cpp main.cpp material.cpp mesh.cpp packet.cpp paintcanvas.cpp paintwindow.cpp polyroots.cpp primitive.cpp ray.cpp scene.cpp scene_lua.cpp tracer.cpp interval.cpp game.cpp tetris.cpp map.cpp .tmp/rt1.0.0/ && (cd `dirname .tmp/rt1.0.0` && $(TAR) rt1.0.0.tar rt1.0.0 && $(COMPRESS) rt1.0.0.tar) && $(MOVE) `dirname .tmp/rt1.0.0`/rt1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/rt1.0.0
 
 
 clean:compiler_clean 
@@ -464,6 +466,7 @@ moc_paintcanvas.cpp: /usr/include/qt5/QtWidgets/QWidget \
 		material.hpp \
 		game.hpp \
 		bih.hpp \
+		a4.hpp \
 		paintcanvas.hpp
 	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/i386-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/i686-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.8/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include paintcanvas.hpp -o moc_paintcanvas.cpp
 
@@ -925,6 +928,7 @@ moc_paintwindow.cpp: /usr/include/qt5/QtWidgets/QMainWindow \
 		material.hpp \
 		game.hpp \
 		bih.hpp \
+		a4.hpp \
 		paintwindow.hpp
 	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/i386-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/i686-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.8/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include paintwindow.hpp -o moc_paintwindow.cpp
 
@@ -1963,7 +1967,8 @@ packet.o: packet.cpp packet.hpp \
 		bbox.hpp \
 		material.hpp \
 		game.hpp \
-		bih.hpp
+		bih.hpp \
+		a4.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o packet.o packet.cpp
 
 paintcanvas.o: paintcanvas.cpp /usr/include/qt5/QtGui/QtGui \
@@ -2287,7 +2292,8 @@ paintcanvas.o: paintcanvas.cpp /usr/include/qt5/QtGui/QtGui \
 		interval.hpp \
 		material.hpp \
 		game.hpp \
-		bih.hpp
+		bih.hpp \
+		a4.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o paintcanvas.o paintcanvas.cpp
 
 paintwindow.o: paintwindow.cpp paintwindow.hpp \
@@ -2748,7 +2754,8 @@ paintwindow.o: paintwindow.cpp paintwindow.hpp \
 		interval.hpp \
 		material.hpp \
 		game.hpp \
-		bih.hpp
+		bih.hpp \
+		a4.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o paintwindow.o paintwindow.cpp
 
 polyroots.o: polyroots.cpp 
@@ -3038,7 +3045,8 @@ scene_lua.o: scene_lua.cpp scene_lua.hpp \
 		/usr/include/lua5.1/lauxlib.h \
 		a4.hpp \
 		mesh.hpp \
-		tetris.hpp
+		tetris.hpp \
+		map.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scene_lua.o scene_lua.cpp
 
 tracer.o: tracer.cpp tracer.hpp \
@@ -3132,7 +3140,8 @@ tracer.o: tracer.cpp tracer.hpp \
 		interval.hpp \
 		material.hpp \
 		game.hpp \
-		bih.hpp
+		bih.hpp \
+		a4.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tracer.o tracer.cpp
 
 interval.o: interval.cpp interval.hpp \
@@ -3144,6 +3153,87 @@ game.o: game.cpp game.hpp
 
 tetris.o: tetris.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tetris.o tetris.cpp
+
+map.o: map.cpp map.hpp \
+		/usr/include/qt5/QtGui/QImage \
+		/usr/include/qt5/QtGui/qimage.h \
+		/usr/include/qt5/QtGui/qtransform.h \
+		/usr/include/qt5/QtGui/qmatrix.h \
+		/usr/include/qt5/QtGui/qpolygon.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qrect.h \
+		/usr/include/qt5/QtCore/qsize.h \
+		/usr/include/qt5/QtGui/qregion.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtGui/qwindowdefs_win.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qline.h \
+		/usr/include/qt5/QtGui/qpainterpath.h \
+		/usr/include/qt5/QtGui/qpaintdevice.h \
+		/usr/include/qt5/QtGui/qrgb.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o map.o map.cpp
 
 moc_paintcanvas.o: moc_paintcanvas.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_paintcanvas.o moc_paintcanvas.cpp

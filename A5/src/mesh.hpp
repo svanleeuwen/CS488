@@ -67,4 +67,20 @@ public:
     virtual Triangle* clone() { return new Triangle(*this); }
 };
 
+class Quad : public Polygon {
+public:
+    Quad(const std::vector<Point3D>& verts, const std::vector<int>& indices, const Matrix4x4& trans);
+    
+    Quad(const Quad& other);
+    Quad& operator=(const Quad& other);
+    
+    virtual Quad* clone() { return new Quad(*this); }
+    virtual Colour getColour(const Point3D& point);
+
+private:
+    Matrix4x4 m_rotate;
+    Interval m_ix;
+    Interval m_iz;
+};
+
 #endif
