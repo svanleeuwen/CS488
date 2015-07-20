@@ -8,8 +8,6 @@ class Map {
 public:
     Map(const char* filename);
 
-    // pure virtual get value function
-
 protected:
     QImage m_img;
 };
@@ -24,6 +22,8 @@ public:
 class Bump : public Map {
 public:
     Bump(const char* filename);
+
+    Point2D getOffset(const Point2D& point);
 };
 
 #endif

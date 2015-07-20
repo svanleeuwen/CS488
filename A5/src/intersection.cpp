@@ -31,6 +31,14 @@ Intersection& Intersection::operator=(const Intersection& other) {
     return *this;
 }
 
+Vector3D Intersection::getNormal() const {
+    if(m_primitive->getBump() == NULL) {
+        return m_normal;
+    }
+
+    Vector3D offset = m_primitive->getOffset(m_point);
+    return m_normal + offset;
+}
 
 Colour Intersection::getDiffuse() const {
     return m_primitive->getColour(m_point);    

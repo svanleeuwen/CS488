@@ -49,3 +49,21 @@ Colour Texture::getColour(const Point2D& point) {
 Bump::Bump(const char* filename) :
     Map(filename)
 {}
+
+Point2D Bump::getOffset(const Point2D& point) {
+    double dx = (m_img.width() - 2) * clamp(point[0], 0.0, 1.0);
+    double dy = (m_img.height() - 2) * clamp(point[1], 0.0, 1.0);
+
+    int i = (int)dx;
+    int j = (int)dy;
+
+    int h00 = qBlue(m_img.pixel(i, j));
+    int h01 = qBlue(m_img.pixel(i, j+1));
+    int h10 = qBlue(m_img.pixel(i+1, j));
+    int h11 = qBlue(m_img.pixel(i+1, j+1));
+
+    double du = ((h00 - h10) + (h01 - h11))/4.0;
+    double dv = ((h01 - h00) + (h11 - h10))/4.0;
+
+    return Point2D(du, dv);
+}

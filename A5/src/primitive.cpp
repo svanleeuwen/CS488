@@ -94,6 +94,12 @@ Colour Primitive::getColour(const Point3D& point) {
     return m_material->getKD();
 }
 
+Vector3D Primitive::getOffset(const Point3D& point) {
+    (void)point;
+
+    return Vector3D(0, 0, 0);
+}
+
 Sphere::Sphere() {
     Point3D min(-1, -1, -1);
     Point3D max(1, 1, 1);
@@ -264,18 +270,12 @@ bool Cube::getIntersection(const Ray& ray, Intersection* isect) {
     return true;
 }
 
-Colour Cube::getColour(const Point3D& point) {
-    if(m_texture == NULL) {
-        return m_material->getKD();
-    }
-    
-    Point3D modelPoint = m_inv * point;
-
+int getDropIndex(const Point3D& point) {
     int index = 0;
-    double min = fabs(modelPoint[0]);
+    double min = fabs(point[0]);
 
     for(int i = 1; i < 3; ++i) {
-        double val = fabs(modelPoint[i]);
+        double val = fabs(point[i]);
 
         if(val < min) {
             index = i;
@@ -287,7 +287,40 @@ Colour Cube::getColour(const Point3D& point) {
         }
     }
 
+    return index;
+}
+
+Colour Cube::getColour(const Point3D& point) {
+    if(m_texture == NULL) {
+        return m_material->getKD();
+    }
+    
+    Point3D modelPoint = m_inv * point;
+    int index = getDropIndex(modelPoint);
+
     return m_texture->getColour(modelPoint.dropDim(index));
+}
+
+Vector3D Cube::getOffset(const Point3D& point) {
+    Vector3D offset3D(0, 0, 0);
+
+    Point3D modelPoint = m_inv * point;
+    int index = getDropIndex(modelPoint);
+
+    Point2D offset2D = m_bump->getOffset(modelPoint.dropDim(index));
+
+    int i = 0;
+    int j = 0;
+
+    while(j < 3) {
+        if(j == index) {
+            ++j;
+        } else {
+            offset3D[j++] = offset2D[i++];
+        }
+    }
+
+    return offset3D;
 }
 
 NonhierSphere::NonhierSphere(const Point3D& pos, double radius) :

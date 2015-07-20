@@ -17,9 +17,9 @@ public:
 
     Point3D getPoint() const { return m_point; }
     double getParam() const { return m_param; }
-    
     Primitive* getPrimitive() const { return m_primitive; }
-    Vector3D getNormal() const { return m_normal; }
+
+    Vector3D getNormal() const ;
 
     Colour getDiffuse() const;
     Colour getSpecular() const;

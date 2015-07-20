@@ -32,6 +32,7 @@ public:
     void getIntersection(Packet& packet, int firstActive, std::vector<bool>& v_hit, std::vector<Intersection>* v_isect);   
     
     virtual Colour getColour(const Point3D& point);
+    virtual Vector3D getOffset(const Point3D& point);
    
     virtual Primitive* clone() = 0;
     virtual bool getIntersection(const Ray& ray, Intersection* isect) = 0;
@@ -78,6 +79,7 @@ public:
     virtual bool getIntersection(const Ray& ray, Intersection* isect);
 
     virtual Colour getColour(const Point3D& point);
+    virtual Vector3D getOffset(const Point3D& point);
 };
 
 class NonhierSphere : public Primitive {
