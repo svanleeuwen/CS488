@@ -37,7 +37,11 @@ Vector3D Intersection::getNormal() const {
     }
 
     Vector3D offset = m_primitive->getOffset(m_point);
-    return m_normal + offset;
+    offset.normalize();
+    Vector3D newNormal = m_normal + offset;
+    newNormal.normalize();
+
+    return newNormal;
 }
 
 Colour Intersection::getDiffuse() const {

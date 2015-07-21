@@ -76,6 +76,7 @@ public:
     
     virtual Quad* clone() { return new Quad(*this); }
     virtual Colour getColour(const Point3D& point);
+    virtual Vector3D getOffset(const Point3D& point);
 
 private:
     Matrix4x4 m_rotate;

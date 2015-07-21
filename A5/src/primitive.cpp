@@ -320,7 +320,11 @@ Vector3D Cube::getOffset(const Point3D& point) {
         }
     }
 
-    return offset3D;
+    if(modelPoint[index] > 0.5) {
+        offset3D = -offset3D;
+    }
+
+    return transNorm(m_trans, offset3D);
 }
 
 NonhierSphere::NonhierSphere(const Point3D& pos, double radius) :

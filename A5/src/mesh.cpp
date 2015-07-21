@@ -381,10 +381,28 @@ Quad& Quad::operator=(const Quad& other) {
 }
 
 Colour Quad::getColour(const Point3D& point) {
+    if(m_texture == NULL) {
+        return m_material->getKD();
+    }
+
     Point3D rotPoint = m_rotate * point;
 
     double x = (rotPoint[0] - m_ix[0]) / (m_ix[1] - m_ix[0]);
     double z = (rotPoint[2] - m_iz[0]) / (m_iz[1] - m_iz[0]);
 
     return m_texture->getColour(Point2D(x, z));
+}
+
+Vector3D Quad::getOffset(const Point3D& point) {
+    if(m_bump == NULL) {
+        return Vector3D(0, 0, 0); 
+    }
+
+    Point3D rotPoint = m_rotate * point;
+
+    double x = (rotPoint[0] - m_ix[0]) / (m_ix[1] - m_ix[0]);
+    double z = (rotPoint[2] - m_iz[0]) / (m_iz[1] - m_iz[0]);
+
+    Point2D offset = m_bump->getOffset(Point2D(x, z));
+    return Vector3D(offset[0], 0.0, offset[1]);
 }

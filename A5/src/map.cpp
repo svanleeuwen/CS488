@@ -1,6 +1,10 @@
 #include "map.hpp"
 
 #include <QColor>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 Map::Map(const char* filename) {
     m_img.load(QString(filename));
@@ -51,19 +55,21 @@ Bump::Bump(const char* filename) :
 {}
 
 Point2D Bump::getOffset(const Point2D& point) {
-    double dx = (m_img.width() - 2) * clamp(point[0], 0.0, 1.0);
-    double dy = (m_img.height() - 2) * clamp(point[1], 0.0, 1.0);
+    double dx = (m_img.width() - 5) * clamp(point[0], 0.0, 1.0) + 2;
+    double dy = (m_img.height() - 5) * clamp(point[1], 0.0, 1.0) + 2;
 
     int i = (int)dx;
     int j = (int)dy;
 
-    int h00 = qBlue(m_img.pixel(i, j));
-    int h01 = qBlue(m_img.pixel(i, j+1));
-    int h10 = qBlue(m_img.pixel(i+1, j));
-    int h11 = qBlue(m_img.pixel(i+1, j+1));
+    int h01 = qBlue(m_img.pixel(i-2, j));
 
-    double du = ((h00 - h10) + (h01 - h11))/4.0;
-    double dv = ((h01 - h00) + (h11 - h10))/4.0;
+    int h10 = qBlue(m_img.pixel(i, j-2));
+    int h12 = qBlue(m_img.pixel(i, j+2));
+
+    int h21 = qBlue(m_img.pixel(i+2, j));
+    
+    double du = (h21 - h01);
+    double dv = (h12 - h10);
 
     return Point2D(du, dv);
 }
