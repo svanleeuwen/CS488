@@ -1,0 +1,265 @@
+sum is: /usr/bin/sum
+
+
+2015-07-22 12:33       Checksum for A5 for srvanlee on gl08       Page 1
+
+
+A5:
+total 288
+  7475863 drwxrwx---  4 srvanlee cs488          4096 Jul 22 12:33 ./
+126602554 -rw-r-x---  1 srvanlee srvanleeuwen    414 Jul 22 12:33 README*
+118671276 drwxrwxr-x  2 srvanlee srvanleeuwen   8192 Jul 22 12:31 src/
+ 28169698 drwxrwxr-x  2 srvanlee srvanleeuwen   4096 Jul 22 12:24 data/
+ 27919494 -rw-r--r--  1 srvanlee srvanleeuwen 261839 Jul 22 12:21 screenshot01.png
+ 28489997 drwxrwx--- 10 srvanlee cs488          4096 May 19 16:02 ../
+  7475866 -rw-r-x---  1 srvanlee cs488          1302 May  9 00:01 gl2im.c*
+
+A5/src:
+total 4340
+  7475863 drwxrwx--- 4 srvanlee cs488           4096 Jul 22 12:33 ../
+118671276 drwxrwxr-x 2 srvanlee srvanleeuwen    8192 Jul 22 12:31 ./
+ 24563141 -rwxr-xr-x 1 srvanlee srvanleeuwen 3791641 Jul 22 12:19 rt*
+108502157 -rw-r--r-- 1 srvanlee srvanleeuwen    5196 Jul 22 12:19 moc_paintwindow.cpp
+108502151 -rw-r--r-- 1 srvanlee srvanleeuwen    3484 Jul 22 12:19 moc_paintcanvas.cpp
+   769983 -rw-r--r-- 1 srvanlee srvanleeuwen  133912 Jul 22 12:18 Makefile
+119769429 -rw-r--r-- 1 srvanlee srvanleeuwen    3438 Jul 22 12:18 scene.hpp
+119769428 -rw-r--r-- 1 srvanlee srvanleeuwen    7717 Jul 22 12:18 scene.cpp
+119769424 -rw-r--r-- 1 srvanlee srvanleeuwen    3051 Jul 22 12:18 primitive.hpp
+119769423 -rw-r--r-- 1 srvanlee srvanleeuwen   12359 Jul 22 12:18 primitive.cpp
+119769421 -rw-r--r-- 1 srvanlee srvanleeuwen    1594 Jul 22 12:18 paintwindow.hpp
+119769420 -rw-r--r-- 1 srvanlee srvanleeuwen    8517 Jul 22 12:18 paintwindow.cpp
+119769418 -rw-r--r-- 1 srvanlee srvanleeuwen    8002 Jul 22 12:18 paintcanvas.cpp
+112917620 -rw-r--r-- 1 srvanlee srvanleeuwen    2374 Jul 22 12:18 mesh.hpp
+112917619 -rw-r--r-- 1 srvanlee srvanleeuwen   10563 Jul 22 12:18 mesh.cpp
+112917616 -rw-r--r-- 1 srvanlee srvanleeuwen     416 Jul 22 12:18 map.hpp
+112917615 -rw-r--r-- 1 srvanlee srvanleeuwen    1838 Jul 22 12:18 map.cpp
+122206019 -rw-r--r-- 1 srvanlee srvanleeuwen     839 Jul 22 12:18 intersection.hpp
+122206018 -rw-r--r-- 1 srvanlee srvanleeuwen    1641 Jul 22 12:18 intersection.cpp
+122206016 -rw-r--r-- 1 srvanlee srvanleeuwen    3485 Jul 22 12:18 game.hpp
+122206009 -rw-r--r-- 1 srvanlee srvanleeuwen    8061 Jul 22 12:18 game.cpp
+ 19657278 -rw-r--r-- 1 srvanlee srvanleeuwen     696 Jul 22 12:18 a4.hpp
+ 19657277 -rw-r--r-- 1 srvanlee srvanleeuwen    1433 Jul 22 12:18 a4.cpp
+117841121 -rw-r--r-- 1 srvanlee srvanleeuwen    1574 Jul 20 12:24 tracer.hpp
+117841120 -rw-r--r-- 1 srvanlee srvanleeuwen   11885 Jul 20 12:24 tracer.cpp
+117841118 -rw-r--r-- 1 srvanlee srvanleeuwen       0 Jul 20 12:24 tetris.hpp
+117841117 -rw-r--r-- 1 srvanlee srvanleeuwen       0 Jul 20 12:24 tetris.cpp
+117841116 -rw-r--r-- 1 srvanlee srvanleeuwen   59812 Jul 20 12:24 tags
+117841114 -rw-r--r-- 1 srvanlee srvanleeuwen   18747 Jul 20 12:24 scene_lua.cpp
+ 18798402 -rw-r--r-- 1 srvanlee srvanleeuwen      68 Jul 20 12:24 sample.hpp
+124556516 -rw-r--r-- 1 srvanlee srvanleeuwen     926 Jul 20 12:24 rt.pro
+124556511 -rw-r--r-- 1 srvanlee srvanleeuwen    1092 Jul 20 12:24 ray.hpp
+ 32918620 -rw-r--r-- 1 srvanlee srvanleeuwen    1766 Jul 20 12:24 ray.cpp
+127746927 -rw-r--r-- 1 srvanlee srvanleeuwen    1975 Jul 20 12:24 paintcanvas.hpp
+131801413 -rw-r--r-- 1 srvanlee srvanleeuwen    1903 Jul 20 12:24 packet.hpp
+131801412 -rw-r--r-- 1 srvanlee srvanleeuwen    8417 Jul 20 12:24 packet.cpp
+131801411 -rw-r--r-- 1 srvanlee srvanleeuwen   42603 Jul 20 12:24 output
+ 92418139 -rw-r--r-- 1 srvanlee srvanleeuwen    1248 Jul 20 12:24 material.hpp
+ 92418138 -rw-r--r-- 1 srvanlee srvanleeuwen    1512 Jul 20 12:24 material.cpp
+ 18027627 -rw-r--r-- 1 srvanlee srvanleeuwen     277 Jul 20 12:24 main.cpp
+ 18027624 -rw-r--r-- 1 srvanlee srvanleeuwen    3310 Jul 20 12:24 interval.hpp
+ 18027622 -rw-r--r-- 1 srvanlee srvanleeuwen    3757 Jul 20 12:24 interval.cpp
+ 30962363 -rw-r--r-- 1 srvanlee srvanleeuwen     808 Jul 20 12:24 camera.hpp
+ 30962362 -rw-r--r-- 1 srvanlee srvanleeuwen    1888 Jul 20 12:24 camera.cpp
+
+
+
+
+
+
+
+2015-07-22 12:33       Checksum for A5 for srvanlee on gl08       Page 2
+
+
+ 30962360 -rw-r--r-- 1 srvanlee srvanleeuwen    1455 Jul 20 12:24 bih.hpp
+ 30962359 -rw-r--r-- 1 srvanlee srvanleeuwen    8125 Jul 20 12:24 bih.cpp
+ 30962357 -rw-r--r-- 1 srvanlee srvanleeuwen     754 Jul 20 12:24 bbox.hpp
+ 30962356 -rw-r--r-- 1 srvanlee srvanleeuwen    4585 Jul 20 12:24 bbox.cpp
+ 30962354 -rw-r--r-- 1 srvanlee srvanleeuwen   10785 Jul 20 12:24 algebra.hpp
+ 30962353 -rw-r--r-- 1 srvanlee srvanleeuwen    6495 Jul 20 12:24 algebra.cpp
+115657626 -rw-r--r-- 1 srvanlee srvanleeuwen    3768 Jul 20 12:24 .ycm_extra_conf.pyc
+115657625 -rw-r--r-- 1 srvanlee srvanleeuwen    5883 Jul 20 12:24 .ycm_extra_conf.py
+ 25507549 -rw-r--r-- 1 srvanlee srvanleeuwen     136 Jun 30 01:51 scene_lua.hpp
+ 25507539 -rw-r--r-- 1 srvanlee srvanleeuwen     966 Jun 30 01:51 polyroots.hpp
+ 25507538 -rw-r--r-- 1 srvanlee srvanleeuwen   47780 Jun 30 01:51 polyroots.cpp
+ 25507529 -rw-r--r-- 1 srvanlee srvanleeuwen     170 Jun 30 01:51 lua488.hpp
+132738277 -rw-r--r-- 1 srvanlee srvanleeuwen     331 Jun 30 01:51 light.hpp
+132738276 -rw-r--r-- 1 srvanlee srvanleeuwen     719 Jun 30 01:51 light.cpp
+132738273 -rw-r--r-- 1 srvanlee srvanleeuwen    1787 Jun 30 01:51 image.hpp
+132738272 -rw-r--r-- 1 srvanlee srvanleeuwen    6107 Jun 30 01:51 image.cpp
+
+A5/data:
+total 4496
+  7475863 drwxrwx--- 4 srvanlee cs488           4096 Jul 22 12:33 ../
+ 28169698 drwxrwxr-x 2 srvanlee srvanleeuwen    4096 Jul 22 12:24 ./
+109713605 -rw-r--r-- 1 srvanlee srvanleeuwen    2581 Jul 22 12:24 tetris2.lua
+ 28169711 -rw-r--r-- 1 srvanlee srvanleeuwen    1738 Jul 22 12:18 tetris.lua
+ 28169709 -rw-r--r-- 1 srvanlee srvanleeuwen   11789 Jul 22 12:18 bump2.jpg
+ 28169708 -rw-r--r-- 1 srvanlee srvanleeuwen  119591 Jul 22 12:18 bump.jpg
+ 27919491 -rw-r--r-- 1 srvanlee srvanleeuwen   53145 Jul 20 12:24 sunset.jpg
+ 27919489 -rw-r--r-- 1 srvanlee srvanleeuwen   14412 Jul 20 12:24 simple_cows.png
+117553159 -rw-r--r-- 1 srvanlee srvanleeuwen   89838 Jul 20 12:24 secondary.png
+117553158 -rw-r--r-- 1 srvanlee srvanleeuwen    1601 Jul 20 12:24 secondary.lua
+117553157 -rw-r--r-- 1 srvanlee srvanleeuwen   16411 Jul 20 12:24 scene.png
+117553156 lrwxrwxrwx 1 srvanlee srvanleeuwen       9 Jul 20 12:24 rt -> ../src/rt*
+117553154 -rw-r--r-- 1 srvanlee srvanleeuwen   77705 Jul 20 12:24 nonhier.png
+117553153 -rw-r--r-- 1 srvanlee srvanleeuwen    1281 Jul 20 12:24 nonhier.lua
+117553152 -rw-r--r-- 1 srvanlee srvanleeuwen  158424 Jul 20 12:24 macho_cows.png
+117553151 -rw-r--r-- 1 srvanlee srvanleeuwen    2847 Jul 20 12:24 macho-cows.lua
+117553150 -rw-r--r-- 1 srvanlee srvanleeuwen 1117493 Jul 20 12:24 grass.jpg
+117553149 -rw-r--r-- 1 srvanlee srvanleeuwen  541304 Jul 20 12:24 dragon.jpg
+ 94926086 -rw-r--r-- 1 srvanlee srvanleeuwen 1439314 Jul 20 12:24 blue.jpg
+ 94926085 -rw-r--r-- 1 srvanlee srvanleeuwen    1283 Jul 20 12:24 background.lua
+ 95405959 -rw-r--r-- 1 srvanlee srvanleeuwen  541304 Jul 20 12:24 attachment.php?attachmentid=1557296
+118908541 -rw-r--r-- 1 srvanlee srvanleeuwen    8859 Jun 30 01:51 smstdodeca.lua
+118908533 -rw-r--r-- 1 srvanlee srvanleeuwen     997 Jun 30 01:51 simple.lua
+111058961 -rw-r--r-- 1 srvanlee srvanleeuwen    2907 Jun 30 01:51 simple-cows.lua
+111058959 -rw-r--r-- 1 srvanlee srvanleeuwen    2782 Jun 30 01:51 scene.lua
+111058958 -rw-r--r-- 1 srvanlee srvanleeuwen   16412 Jun 30 01:51 sample.png
+111058957 -rw-r--r-- 1 srvanlee srvanleeuwen    2782 Jun 30 01:51 sample.lua
+122532976 -rw-r--r-- 1 srvanlee srvanleeuwen    1268 Jun 30 01:51 readobj.lua
+ 28169714 -rw-r--r-- 1 srvanlee srvanleeuwen    6038 Jun 30 01:51 puppet.lua
+ 28169713 -rw-r--r-- 1 srvanlee srvanleeuwen    1470 Jun 30 01:51 nonhier2.lua
+ 28169710 -rw-r--r-- 1 srvanlee srvanleeuwen   38328 Jun 30 01:51 mickey.lua
+ 28169707 -rw-r--r-- 1 srvanlee srvanleeuwen    1566 Jun 30 01:51 instance.lua
+ 28169706 -rw-r--r-- 1 srvanlee srvanleeuwen     755 Jun 30 01:51 icosa.lua
+ 28169705 -rw-r--r-- 1 srvanlee srvanleeuwen    2857 Jun 30 01:51 hier.lua
+ 28169704 -rw-r--r-- 1 srvanlee srvanleeuwen    1673 Jun 30 01:51 dodeca.lua
+ 28169703 -rw-r--r-- 1 srvanlee srvanleeuwen    1011 Jun 30 01:51 cylinder.lua
+ 28169702 -rw-r--r-- 1 srvanlee srvanleeuwen  180010 Jun 30 01:51 cow.obj
+
+
+
+
+
+
+
+2015-07-22 12:33       Checksum for A5 for srvanlee on gl08       Page 3
+
+
+ 28169700 -rw-r--r-- 1 srvanlee srvanleeuwen    4322 Jun 30 01:51 buckyball.lua
+
+A5                                      
+A5/data                                 
+A5/data/attachment.php?attachmentid=155729633596   529
+A5/data/background.lua                  44516     2
+A5/data/blue.jpg                        64340  1406
+A5/data/buckyball.lua                   10689     5
+A5/data/bump2.jpg                       45500    12
+A5/data/bump.jpg                        24963   117
+A5/data/cow.obj                         57991   176
+A5/data/cylinder.lua                    01173     1
+A5/data/dodeca.lua                      50755     2
+A5/data/dragon.jpg                      33596   529
+A5/data/grass.jpg                       41936  1092
+A5/data/hier.lua                        09954     3
+A5/data/icosa.lua                       58132     1
+A5/data/instance.lua                    25944     2
+A5/data/macho-cows.lua                  22722     3
+A5/data/macho_cows.png                  29260   155
+A5/data/mickey.lua                      01039    38
+A5/data/nonhier2.lua                    25636     2
+A5/data/nonhier.lua                     05294     2
+A5/data/nonhier.png                     51149    76
+A5/data/puppet.lua                      11757     6
+A5/data/readobj.lua                     57040     2
+A5/data/rt                              
+A5/data/sample.lua                      04721     3
+A5/data/sample.png                      57721    17
+A5/data/scene.lua                       04721     3
+A5/data/scene.png                       35127    17
+A5/data/secondary.lua                   27459     2
+A5/data/secondary.png                   39377    88
+A5/data/simple-cows.lua                 10797     3
+A5/data/simple_cows.png                 42450    15
+A5/data/simple.lua                      02633     1
+A5/data/smstdodeca.lua                  02544     9
+A5/data/sunset.jpg                      51916    52
+A5/data/tetris2.lua                     24777     3
+A5/data/tetris.lua                      26196     2
+A5/gl2im.c                              14410     2
+A5/README                               26276     1
+A5/screenshot01.png                     60416   256
+A5/src                                  
+A5/src/a4.cpp                           19315     2
+A5/src/a4.hpp                           50711     1
+A5/src/algebra.cpp                      55250     7
+A5/src/algebra.hpp                      59388    11
+A5/src/bbox.cpp                         43888     5
+A5/src/bbox.hpp                         53832     1
+A5/src/bih.cpp                          49748     8
+A5/src/bih.hpp                          49451     2
+A5/src/camera.cpp                       04522     2
+A5/src/camera.hpp                       12958     1
+A5/src/game.cpp                         40798     8
+A5/src/game.hpp                         26377     4
+
+
+
+
+
+
+
+2015-07-22 12:33       Checksum for A5 for srvanlee on gl08       Page 4
+
+
+A5/src/image.cpp                        42618     6
+A5/src/image.hpp                        52703     2
+A5/src/intersection.cpp                 04267     2
+A5/src/intersection.hpp                 48976     1
+A5/src/interval.cpp                     39207     4
+A5/src/interval.hpp                     07453     4
+A5/src/light.cpp                        01652     1
+A5/src/light.hpp                        61469     1
+A5/src/lua488.hpp                       04702     1
+A5/src/main.cpp                         44248     1
+A5/src/Makefile                         54932   131
+A5/src/map.cpp                          04192     2
+A5/src/map.hpp                          16351     1
+A5/src/material.cpp                     34212     2
+A5/src/material.hpp                     06288     2
+A5/src/mesh.cpp                         19161    11
+A5/src/mesh.hpp                         00158     3
+A5/src/moc_paintcanvas.cpp              64677     4
+A5/src/moc_paintwindow.cpp              22671     6
+A5/src/output                           17956    42
+A5/src/packet.cpp                       03585     9
+A5/src/packet.hpp                       25171     2
+A5/src/paintcanvas.cpp                  64416     8
+A5/src/paintcanvas.hpp                  61632     2
+A5/src/paintwindow.cpp                  42839     9
+A5/src/paintwindow.hpp                  09749     2
+A5/src/polyroots.cpp                    59889    47
+A5/src/polyroots.hpp                    52382     1
+A5/src/primitive.cpp                    60919    13
+A5/src/primitive.hpp                    22005     3
+A5/src/ray.cpp                          31178     2
+A5/src/ray.hpp                          06685     2
+A5/src/rt                               20139  3703
+A5/src/rt.pro                           21036     1
+A5/src/sample.hpp                       05516     1
+A5/src/scene.cpp                        04008     8
+A5/src/scene.hpp                        19431     4
+A5/src/scene_lua.cpp                    11251    19
+A5/src/scene_lua.hpp                    33354     1
+A5/src/tags                             00695    59
+A5/src/tetris.cpp                       00000     0
+A5/src/tetris.hpp                       00000     0
+A5/src/tracer.cpp                       00207    12
+A5/src/tracer.hpp                       31865     2
+A5/src/.ycm_extra_conf.py               44308     6
+A5/src/.ycm_extra_conf.pyc              34157     4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

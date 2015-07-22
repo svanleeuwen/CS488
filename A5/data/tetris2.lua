@@ -10,7 +10,7 @@ mat7 = gr.material({0.7, 0.7, 0.7}, {0.1, 0.1, 0.1}, 25)
 mat8 = gr.material({0.7, 0.35, 0.0}, {0.1, 0.1, 0.1}, 25)
 
 m_ground = gr.material({0.0, 0.0, 0.3}, {0.5, 0.7, 0.5}, 25)
-m_sky = gr.material({0, 0, 0}, {0, 0, 0}, 0)
+m_sky = gr.material({0, 0, 0}, {0.0, 0.0, 0.0}, 0)
 
 tex1 = gr.texture("blue.jpg")
 tex2 = gr.texture("grass.jpg")
@@ -99,6 +99,6 @@ piece7:set_bump(bump2)
 
 white_light = gr.light({-100.0, 300.0, 600.0}, {0.9, 0.9, 0.9}, {1, 0, 0})
 
-gr.render(scene_root, 'tetris.png', 300, 600,
+gr.render(scene_root, 'tetris2.png', 300, 600,
 	  {0, 100, 800}, {0, 0, -1}, {0, 1, 0}, 50,
 	  {0.3, 0.3, 0.3}, {white_light, orange_light})
