@@ -73,32 +73,38 @@ void PaintWindow::createAppActions()
     QAction* pauseAct = new QAction(tr("&Pause"), this);
     QAction* statusAct = new QAction(tr("Print &Status"), this);
     QAction* saveAct = new QAction(tr("Sa&ve"), this);
+    QAction* interpAct = new QAction(tr("&Keyframe Interpolation"), this);
 
     m_app_actions.push_back(quitAct);
     m_app_actions.push_back(newGameAct);
     m_app_actions.push_back(pauseAct);
     m_app_actions.push_back(statusAct);
     m_app_actions.push_back(saveAct);
+    m_app_actions.push_back(interpAct);
 
     quitAct->setShortcuts(QList<QKeySequence>({QKeySequence::Quit, QKeySequence(Qt::Key_Q)}));
     newGameAct->setShortcut(Qt::Key_N);
     pauseAct->setShortcut(Qt::Key_P);
     statusAct->setShortcut(Qt::Key_S);
     saveAct->setShortcut(Qt::Key_V);
+    interpAct->setShortcut(Qt::Key_I);
 
     quitAct->setStatusTip(tr("Exits the file"));
     newGameAct->setStatusTip(tr("Starts a new game"));
     pauseAct->setStatusTip(tr("Pauses the game"));
     statusAct->setStatusTip(tr("Prints the tracing status"));
     saveAct->setStatusTip(tr("Saves the image"));
+    interpAct->setStatusTip(tr("Toggles keyframe interpolation"));
 
     connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
     connect(newGameAct, SIGNAL(triggered()), this, SLOT(newGame()));
     connect(pauseAct, SIGNAL(triggered()), this, SLOT(pause())); 
     connect(statusAct, SIGNAL(triggered()), this, SLOT(printStatus())); 
     connect(saveAct, SIGNAL(triggered()), this, SLOT(save())); 
+    connect(interpAct, SIGNAL(triggered()), this, SLOT(interp())); 
 
     statusAct->setCheckable(true);
+    interpAct->setCheckable(true);
 
     for (auto& action : m_app_actions) {
         addAction(action);
@@ -285,4 +291,8 @@ void PaintWindow::setBihAccel() {
 void PaintWindow::setAllAccel() {
     BIH = true;
     PACKETS = true;
+}
+
+void PaintWindow::interp() {
+    INTERP = !INTERP;
 }

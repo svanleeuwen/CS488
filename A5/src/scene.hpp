@@ -25,8 +25,10 @@ public:
         m_children.push_back(child);
     }
 
-    void getPrimitives(std::vector<Primitive*>* primitives, Game* game = NULL);
-    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
+    void getPrimitives(std::vector<Primitive*>* primitives, Game* game = NULL, 
+            double fallAmount = 0.0);
+    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, 
+            const Matrix4x4& inv, Game* game, double fallAmount);
     
     virtual bool initGame(Game*& game);
     
@@ -82,7 +84,8 @@ public:
                Primitive* primitive);
     virtual ~GeometryNode();
 
-    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
+    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, 
+            const Matrix4x4& inv, Game* game, double fallAmount);
     
     Primitive* get_primitive();
 
@@ -122,13 +125,14 @@ public:
     TetrisNode(const std::string& name);
     virtual ~TetrisNode();
 
-    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
+    virtual void getPrimitives(std::vector<Primitive*>* primitives, const Matrix4x4& trans, 
+            const Matrix4x4& inv, Game* game, double fallAmount);
 
     virtual bool initGame(Game*& game);
 
 private:
     void buildBorder(const Matrix4x4& trans, const Matrix4x4& inv);
-    void buildPieces(const Matrix4x4& trans, const Matrix4x4& inv, Game* game);
+    void buildPieces(const Matrix4x4& trans, const Matrix4x4& inv, Game* game, double fallAmount);
     
     void initPieceTypes();
     void deletePieces();

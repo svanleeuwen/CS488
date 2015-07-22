@@ -131,7 +131,7 @@ void PaintCanvas::paintEvent(QPaintEvent* event) {
         timer.start();
     }
       
-    if(m_piecesMoved) {
+    if(m_piecesMoved || INTERP) {
         bool temp = m_refreshScreen;
         m_refreshScreen = false;
         
@@ -147,7 +147,14 @@ void PaintCanvas::paintEvent(QPaintEvent* event) {
         }
 
         m_primitives->clear();
-        m_root->getPrimitives(m_primitives, m_game);
+        
+        if(INTERP) {
+            double fallAmount = 1.0 - m_gameTimer->remainingTime() / (double)m_gameTimer->interval();
+            m_root->getPrimitives(m_primitives, m_game, fallAmount);
+
+        } else {
+            m_root->getPrimitives(m_primitives, m_game);
+        }
 
         m_tracer->updatePrimitives(m_primitives);
 
@@ -334,7 +341,7 @@ void PaintCanvas::pause() {
 }
 
 void PaintCanvas::refresh() {
-    if(m_piecesMoved) {
+    if(m_piecesMoved || INTERP) {
         m_refreshScreen = true;
     }
     

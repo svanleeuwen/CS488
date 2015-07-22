@@ -16,6 +16,7 @@ using std::vector;
 
 bool BIH = true;
 bool PACKETS = true;
+bool INTERP = false;
 
 bool launch_qt(// What to render
                SceneNode* root,

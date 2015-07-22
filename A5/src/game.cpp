@@ -185,6 +185,26 @@ int& Game::get(int r, int c)
   return board_[ r*board_width_ + c ];
 }
 
+bool Game::isBlockMoving(int i, int j) {
+    if(i < px_ || j < py_ - 4) {
+        return false;
+    
+    } else if(i > px_ + 4 || j > py_) {
+        return false;
+    
+    } else {
+        if(piece_.isOn(py_ - j, i - px_)) {
+
+            removePiece(piece_, px_, py_);
+            bool val = doesPieceFit(piece_, px_, py_-1);
+            placePiece(piece_, px_, py_);
+            return val;
+        }
+
+        return false;
+    }
+}
+
 bool Game::doesPieceFit(const Piece& p, int x, int y) const
 {
   if(x + p.getLeftMargin() < 0) {

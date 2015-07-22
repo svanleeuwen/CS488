@@ -23,17 +23,18 @@ SceneNode::~SceneNode()
     }
 }
 
-void SceneNode::getPrimitives(vector<Primitive*>* primitives, Game* game) {
+void SceneNode::getPrimitives(vector<Primitive*>* primitives, Game* game, double fallAmount) {
     Matrix4x4 eye;
-    getPrimitives(primitives, eye, eye, game);
+    getPrimitives(primitives, eye, eye, game, fallAmount);
 }
 
-void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game) {
+void SceneNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, 
+        const Matrix4x4& inv, Game* game, double fallAmount) {
     Matrix4x4 t_trans = trans * m_trans;
     Matrix4x4 t_inv = m_inv * inv;
    
     for(auto it = m_children.begin(); it != m_children.end(); it++) {
-        (*it)->getPrimitives(primitives, t_trans, t_inv, game);
+        (*it)->getPrimitives(primitives, t_trans, t_inv, game, fallAmount);
     }
 }
 
@@ -121,7 +122,8 @@ GeometryNode::~GeometryNode()
 {
 }
 
-void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game) {
+void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, 
+        const Matrix4x4& inv, Game* game, double fallAmount) {
     Matrix4x4 t_trans = trans * m_trans;
     Matrix4x4 t_inv = m_inv * inv;
 
@@ -144,7 +146,7 @@ void GeometryNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4
     }
 
     for(auto it = m_children.begin(); it != m_children.end(); it++) {
-        (*it)->getPrimitives(primitives, t_trans, t_inv, game);
+        (*it)->getPrimitives(primitives, t_trans, t_inv, game, fallAmount);
     }
 }
 
@@ -227,7 +229,9 @@ void TetrisNode::initPieceTypes() {
     }
 }
 
-void TetrisNode::buildPieces(const Matrix4x4& trans, const Matrix4x4& inv, Game* game) {
+void TetrisNode::buildPieces(const Matrix4x4& trans, const Matrix4x4& inv, Game* game,
+        double fallAmount) 
+{
     deletePieces();
 
     for(int i = 0; i < game->getHeight(); i++)
@@ -235,8 +239,16 @@ void TetrisNode::buildPieces(const Matrix4x4& trans, const Matrix4x4& inv, Game*
         for(int j = 0; j < game->getWidth(); j++)
         {
             int primIndex = game->get(i, j); 
+
             if(primIndex > -1) {
-                Vector3D transFactor = Vector3D(-5 + j, -10 + i, 0);
+                Vector3D transFactor;
+
+                if(game->isBlockMoving(j, i)) {
+                    transFactor = Vector3D(-5 + j, -10 + i - fallAmount, 0);
+
+                } else {
+                     transFactor = Vector3D(-5 + j, -10 + i, 0);
+                }
 
                 Matrix4x4 transMat = trans * Matrix4x4::getTransMat(transFactor);
                 Matrix4x4 invMat = Matrix4x4::getTransMat(-transFactor) * inv;
@@ -258,7 +270,8 @@ void TetrisNode::deletePieces() {
     m_pieces.clear();
 }
 
-void TetrisNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, const Matrix4x4& inv, Game* game) {
+void TetrisNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& trans, 
+        const Matrix4x4& inv, Game* game, double fallAmount) {
     if(game == NULL) {
         return;
     }
@@ -285,7 +298,7 @@ void TetrisNode::getPrimitives(vector<Primitive*>* primitives, const Matrix4x4& 
     }
 
     // Add pieces
-    buildPieces(t_trans, t_inv, game);
+    buildPieces(t_trans, t_inv, game, fallAmount);
     for(auto it = m_pieces.begin(); it != m_pieces.end(); ++it) {
         primitives->push_back(*it);
     }

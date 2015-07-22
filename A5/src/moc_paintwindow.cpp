@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_PaintWindow_t {
-    QByteArrayData data[16];
-    char stringdata[180];
+    QByteArrayData data[17];
+    char stringdata[187];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,13 +44,15 @@ QT_MOC_LITERAL(11, 113, 15),
 QT_MOC_LITERAL(12, 129, 14),
 QT_MOC_LITERAL(13, 144, 10),
 QT_MOC_LITERAL(14, 155, 11),
-QT_MOC_LITERAL(15, 167, 11)
+QT_MOC_LITERAL(15, 167, 11),
+QT_MOC_LITERAL(16, 179, 6)
     },
     "PaintWindow\0newGame\0\0pause\0printStatus\0"
     "save\0setSlowSpeed\0setMediumSpeed\0"
     "setFastSpeed\0setOneSamples\0setTwoSamples\0"
     "setThreeSamples\0setFourSamples\0"
     "setNoAccel\0setBihAccel\0setAllAccel\0"
+    "interp\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,7 +62,7 @@ static const uint qt_meta_data_PaintWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -68,22 +70,24 @@ static const uint qt_meta_data_PaintWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   84,    2, 0x08,
-       3,    0,   85,    2, 0x08,
-       4,    0,   86,    2, 0x08,
-       5,    0,   87,    2, 0x08,
-       6,    0,   88,    2, 0x08,
-       7,    0,   89,    2, 0x08,
-       8,    0,   90,    2, 0x08,
-       9,    0,   91,    2, 0x08,
-      10,    0,   92,    2, 0x08,
-      11,    0,   93,    2, 0x08,
-      12,    0,   94,    2, 0x08,
-      13,    0,   95,    2, 0x08,
-      14,    0,   96,    2, 0x08,
-      15,    0,   97,    2, 0x08,
+       1,    0,   89,    2, 0x08,
+       3,    0,   90,    2, 0x08,
+       4,    0,   91,    2, 0x08,
+       5,    0,   92,    2, 0x08,
+       6,    0,   93,    2, 0x08,
+       7,    0,   94,    2, 0x08,
+       8,    0,   95,    2, 0x08,
+       9,    0,   96,    2, 0x08,
+      10,    0,   97,    2, 0x08,
+      11,    0,   98,    2, 0x08,
+      12,    0,   99,    2, 0x08,
+      13,    0,  100,    2, 0x08,
+      14,    0,  101,    2, 0x08,
+      15,    0,  102,    2, 0x08,
+      16,    0,  103,    2, 0x08,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -121,6 +125,7 @@ void PaintWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 11: _t->setNoAccel(); break;
         case 12: _t->setBihAccel(); break;
         case 13: _t->setAllAccel(); break;
+        case 14: _t->interp(); break;
         default: ;
         }
     }
@@ -152,13 +157,13 @@ int PaintWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 14)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 14)
+        if (_id < 15)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 14;
+        _id -= 15;
     }
     return _id;
 }

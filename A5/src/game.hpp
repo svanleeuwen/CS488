@@ -108,6 +108,7 @@ public:
   int& get(int r, int c);
 
   bool isGameOver() { return stopped_; }
+  bool isBlockMoving(int i, int j);
 
 private:
   bool doesPieceFit(const Piece& p, int x, int y) const;

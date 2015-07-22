@@ -75,6 +75,8 @@ private slots:
     void setNoAccel();
     void setBihAccel();
     void setAllAccel();
+
+    void interp();
 };
 
 #endif

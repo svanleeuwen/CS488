@@ -8,6 +8,7 @@
 
 extern bool BIH;
 extern bool PACKETS;
+extern bool INTERP;
 
 bool launch_qt(// What to render
                SceneNode* root,
